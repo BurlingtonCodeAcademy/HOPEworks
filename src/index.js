@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter, Link, Route  } from "react-router-dom";
+import Home from "./home"
+import Login from "./login"
+import Form from "./form"
 
 class App extends React.Component {
     constructor() {
@@ -8,21 +12,23 @@ class App extends React.Component {
         this.state = {
             property: true
         }
-//        this.function = this.function.bind(this);
-      }
+    }
 
     render() {
       return (
         <div>
-          <button>hi</button>
+          <Route path="/" exact component={Login} />
+          <Route path="/home" component={Home} />
+          <Route path="/form" component={Form} />
         </div>
       )
     }        
 }
 
-
 ReactDOM.render(
-<App />, 
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>, 
 document.getElementById('root'));
 
 serviceWorker.unregister();
