@@ -11,7 +11,11 @@ class Home extends React.Component {
 
     render() {
       return (
-          <Link to={{ pathname: "/form" }}>create new form</Link>
+          <div>
+              <Link to={{ pathname: "/form" }}>create new form</Link>
+              <br/>
+              <Link to={{ pathname: "/" }}><button>log out</button></Link>
+          </div>
       )
     }  
 }

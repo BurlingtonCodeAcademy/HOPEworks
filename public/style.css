@@ -1,0 +1,26 @@
+#login-form {
+    display: flex;
+    flex-direction: column;
+    width: 125px;
+    height: 500px;
+    flex-wrap: wrap;
+}
+
+#all-fields {
+    font-size: 14px;
+    font-family: Georgia, 'Times New Roman', Times, serif
+}
+
+button {
+    margin: 5px;
+}
+
+input, select {
+    margin: 5px;
+}
+
+#Logo {
+    width:145px;
+    height:41px;
+    background-image: url('https://burlingtonspaworks.files.wordpress.com/2015/04/logo-gif.jpg');
+  }
