@@ -11,13 +11,16 @@
     font-family: Georgia, 'Times New Roman', Times, serif
 }
 
-button {
+input, select, button {
     margin: 5px;
+    margin-left: 0px;
 }
 
-input, select {
-    margin: 5px;
+hr {
+    border-top:1px dotted #000;
+    /*Rest of stuff here*/
 }
+
 
 #Logo {
     width:145px;
