@@ -569,6 +569,55 @@ class Form extends React.Component {
                         <input type="checkbox" name="referrals" value="to Other"/>
                         <input type="checkbox" name="referrals" value="from Other"/>Other
                         <input type="text" name="referrals"/>
+                        <br/>
+                    </div>
+                    <hr/>
+                    <label for="measures">Outcome Measures:</label>
+                    <div id="measures">
+                        <label for="plan-for-safety">Service User knows more ways to plan for their safety</label>
+                        <div id="plan-for-safety">
+                            <label>
+                                <input name="plan-for-safety" value="Yes" type="radio"/>Yes
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="plan-for-safety" value="No" type="radio"/>No
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="plan-for-safety" value="N/A" type="radio"/>N/A
+                            </label>
+                        </div>
+                        <br/>
+                        <label for="community-resources">Service User knows more about community resources</label>
+                        <div id="community-resources">
+                            <label>
+                                <input name="community-resources" value="Yes" type="radio"/>Yes
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="community-resources" value="No" type="radio"/>No
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="community-resources" value="N/A" type="radio"/>N/A
+                            </label>
+                        </div>
+                        <br/>
+                        <label for="rights-options">Service User knows more about their rights and options</label>
+                        <div id="rights-options">
+                            <label>
+                                <input name="rights-options" value="Yes" type="radio"/>Yes
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="rights-options" value="No" type="radio"/>No
+                            </label>
+                            <br/>
+                            <label>
+                            <input name="rights-options" value="N/A" type="radio"/>N/A
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <button>submit</button>
