@@ -8,39 +8,47 @@ class Form extends React.Component {
         this.state = {
             property: true
         }
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    handleSubmit (evnt) {
+        evnt.target.preventDefault();
+    }
+
     render() {
       return (
-          <div>
-              <div>
-                <img id="Logo"></img>
-                </div>
+          <div id="form-page">
             <form id="the-form">
-                <br/>
-                <div>
+                <Link to={{ pathname: '/home' }}><button>back</button></Link>
+                <div id="title">
                     <h1>H.O.P.E. Works</h1>
                     <h2>SURVIVOR INTAKE FORM</h2>
                     </div>
                 <div id="all-fields">
+                 <div id="basic-info">
                     <br/>
-                    <label for="first-name">Name of Service User</label>
+                    <label for="first-name">Name of Service User </label>
                     <br/>
                     <input id="first-name" placeholder="First Name"></input>
                     <input placeholder="Last Name/Initial"></input>
                     <br/>
-                    <label for="contact-date">Date of contact</label>
+                    <label for="identifiers">Other identifiers for Service User </label>
+                    <br/> 
+                    <input id="identifiers" placeholder="Favorite color, etc."></input>
                     <br/>
-                    <input type="date" id="contact-date"></input>
-                    <br/>
-                    <label for="advocate-initials">Advocate Initials</label>
+                    <label for="advocate-initials">Advocate Initials </label>
                     <br/>
                     <input id="advocate-initials" placeholder="Initials" maxlength="2"></input>
                     <br/>
-                    <label for="city-town">City/Town</label>
+                    <label id="date-text" for="contact-date">Date of contact </label>
+                    <br/>
+                    <input type="date" id="contact-date"></input>
+                    <br/>
+                    <label for="city-town">City/Town </label>
                     <br/>
                     <input id="city-town" placeholder="City/Town"></input>
                     <br/>
-                    <label for="phone">Phone Number</label>
+                    <label for="phone">Phone Number </label>
                     <br/>
                     <input id="phone" type="tel" placeholder="802-123-4567"></input>
                     <br/>
@@ -53,6 +61,7 @@ class Form extends React.Component {
                            <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor
                         </label>
                     </div>
+                 </div>
                     <hr/>
                     <label for="survivor-gender">Gender</label>
                     <br/>
@@ -111,8 +120,8 @@ class Form extends React.Component {
                         </label>
                         <br/>
                         <label>
-                            <input name="language" type="radio"/>Other:
-                            <input type="text" name="language"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                            <input name="language" type="radio" value="Other" on/>Other:
+                            <input type="text" name="language" class="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         </label>
                     </div>
                     <label for="ethnicity">Ethnicity</label>
@@ -132,7 +141,7 @@ class Form extends React.Component {
                         <input type="checkbox" name="ethnicity" value="Unknown"/>Unknown
                         <br/>
                         <input type="checkbox" name="ethnicity" value="Other"/>Other:
-                        <input type="text" name="ethnicity"/>
+                        <input type="text" name="ethnicity" class="inline-input"/>
                     </div>
                     <label for="number-children">Number of Children in Household</label>
                     <br/>
@@ -163,7 +172,7 @@ class Form extends React.Component {
                         <input type="checkbox" name="characteristics" value="White/Caucasian"/>College student/affiliated with a college
                         <br/>
                         <label for="name-of-school">Name of school:</label>
-                        <input id="name-of-school" type="text" name="characteristics"/>
+                        <input id="name-of-school" type="text" name="characteristics" class="inline-input"/>
                         <br/>
                     </div>
                     <label for="hear-about">How did the service user hear about HOPE Works?</label>
@@ -189,7 +198,7 @@ class Form extends React.Component {
                         <input type="checkbox" name="victimization" value="Domestic Violence"/>Domestic Violence
                         <br/>
                         <input type="checkbox" name="victimization" value="Other"/>Other: 
-                        <input type="text" name="victimization"/>
+                        <input type="text" name="victimization" class="inline-input"/>
                     </div>
                     <label for="perp-relationship">Perpetrator Relationship</label>
                     <div id="perp-relationship">
@@ -204,7 +213,7 @@ class Form extends React.Component {
                         <input type="checkbox" name="perp-relationship" value="Stranger"/>Stranger
                         <br/>
                         <input type="checkbox" name="perp-relationship" value="Other"/>Other: 
-                        <input type="text" name="perp-relationship"/>
+                        <input type="text" name="perp-relationship" class="inline-input"/>
                     </div>
                     <label for="perp-gender">Perpetrator Gender</label>
                     <br/>
@@ -286,10 +295,6 @@ class Form extends React.Component {
                         <input type="checkbox" name="partially-served" value="Transportation"/>Transportation
                     </div>
                     <hr/>
-                    <label for="notes">Notes</label>
-                    <br/>
-                    <textarea id="notes"></textarea>
-                    <hr/>
                     <h2>Ongoing Services</h2>
                     <label for="safe-to-call">Safe to call back?</label>
                     <div id="safe-to-call">
@@ -368,7 +373,7 @@ class Form extends React.Component {
                         <input type="checkbox" name="time-call" value="Limited Resources/Priority Setting"/>60 min
                         <br/>
                         <input type="checkbox" name="time-call" value="Other"/>Other (in hours): 
-                        <input type="text" name="time-call"/>
+                        <input type="number" name="time-call" class="inline-input"/>
                     </div>
                     <hr/>
                     <label>Services Provided</label>
@@ -467,12 +472,12 @@ class Form extends React.Component {
                         <br/>
                         <label>
                             <input type="number"/>Medical Assistance
-                            <input type="text"/>
+                            <input type="text" class="inline-input"/>
                         </label>
                         <br/>
                         <label>
                             <input type="number"/>Groups
-                            <input type="text"/>
+                            <input type="text" class="inline-input"/>
                         </label>
                         <br/>
                         <label>
@@ -489,7 +494,7 @@ class Form extends React.Component {
                         <br/>
                         <input type="checkbox" name="referrals" value="to Campus Services"/>
                         <input type="checkbox" name="referrals" value="from Campus Services"/>Campus Services
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to CUSI/State's Attorney/CAC"/>
                         <input type="checkbox" name="referrals" value="from CUSI/State's Attorney/CAC"/>CUSI/State's Attorney/CAC
@@ -499,7 +504,7 @@ class Form extends React.Component {
                         <br/>
                         <input type="checkbox" name="referrals" value="to Disability Org"/>
                         <input type="checkbox" name="referrals" value="from Disability Org"/>Disability Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to DIVAS/Corrections/P+P"/>
                         <input type="checkbox" name="referrals" value="from DIVAS/Corrections/P+P"/>DIVAS/Corrections/P+P
@@ -509,40 +514,40 @@ class Form extends React.Component {
                         <br/>
                         <input type="checkbox" name="referrals" value="to Financial Assistance Org"/>
                         <input type="checkbox" name="referrals" value="from Financial Assistance Org"/>Financial Assistance Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to Financial Empowerment Programming"/>
                         <input type="checkbox" name="referrals" value="from Financial Empowerment Programming"/>Financial Empowerment Programming
                         <br/>
                         <input type="checkbox" name="referrals" value="to Health Centers"/>
                         <input type="checkbox" name="referrals" value="from Health Centers"/>Health Centers
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to HOPE Works Clinical Therapist"/>
                         <input type="checkbox" name="referrals" value="from HOPE Works Clinical Therapist"/>HOPE Works Clinical Therapist
                         <br/>
                         <input type="checkbox" name="referrals" value="to Housing Org"/>
                         <input type="checkbox" name="referrals" value="from Housing Org"/>Housing Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to Immigrant Org"/>
                         <input type="checkbox" name="referrals" value="from Immigrant Org"/>Immigrant Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to LGBTQ Org"/>
                         <input type="checkbox" name="referrals" value="from LGBTQ Org"/>LGBTQ Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to National Guard/Military Services"/>
                         <input type="checkbox" name="referrals" value="from National Guard/Military Services"/>National Guard/Military Services
                         <br/>
                         <input type="checkbox" name="referrals" value="to Network Program"/>
                         <input type="checkbox" name="referrals" value="from Network Program"/>Network Program
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to Police Department"/>
                         <input type="checkbox" name="referrals" value="from Police Department"/>Police Department
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to Out of State Rape Crisis Services"/>
                         <input type="checkbox" name="referrals" value="from Out of State Rape Crisis Services"/>Out of State Rape Crisis Services
@@ -561,11 +566,11 @@ class Form extends React.Component {
                         <br/>
                         <input type="checkbox" name="referrals" value="to Youth Org"/>
                         <input type="checkbox" name="referrals" value="from Youth Org"/>Youth Org
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                         <input type="checkbox" name="referrals" value="to Other"/>
                         <input type="checkbox" name="referrals" value="from Other"/>Other
-                        <input type="text" name="referrals"/>
+                        <input type="text" name="referrals" class="inline-input"/>
                         <br/>
                     </div>
                     <hr/>
@@ -615,11 +620,14 @@ class Form extends React.Component {
                             <input name="rights-options" value="N/A" type="radio"/>N/A
                             </label>
                         </div>
+                        <hr/>
+                        <label for="notes">Notes</label>
+                        <br/>
+                        <textarea id="notes"></textarea>
                     </div>
                 </div>
-                <button>submit</button>
+                <button onClick={this.handleSubmit}>submit</button>
             </form>
-            <Link to={{ pathname: '/home' }}><button>back</button></Link>
           </div>
       )
     }  

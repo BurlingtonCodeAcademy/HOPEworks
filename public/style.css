@@ -1,3 +1,18 @@
+#the-form {
+    width: 500px;
+}
+
+#form-page {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(255, 247, 235);
+}
+
+#title {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+}
+
 #login-form {
     display: flex;
     flex-direction: column;
@@ -7,23 +22,48 @@
 }
 
 #all-fields {
-    font-size: 14px;
-    font-family: Georgia, 'Times New Roman', Times, serif
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 input, select, button {
+    font-size: 20px;
     margin: 5px;
     margin-left: 0px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+input[type="date"] {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: gray;
+}
+
+input[type="number"] {
+    width: 40px;
 }
 
 hr {
     border-top:1px dotted #000;
-    /*Rest of stuff here*/
+    text-align: center;
 }
 
+#notes {
+    height: 140px;
+    width: 500px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
 
-#Logo {
-    width:145px;
-    height:41px;
-    background-image: url('https://burlingtonspaworks.files.wordpress.com/2015/04/logo-gif.jpg');
-  }
+#basic-info {
+  margin: 0px;
+}
+
+.inline-input {
+    margin-left: 5px;
+    width: 100px;
+    border-radius: 15px, 0px, 15px, 0px;
+}
+
+body {
+    margin: 0px;
+}
