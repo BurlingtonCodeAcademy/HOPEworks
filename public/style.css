@@ -39,7 +39,7 @@ input[type="date"] {
 }
 
 input[type="number"] {
-    width: 40px;
+    width: 50px;
 }
 
 hr {
@@ -60,10 +60,14 @@ hr {
 
 .inline-input {
     margin-left: 5px;
-    width: 100px;
+    width: 160px;
     border-radius: 15px, 0px, 15px, 0px;
 }
 
 body {
     margin: 0px;
+}
+
+#Logo {
+    
 }
