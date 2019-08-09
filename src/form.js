@@ -32,23 +32,13 @@ class Form extends React.Component {
                     <input id="first-name" placeholder="First Name"></input>
                     <input placeholder="Last Name/Initial"></input>
                     <br/>
-<<<<<<< HEAD
-                    <label for="identifier">Other identifier(s) for service user</label>
-=======
                     <label for="identifiers">Other identifiers for Service User </label>
                     <br/> 
                     <input id="identifiers" placeholder="Favorite color, etc."></input>
->>>>>>> 338b5a0965f5edb7cd2fa31c9cf5fb0d62f5783c
                     <br/>
                     <label for="advocate-initials">Advocate Initials </label>
                     <br/>
-<<<<<<< HEAD
-                    <label for="contact-date">Date of contact</label>
-                    <br/>
-                    <input type="date" id="contact-date"></input>
-=======
                     <input id="advocate-initials" placeholder="Initials" maxlength="2"></input>
->>>>>>> 338b5a0965f5edb7cd2fa31c9cf5fb0d62f5783c
                     <br/>
                     <label id="date-text" for="contact-date">Date of contact </label>
                     <br/>
