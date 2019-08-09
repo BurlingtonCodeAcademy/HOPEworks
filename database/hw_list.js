@@ -26,7 +26,7 @@ class FactStore {
   async collection() {
     const client = await this.client();
     const db = client.db(this.dbName);
-    const collection = db.collection('facts');
+    const collection = db.collection('form');
     return collection;
   }
 
@@ -38,24 +38,24 @@ class FactStore {
   async printAll() {
     let cursor = await this.all();
 
-    let currentDay;
-    await cursor.forEach((fact) => {
-      let when = moment(fact.when);
-      let startOfDay = when.format('YYYYMMDD');
-      if (!currentDay || currentDay != startOfDay) {
-        console.log(when.format('MMMM Do, YYYY'));
-        currentDay = startOfDay;
-      }
-      let output = when.format('  hh:mm a - ') + fact.text;
-      console.log(output);
-      return currentDay;
-    })
-  }
+  //   let currentDay;
+  //   await cursor.forEach((fact) => {
+  //     let when = moment(fact.when);
+  //     let startOfDay = when.format('YYYYMMDD');
+  //     if (!currentDay || currentDay != startOfDay) {
+  //       console.log(when.format('MMMM Do, YYYY'));
+  //       currentDay = startOfDay;
+  //     }
+  //     let output = when.format('  hh:mm a - ') + fact.text;
+  //     console.log(output);
+  //     return currentDay;
+  //   })
+   }
 
   printEntry(fact, currentDay) {
   }
 
-  async addFact(text) {
+  async addForm(text) {
     let entry = {
       when: new Date(),
       text: text
