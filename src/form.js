@@ -364,124 +364,128 @@ class Form extends React.Component {
                     <br/>
                     <div id="time-call">Total time spent
                     <br/>
-                    <input type="checkbox" name="time-call" value="Hours of Operation"/>15 min
+                    </div>
+                    <div id="time-call">
+                        <label>
+                            <input name="time-call" value="15 min" type="radio"/>15 min
+                        </label>
                         <br/>
-                        <input type="checkbox" name="time-call" value="Lack of Child Care"/>30 min
+                        <label>
+                           <input name="time-call" value="30 min" type="radio"/>30 min
+                        </label>
                         <br/>
-                        <input type="checkbox" name="time-call" value="Program Reach Capacity"/>45 min
+                        <label>
+                           <input name="time-call" value="45 min" type="radio"/>45 min
+                        </label>
                         <br/>
-                        <input type="checkbox" name="time-call" value="Limited Resources/Priority Setting"/>60 min
+                        <label>
+                           <input name="time-call" value="60 min" type="radio"/>60 min
+                        </label>
                         <br/>
-                        <input type="checkbox" name="time-call" value="Other"/>Other (in hours): 
-                        <input type="number" name="time-call" class="inline-input"/>
+                        <label>
+                            <input name="time-call" type="radio" value="Other" on/>Other (in hours):
+                            <input type="number" name="language" class="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        </label>
                     </div>
                     <hr/>
                     <label>Services Provided</label>
                     <div id="contact">
                         <label>
-                            <input type="number"/>Information and Referral
+                            <input id="info-and-referral" type="number"/>Information and Referral
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Emotional Support
+                            <input id="emotional-support" type="number"/>Emotional Support
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Crisis Support
+                            <input id="crisis-support" type="number"/>Crisis Support
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Safety Planning
+                            <input id="safety-planning" type="number"/>Safety Planning
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Housing Advocacy
+                            <input id="housing-advocacy" type="number"/>Housing Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Economic Advocacy
+                            <input id="economic-advocacy" type="number"/>Economic Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Education Advocacy
+                            <input id="education-advocacy" type="number"/>Education Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Employment Advocacy
+                            <input id="employment-advocacy" type="number"/>Employment Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Health Care Advocacy
+                            <input id="health-care-advocacy" type="number"/>Health Care Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Immigration Advocacy
+                            <input id="immigration-advocacy" type="number"/>Immigration Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Other Advocacy
+                            <input id="other-advocacy" type="number"/>Other Advocacy
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>SANE Exam Accompaniment
+                            <input id="sane-exam" type="number"/>SANE Exam Accompaniment
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Protection Order**
+                            <input id="protection-order" type="number"/>Protection Order**
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Other Civil Legal Support
+                            <input id="other-civil-legal" type="number"/>Other Civil Legal Support
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Criminal Legal Support
+                            <input id="criminal-legal" type="number"/>Criminal Legal Support
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Language Services
+                            <input id="language-services" type="number"/>Language Services
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Health Care Advocacy
+                            <input id="child-related-services" type="number"/>Child Related Services
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Immigration Advocacy
+                            <input id="victim-comp" type="number"/>Victims Comp Claim Assistance
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Child Related Services
+                            <input id="safe-home=entered" type="number"/>Safe home entered
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Victims Comp Claim Assistance
+                            <input id="safe-home-exited" type="number"/>Safe home exited
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Safe home entered
+                            <input id="transportation" type="number"/>Transportation
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Safe home exited
+                            <input id="medical-assist-num" type="number"/>Medical Assistance
+                            <input id="medical-assist-name" type="text" class="inline-input"/>
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Transportation
+                            <input id="groups-num" type="number"/>Groups
+                            <input id="groups-name" type="text" class="inline-input"/>
                         </label>
                         <br/>
                         <label>
-                            <input type="number"/>Medical Assistance
-                            <input type="text" class="inline-input"/>
-                        </label>
-                        <br/>
-                        <label>
-                            <input type="number"/>Groups
-                            <input type="text" class="inline-input"/>
-                        </label>
-                        <br/>
-                        <label>
-                            <input type="number"/>Partially Served**
+                            <input id="partially-served" type="number"/>Partially Served**
                         </label>
                     </div>
                     <hr/>
@@ -632,5 +636,348 @@ class Form extends React.Component {
       )
     }  
 }
+
+let theData = {
+    firstName: "",
+    lastName: "",
+    otherIdentifiers: "",
+    advocateInitials: "",
+    contactDate: "",
+    city: "",
+    phone: "",
+    survivorType: "",
+    survivorGender: "",
+    dob: "",
+    ageRange: "",
+    language: "",
+    ethnicity: "",
+    numberChildren: 0,
+    disability: "",
+    miscChars: [],
+    nameOfSchool: "",
+    referrer: "",
+    victimization: [],
+    perpRelation: [],
+    perpGender: "",
+    protectionOrder: {
+        length: "",
+        type: "",
+        granted: ""
+    },
+    partiallyServedReasons: [],
+    safeToCall: "",
+    safeToLeaveMessage: "",
+    firstTime: "",
+    contactTypes: {
+        calls: 0,
+        inPerson: 0,
+        webChat: 0,
+        onBehalf: 0
+    },
+    timeSpent: "",
+    servicesProvided: {
+        informationAndReferral: 0,
+        emotionalSupport: 0,
+        crisisSupport: 0,
+        safetyPlanning: 0,
+        housingAdvocacy: 0,
+        economicAdvocacy: 0,
+        educationAdvocacy: 0,
+        employmentAdvocacy: 0,
+        healthCareAdvocacy: 0,
+        immigrationAdvocacy: 0,
+        otherAdvocacy: 0,
+        saneExamAccompaniment: 0,
+        protectionOrder: 0,
+        otherCivilLegalSupport: 0,
+        criminalLegalSupport: 0,
+        languageServices: 0,
+        childRelatedServices: 0,
+        victimsCompClaimAssistance: 0,
+        safeHomeEntered: 0,
+        safeHomeExited: 0,
+        transportation: 0,
+        medicalAssistance: [0, ""],
+        groups: [0, ""],
+        partiallyServed: 0
+    },
+    referrals: {
+        "211": {
+            to: false,
+            from: false
+        },
+        "Campus Services": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "CUSI/State's Attorney/CAC": {
+            to: false,
+            from: false
+        },
+        "DCF": {
+            to: false,
+            from: false
+        },
+        "Disability Org": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "DIVAS/Corrections/P+P": {
+            to: false,
+            from: false
+        },
+        "DVAS": {
+            to: false,
+            from: false
+        },
+        "Financial Assistance Org": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "Financial Empowerment Programming": {
+            to: false,
+            from: false
+        },
+        "Health Centers": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "HOPE Works Clinical Therapist": {
+            to: false,
+            from: false
+        },
+        "Housing Org": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "Immigrant Org": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "LGBTQ Org": {
+            to: false,
+            from: false
+        },
+        "National Guard/Military Services": {
+            to: false,
+            from: false,
+        },
+        "Network Program": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "Police Department": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "Out of State Rape Crisis Services": {
+            to: false,
+            from: false
+        },
+        "RAINN": {
+            to: false,
+            from: false
+        },
+        "SANE": {
+            to: false,
+            from: false
+        },
+        "Support Group": {
+            to: false,
+            from: false
+        },
+        "Therapist List": {
+            to: false,
+            from: false
+        },
+        "Youth Org": {
+            to: false,
+            from: false,
+            name: ""
+        },
+        "Other": {
+            to: false,
+            from: false,
+            name: ""
+        }
+    },
+    outcomeMeasures: "",
+    communityResources: "",
+    rightsAndOptions: "",
+    notes: ""
+}
+
+let firstName = document.getElementById('first-name');
+let indentifiers = document.getElementById('identifiers');
+let advocateInitials = document.getElementById('advocate-initials');
+let dateText = document.getElementById('date-text');
+let cityTown = document.getElementById('city-town');
+let phone = document.getElementById('phone');
+let survivorGender = document.getElementById('survivor-gender');
+let language = document.getElementById('language');
+let ethnicity = document.getElementById('ethnicity');
+let numberChildren = document.getElementById('number-children');
+let nameOfSchool = document.getElementById("name-of-school");
+let referrer = document.getElementById("hear-about");
+let perpGender = document.getElementById("perp-gender");
+let timeSpent = document.getElementById("time-call");
+let servicesProvided = {
+    informationAndReferral: document.getElementById("info-and-referral"),
+    emotionalSupport: document.getElementById("emotional-support"),
+    crisisSupport: document.getElementById("crisis-support"),
+    safetyPlanning: document.getElementById("safety-planning"),
+    housingAdvocacy: document.getElementById("housing-advocacy"),
+    economicAdvocacy: document.getElementById("economic-advocacy"),
+    educationAdvocacy: document.getElementById("education-advocacy"),
+    employmentAdvocacy: document.getElementById("employment-advocacy"),
+    healthCareAdvocacy: document.getElementById("health-care-advocacy"),
+    immigrationAdvocacy: document.getElementById("immigration-advocacy"),
+    otherAdvocacy: document.getElementById("other-advocacy"),
+    saneExamAccompaniment: document.getElementById("sane-exam"),
+    protectionOrder: document.getElementById("protection-order"),
+    otherCivilLegalSupport: document.getElementById("other-civil-legal"),
+    criminalLegalSupport: document.getElementById("criminal-legal"),
+    languageServices: document.getElementById("language-services"),
+    childRelatedServices: document.getElementById("child-related-services"),
+    victimsCompClaimAssistance: document.getElementById("victim-comp"),
+    safeHomeEntered: document.getElementById("safe-home-entered"),
+    safeHomeExited: document.getElementById("safe-home-exited"),
+    transportation: document.getElementById("transportation"),
+    medicalAssistance: [document.getElementById("medical-assist-num"), document.getElementById("medical-assist-name")],
+    groups: [document.getElementById("groups-num"), document.getElementById("groups-name")],
+    partiallyServed: document.getElementById("partially-served")
+}
+let notes = document.getElementById("notes")
+// referrals: {
+//     "211": {
+//         to: false,
+//         from: false
+//     },
+//     "Campus Services": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "CUSI/State's Attorney/CAC": {
+//         to: false,
+//         from: false
+//     },
+//     "DCF": {
+//         to: false,
+//         from: false
+//     },
+//     "Disability Org": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "DIVAS/Corrections/P+P": {
+//         to: false,
+//         from: false
+//     },
+//     "DVAS": {
+//         to: false,
+//         from: false
+//     },
+//     "Financial Assistance Org": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "Financial Empowerment Programming": {
+//         to: false,
+//         from: false
+//     },
+//     "Health Centers": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "HOPE Works Clinical Therapist": {
+//         to: false,
+//         from: false
+//     },
+//     "Housing Org": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "Immigrant Org": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "LGBTQ Org": {
+//         to: false,
+//         from: false
+//     },
+//     "National Guard/Military Services": {
+//         to: false,
+//         from: false,
+//     },
+//     "Network Program": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "Police Department": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "Out of State Rape Crisis Services": {
+//         to: false,
+//         from: false
+//     },
+//     "RAINN": {
+//         to: false,
+//         from: false
+//     },
+//     "SANE": {
+//         to: false,
+//         from: false
+//     },
+//     "Support Group": {
+//         to: false,
+//         from: false
+//     },
+//     "Therapist List": {
+//         to: false,
+//         from: false
+//     },
+//     "Youth Org": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     },
+//     "Other": {
+//         to: false,
+//         from: false,
+//         name: ""
+//     }
+// },
+// outcomeMeasures: "",
+// communityResources: "",
+// rightsAndOptions: "",
+// notes: ""
+
+function radioButtonValue (name) {
+    let theButtons = document.getElementsByName(name);
+    for (var i = 0; i < theButtons.length; i++) {
+        if (theButtons[i].checked) {
+            return theButtons[i].value
+        }
+    }
+}
+
+radioButtonValue("survivor-type")
 
 export default Form;
