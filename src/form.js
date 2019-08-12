@@ -1,14 +1,18 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-
 class Form extends React.Component {
     constructor() {
         super();
         this.state = {
-            property: true
+            numIncidents: 1,
+            numOrders: 1
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.displayIncidents = this.displayIncidents.bind(this);
+        this.numIncidentsChange = this.numIncidentsChange.bind(this);
+        this.numOrdersChange = this.numOrdersChange.bind(this);
+        this.displayOrders = this.displayOrders.bind(this);
     }
 
     handleSubmit (evnt) {
@@ -32,30 +36,7 @@ class Form extends React.Component {
         let contactWebChat = document.getElementById("contact-web-chat")
         let contactOnBehalf = document.getElementById("contact-on-behalf")
         let servicesProvided = {
-            informationAndReferral: document.getElementById("info-and-referral"),
-            emotionalSupport: document.getElementById("emotional-support"),
-            crisisSupport: document.getElementById("crisis-support"),
-            safetyPlanning: document.getElementById("safety-planning"),
-            housingAdvocacy: document.getElementById("housing-advocacy"),
-            economicAdvocacy: document.getElementById("economic-advocacy"),
-            educationAdvocacy: document.getElementById("education-advocacy"),
-            employmentAdvocacy: document.getElementById("employment-advocacy"),
-            healthCareAdvocacy: document.getElementById("health-care-advocacy"),
-            immigrationAdvocacy: document.getElementById("immigration-advocacy"),
-            otherAdvocacy: document.getElementById("other-advocacy"),
-            saneExamAccompaniment: document.getElementById("sane-exam"),
-            protectionOrder: document.getElementById("protection-order"),
-            otherCivilLegalSupport: document.getElementById("other-civil-legal"),
-            criminalLegalSupport: document.getElementById("criminal-legal"),
-            languageServices: document.getElementById("language-services"),
-            childRelatedServices: document.getElementById("child-related-services"),
-            victimsCompClaimAssistance: document.getElementById("victim-comp"),
-            safeHomeEntered: document.getElementById("safe-home-entered"),
-            safeHomeExited: document.getElementById("safe-home-exited"),
-            transportation: document.getElementById("transportation"),
-            medicalAssistance: [document.getElementById("medical-assist-num"), document.getElementById("medical-assist-name")],
-            groups: [document.getElementById("groups-num"), document.getElementById("groups-name")],
-            partiallyServed: document.getElementById("partially-served")
+            
         }
         let notes = document.getElementById("notes")
         
@@ -123,13 +104,153 @@ class Form extends React.Component {
                 groups: [servicesProvided.groups[0].value, servicesProvided.groups[1].value],
                 partiallyServed: servicesProvided.partiallyServed.value
             },
-            referrals: checkBoxValues("referrals"),
+            referrals: referralValues("referrals"),
             outcomeMeasures: radioButtonValue("plan-for-safety"),
             communityResources: radioButtonValue("community-resources"),
             rightsAndOptions: radioButtonValue("rights-options"),
             notes: notes.value
         }
         console.log(theData);
+    }
+
+    numIncidentsChange (evnt) {
+        this.setState({numIncidents: evnt.target.value})
+    }
+
+    displayIncidents (num) {
+        let newNum = num;
+        if (num > 10) {
+            newNum = 0;
+        }
+        let i = 0;
+        let listItems = [];
+        while (i < newNum) {
+            listItems.push(
+                <div key={i}>
+                    <label htmlFor="victimization">Victimization #{i + 1}</label>
+                    <div id="victimization">
+                        <input type="checkbox" name="victimization" value="Rape"/>Rape
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Attempted Rape"/>Attempted Rape
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Sex Trafficking"/>Sex Trafficking
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Child Sexual Abuse"/>Child Sexual Abuse
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Drug Facilitated SV"/>Drug Facilitated SV
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Stalking"/>Stalking
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Sexual Harassment"/>Sexual Harassment
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Domestic Violence"/>Domestic Violence
+                        <br/>
+                        <input type="checkbox" name="victimization" value="Other"/>Other: 
+                        <input type="text" name="victimization" className="inline-input"/>
+                    </div>
+                    <label htmlFor="perp-relationship">Perpetrator #{i+1} Relationship</label>
+                    <div id="perp-relationship">
+                        <input type="checkbox" name="perp-relationship" value="Acquaitance"/>Acquaitance
+                        <br/>
+                        <input type="checkbox" name="perp-relationship" value="Intimate Partner"/>Intimate Partner
+                        <br/>
+                        <input type="checkbox" name="perp-relationship" value="Family/Household Member"/>Family/Household Member
+                        <br/>
+                        <input type="checkbox" name="perp-relationship" value="Dating Relationship"/>Dating Relationship
+                        <br/>
+                        <input type="checkbox" name="perp-relationship" value="Stranger"/>Stranger
+                        <br/>
+                        <input type="checkbox" name="perp-relationship" value="Other"/>Other: 
+                        <input type="text" name="perp-relationship" className="inline-input"/>
+                    </div>
+                    <label htmlFor="perp-gender">Perpetrator #{i+1} Gender</label>
+                    <br/>
+                    <select id="perp-gender">
+                        <option value="Unknown">Unknown</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Intersex">Intersex</option>
+                        <option value="M→F">M→F</option>
+                        <option value="F→M">F→M</option>
+                        <option value="Questioning">Questioning</option>
+                        <option value="Self Defined">Self Defined</option>
+                    </select>
+                    <br/>
+                </div>)
+            i++;
+        }
+        if (num > 10) {
+            return (
+                <h4>Sorry, {num} is too many victimizations!</h4>
+            )
+        } else {
+            return (
+                <div id="victimizations">{listItems}</div>
+            )
+        }
+    }
+      
+    numOrdersChange (evnt) {
+        this.setState({numOrders: evnt.target.value})
+    }
+
+    displayOrders (num) {
+        let newNum = num;
+        if (num > 10) {
+            newNum = 0;
+        }
+        let i = 0;
+        let listItems = [];
+        while (i < newNum) {
+            listItems.push(
+                <div key={i}>
+                    <label htmlFor="protection-asst">Protection Order Assistance #{i+1}</label>
+                    <div id="protection-asst">
+                        <div>
+                            <input name="order-length" value="Temporary Order" type="radio"/>Temporary Order
+                            <br/>
+                            <input name="order-length" value="Final Order" type="radio"/>Final Order
+                        </div>
+                        <br/>
+                        <div>
+                            <input name="order-type" value="Adult: DV" type="radio"/>Adult: DV
+                            <br/>
+                            <input name="order-type" value="Adult: Stalking" type="radio"/>Adult: Stalking
+                            <br/>
+                            <input name="order-type" value="Adult: SV" type="radio"/>Adult: SV
+                            <br/>
+                            <input name="order-type" value="OBO Child: CSA" type="radio"/>OBO Child: CSA
+                            <br/>
+                            <input name="order-type" value="OBO Child: Other" type="radio"/>OBO Child: Other
+                        </div>
+                        <br/>
+                        <div>
+                            <label>
+                                <input name="order-granted" value="Granted" type="radio"/>Granted
+                            </label>
+                            <br/>
+                            <label>
+                                <input name="order-granted" value="Denied" type="radio"/>Denied
+                            </label>
+                            <br/>
+                            <label>
+                                <input name="order-granted" value="Unknown" type="radio"/>Unknown
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                )
+            i++;
+        }
+        if (num > 10) {
+            return (
+                <h4>Sorry, {num} is too many orders!</h4>
+            )
+        } else {
+            return (
+                <div id="victimizations">{listItems}</div>
+            )
+        }
     }
 
     render() {
@@ -142,7 +263,6 @@ class Form extends React.Component {
                     <h2>SURVIVOR INTAKE FORM</h2>
                     </div>
                 <div id="all-fields">
-                 <div>
                     <br/>
                     <label htmlFor="first-name">Name of Service User </label>
                     <br/>
@@ -178,7 +298,6 @@ class Form extends React.Component {
                            <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor
                         </label>
                     </div>
-                 </div>
                     <hr/>
                     <label htmlFor="survivor-gender">Gender</label>
                     <br/>
@@ -197,50 +316,20 @@ class Form extends React.Component {
                     <br/>
                     <input type="date" id="dob"></input>
                     <br/>
-                    <label htmlFor="age-range">Age (range)</label>
-                    <div id="age-range">
-                        <label>
-                            <input name="age-range" value="0-12" type="radio"/>0-12
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="age-range" value="13-17" type="radio"/>13-17
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="age-range" value="18-21" type="radio"/>18-21
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="age-range" value="22-24" type="radio"/>22-24
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="age-range" value="25-59" type="radio"/>25-59
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="age-range" value="60+" type="radio"/>60+
-                        </label>
-                    </div>
+                    <label htmlFor="age-range-0">Approximate Age (range)</label>
+                    <br/>
+                    <input id="age-range-0" type="number"/>- <input id="age-range-1" type="number"/>
+                    <br/>
                     <label htmlFor="language">Language</label>
                     <div id="language">
-                        <label>
-                            <input name="language" value="English" type="radio"/>English
-                        </label>
+                        <input name="language" value="English" type="radio"/>English
                         <br/>
-                        <label>
-                           <input name="language" value="Limited English Proficiency" type="radio"/>Limited English Proficiency
-                        </label>
+                        <input name="language" value="Limited English Proficiency" type="radio"/>Limited English Proficiency
                         <br/>
-                        <label>
-                           <input name="language" value="ASL" type="radio"/>ASL
-                        </label>
+                        <input name="language" value="ASL" type="radio"/>ASL
                         <br/>
-                        <label>
-                            <input name="language" type="radio" value="Other"/>Other:
-                            <input type="text" name="language" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
-                        </label>
+                        <input name="language" type="radio" value="Other"/>Other:
+                        <input type="text" name="language" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                     </div>
                     <label htmlFor="ethnicity">Ethnicity</label>
                     <div id="ethnicity">
@@ -297,103 +386,16 @@ class Form extends React.Component {
                     <br/>
                     <input id="hear-about" placeholder="Name of referrer"></input>
                     <hr/>
-                    <label htmlFor="victimization">Victimization</label>
-                    <div id="victimization">
-                        <input type="checkbox" name="victimization" value="Rape"/>Rape
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Attempted Rape"/>Attempted Rape
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Sex Trafficking"/>Sex Trafficking
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Child Sexual Abuse"/>Child Sexual Abuse
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Drug Facilitated SV"/>Drug Facilitated SV
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Stalking"/>Stalking
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Sexual Harassment"/>Sexual Harassment
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Domestic Violence"/>Domestic Violence
-                        <br/>
-                        <input type="checkbox" name="victimization" value="Other"/>Other: 
-                        <input type="text" name="victimization" className="inline-input"/>
-                    </div>
-                    <label htmlFor="perp-relationship">Perpetrator Relationship</label>
-                    <div id="perp-relationship">
-                        <input type="checkbox" name="perp-relationship" value="Acquaitance"/>Acquaitance
-                        <br/>
-                        <input type="checkbox" name="perp-relationship" value="Intimate Partner"/>Intimate Partner
-                        <br/>
-                        <input type="checkbox" name="perp-relationship" value="Family/Household Member"/>Family/Household Member
-                        <br/>
-                        <input type="checkbox" name="perp-relationship" value="Dating Relationship"/>Dating Relationship
-                        <br/>
-                        <input type="checkbox" name="perp-relationship" value="Stranger"/>Stranger
-                        <br/>
-                        <input type="checkbox" name="perp-relationship" value="Other"/>Other: 
-                        <input type="text" name="perp-relationship" className="inline-input"/>
-                    </div>
-                    <label htmlFor="perp-gender">Perpetrator Gender</label>
+                    <label htmlFor="victimization-count">Number of Incidents</label>
                     <br/>
-                    <select id="perp-gender">
-                        <option value="Unknown">Unknown</option>
-                        <option value="Female">Female</option>
-                        <option value="Male">Male</option>
-                        <option value="Intersex">Intersex</option>
-                        <option value="M→F">M→F</option>
-                        <option value="F→M">F→M</option>
-                        <option value="Questioning">Questioning</option>
-                        <option value="Self Defined">Self Defined</option>
-                    </select>
+                    <input id="victimization-count" type="number" onChange={this.numIncidentsChange}/>
+                    {this.displayIncidents(this.state.numIncidents)}
                     <hr/>
-                    <label htmlFor="protection-asst">Protection Order Assistance</label>
-                    <div id="protection-asst">
-                        <div>
-                            <label>
-                                <input name="order-length" value="Temporary Order" type="radio"/>Temporary Order
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-length" value="Final Order" type="radio"/>Final Order
-                            </label>
-                        </div>
-                        <br/>
-                        <div>
-                            <label>
-                                <input name="order-type" value="Adult: DV" type="radio"/>Adult: DV
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-type" value="Adult: Stalking" type="radio"/>Adult: Stalking
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-type" value="Adult: SV" type="radio"/>Adult: SV
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-type" value="OBO Child: CSA" type="radio"/>OBO Child: CSA
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-type" value="OBO Child: Other" type="radio"/>OBO Child: Other
-                            </label>
-                        </div>
-                        <br/>
-                        <div>
-                            <label>
-                                <input name="order-granted" value="Granted" type="radio"/>Granted
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-granted" value="Denied" type="radio"/>Denied
-                            </label>
-                            <br/>
-                            <label>
-                                <input name="order-granted" value="Unknown" type="radio"/>Unknown
-                            </label>
-                        </div>
-                    </div>
+                    <label htmlFor="order-count">Number of Protection Orders</label>
+                    <br/>
+                    <input id="order-count" type="number" onChange={this.numOrdersChange}/>
+                    <br/>
+                    {this.displayOrders(this.state.numOrders)}
                     <hr/>
                     <label htmlFor="partially-served">Partially Served</label>
                     <br/>
@@ -417,47 +419,29 @@ class Form extends React.Component {
                     <h2>Ongoing Services</h2>
                     <label htmlFor="safe-to-call">Safe to call back?</label>
                     <div id="safe-to-call">
-                        <label>
-                            <input name="safe-to-call" value="Yes" type="radio"/>Yes
-                        </label>
+                        <input name="safe-to-call" value="Yes" type="radio"/>Yes
                         <br/>
-                        <label>
-                           <input name="safe-to-call" value="No" type="radio"/>No
-                        </label>
+                        <input name="safe-to-call" value="No" type="radio"/>No
                         <br/>
-                        <label>
-                           <input name="safe-to-call" value="Unknown" type="radio"/>Unknown
-                        </label>
+                        <input name="safe-to-call" value="Unknown" type="radio"/>Unknown
                     </div>
                     <br/>
                     <label htmlFor="safe-to-leave-message">Safe to leave a message?</label>
                     <div id="safe-to-leave-message">
-                        <label>
-                            <input name="safe-to-leave-message" value="Yes" type="radio"/>Yes
-                        </label>
+                        <input name="safe-to-leave-message" value="Yes" type="radio"/>Yes
                         <br/>
-                        <label>
-                           <input name="safe-to-leave-message" value="No" type="radio"/>No
-                        </label>
+                        <input name="safe-to-leave-message" value="No" type="radio"/>No
                         <br/>
-                        <label>
-                           <input name="safe-to-leave-message" value="Unknown" type="radio"/>Unknown
-                        </label>
+                        <input name="safe-to-leave-message" value="Unknown" type="radio"/>Unknown
                     </div>
                     <br/>
                     <label htmlFor="first-time">First time caller?</label>
                     <div id="first-time">
-                        <label>
-                            <input name="first-time" value="Yes" type="radio"/>Yes
-                        </label>
+                        <input name="first-time" value="Yes" type="radio"/>Yes
                         <br/>
-                        <label>
-                           <input name="first-time" value="No" type="radio"/>No
-                        </label>
+                        <input name="first-time" value="No" type="radio"/>No
                         <br/>
-                        <label>
-                           <input name="first-time" value="Unknown" type="radio"/>Unknown
-                        </label>
+                        <input name="first-time" value="Unknown" type="radio"/>Unknown
                     </div>
                     <br/>
                     <label htmlFor="contact">Contact</label>
@@ -465,19 +449,19 @@ class Form extends React.Component {
                     <label htmlFor="contact">(indicate the number of contacts through each method per day)</label>
                     <div id="contact">
                         <label>
-                            <input id="contact-calls" type="number"/>Calls with Service User
+                        <input id="contact-calls" type="number"/>Calls with Service User
                         </label>
                         <br/>
                         <label>
-                            <input id="contact-in-person" type="number"/>In-person with Service User
+                        <input id="contact-in-person" type="number"/>In-person with Service User
                         </label>
                         <br/>
                         <label>
-                            <input id="contact-web-chat" type="number"/>Web Chat
+                        <input id="contact-web-chat" type="number"/>Web Chat
                         </label>
                         <br/>
                         <label>
-                            <input id="contact-on-behalf" type="number"/>On Behalf of Service User
+                        <input id="contact-on-behalf" type="number"/>On Behalf of Service User
                         </label>
                     </div>
                     <br/>
@@ -486,126 +470,114 @@ class Form extends React.Component {
                     </div>
                     <div id="time-call">
                         <label>
-                            <input name="time-call" value="15 min" type="radio"/>15 min
+                        <input name="time-call" value="15 min" type="radio"/>15 min
                         </label>
                         <br/>
                         <label>
-                           <input name="time-call" value="30 min" type="radio"/>30 min
+                        <input name="time-call" value="30 min" type="radio"/>30 min
                         </label>
                         <br/>
                         <label>
-                           <input name="time-call" value="45 min" type="radio"/>45 min
+                        <input name="time-call" value="45 min" type="radio"/>45 min
                         </label>
                         <br/>
                         <label>
-                           <input name="time-call" value="60 min" type="radio"/>60 min
+                        <input name="time-call" value="60 min" type="radio"/>60 min
                         </label>
                         <br/>
                         <label>
-                            <input name="time-call" type="radio" value="Other"/>Other (in hours):
-                            <input type="number" name="time-call" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        <input name="time-call" type="radio" value="Other"/>Other (in hours):
+                        <input type="number" name="time-call" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         </label>
                     </div>
                     <hr/>
-                    <label>Services Provided</label>
-                    <div id="contact">
-                        <label>
-                            <input id="info-and-referral" type="number"/>Information and Referral
-                        </label>
+                    <p>Services Provided</p>
+                    <label htmlFor="advocacy">Advocacy</label>
+                    <div id="advocacy">
+                        <input type="checkbox" name="advocacy" value="Economic"/>Economic
                         <br/>
-                        <label>
-                            <input id="emotional-support" type="number"/>Emotional Support
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Financial"/>Financial
                         <br/>
-                        <label>
-                            <input id="crisis-support" type="number"/>Crisis Support
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Housing"/>Housing
                         <br/>
-                        <label>
-                            <input id="safety-planning" type="number"/>Safety Planning
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Education"/>Education
                         <br/>
-                        <label>
-                            <input id="housing-advocacy" type="number"/>Housing Advocacy
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Employment"/>Employment
                         <br/>
-                        <label>
-                            <input id="economic-advocacy" type="number"/>Economic Advocacy
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Immigration"/>Immigrantion
                         <br/>
-                        <label>
-                            <input id="education-advocacy" type="number"/>Education Advocacy
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Healthcare"/>Healthcare
                         <br/>
-                        <label>
-                            <input id="employment-advocacy" type="number"/>Employment Advocacy
-                        </label>
+                        <input type="checkbox" name="advocacy" value="Other Civil Legal"/>Other Civil Legal:
+                        <input type="text" name="advocacy" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
-                        <label>
-                            <input id="health-care-advocacy" type="number"/>Health Care Advocacy
-                        </label>
                         <br/>
-                        <label>
-                            <input id="immigration-advocacy" type="number"/>Immigration Advocacy
-                        </label>
+                    </div>
+                    <label htmlFor="support">Support</label>
+                    <div id="support">
+                        <input type="checkbox" name="support" value="Immigration"/>Emotional
+                        <br/>                      
+                        <input type="checkbox" name="support" value="Crisis"/>Crisis                       
+                        <br/>                     
+                        <input type="checkbox" name="support" value="Criminal Legal"/>Criminal Legal
                         <br/>
-                        <label>
-                            <input id="other-advocacy" type="number"/>Other Advocacy
-                        </label>
+                        <input type="checkbox" name="support" value="Other"/>Other:
+                        <input type="text" name="support" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
-                        <label>
-                            <input id="sane-exam" type="number"/>SANE Exam Accompaniment
-                        </label>
                         <br/>
-                        <label>
-                            <input id="protection-order" type="number"/>Protection Order**
-                        </label>
+                    </div>
+                    <div>
+                    <label htmlFor="Medical">Medical</label>
+                    <div id="medical"></div>
+                        <input type="checkbox" name="medical" value="SANE Exam Accompaniment"/>SANE Exam Accompaniment
                         <br/>
-                        <label>
-                            <input id="other-civil-legal" type="number"/>Other Civil Legal Support
-                        </label>
+                        <br/> 
+                    </div>
+                    <label htmlFor="assistance-services">Assistance/Services</label>
+                    <div id="assistance-services">
+                        <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim"/>Victims' Compensation Claim
                         <br/>
-                        <label>
-                            <input id="criminal-legal" type="number"/>Criminal Legal Support
-                        </label>
+                        <input type="checkbox" name="assistance-services" value="Amount"/>Amount: $
+                        <input type="number" name="assistance-services" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
-                        <label>
-                            <input id="language-services" type="number"/>Language Services
-                        </label>
+                        <input type="checkbox" name="assistance-services" value="Language"/>Language
                         <br/>
-                        <label>
-                            <input id="child-related-services" type="number"/>Child Related Services
-                        </label>
+                        <input type="checkbox" name="assistance-services" value="Transporation"/>Transporation
                         <br/>
-                        <label>
-                            <input id="victim-comp" type="number"/>Victims Comp Claim Assistance
-                        </label>
+                        <input type="checkbox" name="assistance-services" value="Material Assistance"/>Material Assistance
                         <br/>
-                        <label>
-                            <input id="safe-home-entered" type="number"/>Safe home entered
-                        </label>
+                            <div id="material-assistance-div">
+                             <input type="checkbox" name="assistance-services" value="Bus Pass"/>Bus Pass
+                             <br/>
+                             <input type="checkbox" name="assistance-services" value="Food Cart"/>Food Cart
+                             <br/>
+                             <input type="checkbox" name="assistance-services" value="Clothes"/>Clothes
+                             <br/>
+                             <input type="checkbox" name="assistance-services" value="Hygiene"/>Hygiene
+                             <br/>
+                             <input type="checkbox" name="assistance-services" value="Hotel"/>Hotel
+                             <br/>
+                             <input type="checkbox" name="assistance-services" value="other"/>Other
+                             <br/>
+                            </div>
+                    </div>
+                    <label htmlFor="information-referral">Information Referral</label>
+                    <div id="information-referral">
+                        <input type="checkbox" name="information-referral" value="Information"/>Information
                         <br/>
-                        <label>
-                            <input id="safe-home-exited" type="number"/>Safe home exited
-                        </label>
+                        <input type="checkbox" name="information-referral" value="Referral"/>Referral (please see below)
                         <br/>
-                        <label>
-                            <input id="transportation" type="number"/>Transportation
-                        </label>
+                     </div>
+                     <label htmlFor="safe-home">Safe Home</label>
+                     <div id="safe-home">
+                        <input type="checkbox" name="safe-home" value="Date Entered"/>Date Entered
+                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
-                        <label>
-                            <input id="medical-assist-num" type="number"/>Medical Assistance
-                            <input id="medical-assist-name" type="text" className="inline-input"/>
-                        </label>
+                        <input type="checkbox" name="safe-home" value="Date Exited"/>Date Exited
+                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
-                        <label>
-                            <input id="groups-num" type="number"/>Groups
-                            <input id="groups-name" type="text" className="inline-input"/>
-                        </label>
-                        <br/>
-                        <label>
-                            <input id="partially-served" type="number"/>Partially Served**
-                        </label>
+                        <input type="checkbox" name="safe-home" value="Extension Date"/>Extention Date
+                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                     </div>
                     <hr/>
                     <label htmlFor="referrals">Referrals</label>
@@ -962,6 +934,23 @@ function checkBoxValues (name) {
         }
     }
     return checkedBoxes;
+}
+
+function referralValues (name) {
+    let theInputs = document.getElementsByName(name);
+    let finalValues = [];
+    for (let i = 0; i < theInputs.length; i++) {
+        if (theInputs[i].checked) {
+            if (theInputs[i + 1].type==="text") {
+                finalValues.push(theInputs[i].value + ": " + theInputs[i + 1].value)
+            } else if (theInputs[i + 2].type==="text") {
+                finalValues.push(theInputs[i].value + ": " + theInputs[i + 2].value)
+            } else if (theInputs[i].type!=="text") {
+                finalValues.push(theInputs[i].value)
+            }
+        }
+    }
+    return finalValues;
 }
 
 export default Form;
