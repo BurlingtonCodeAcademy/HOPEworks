@@ -291,12 +291,13 @@ class Form extends React.Component {
                     <br/>
                     <input id="phone" type="tel" placeholder="802-123-4567"></input>
                     <br/>
+                  <div class="center-div">
                     <div id="survivor-type">
                         <input name="survivor-type" value="Primary Survivor" type="radio"/>Primary Survivor                       
                         <br/>                       
-                        <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor
-                        
+                        <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor                       
                     </div>
+                  </div>
                     <hr/>
                     <label htmlFor="survivor-gender">Gender</label>
                     <br/>

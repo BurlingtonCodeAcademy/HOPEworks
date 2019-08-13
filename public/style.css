@@ -18,7 +18,6 @@
     flex-direction: column;
     width: 300px;
     height: 500px;
-    flex-wrap: wrap;
 }
 
 #all-fields {
@@ -86,6 +85,8 @@ h4 {
   
   .column-a {
       float: left;
-      margin-right: 44px;
+      margin-right: 66px;
   }
-  
+  .center-div {
+      text-align: center;
+  }
