@@ -5,6 +5,11 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
+// create app.use to get a specific URL path, either do a callback or async function, in that function, call the function in the
+// middleware file that will do "db.collection.find", then send it as JSON. Once done, create a new react component that will
+// fetch that link, convert it to JSON and append it to an array. Then display the array as an unordered list. look at
+// "till-react" for reference.
+
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/testForAuth');
 var db = mongoose.connection;
