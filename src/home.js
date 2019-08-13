@@ -15,6 +15,10 @@ class Home extends React.Component {
               <Link to={{ pathname: "/form" }}>create new form</Link>
               <br/>
               <Link to={{ pathname: "/" }}><button>log out</button></Link>
+              <p>change my account info</p>
+              <p>(admin) manage accounts</p>
+              <p>search for a profile</p>
+              <p>view aggregate data</p>
           </div>
       )
     }  

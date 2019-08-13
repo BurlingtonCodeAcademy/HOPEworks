@@ -1,5 +1,5 @@
 #the-form {
-    width: 500px;
+    width: 800px;
 }
 
 #form-page {
@@ -16,9 +16,8 @@
 #login-form {
     display: flex;
     flex-direction: column;
-    width: 125px;
+    width: 300px;
     height: 500px;
-    flex-wrap: wrap;
 }
 
 #all-fields {
@@ -39,7 +38,7 @@ input[type="date"] {
 }
 
 input[type="number"] {
-    width: 40px;
+    width: 50px;
 }
 
 hr {
@@ -60,10 +59,34 @@ hr {
 
 .inline-input {
     margin-left: 5px;
-    width: 100px;
+    width: 160px;
     border-radius: 15px, 0px, 15px, 0px;
 }
 
 body {
     margin: 0px;
 }
+
+#material-assistance-div {
+    margin-left: 40px;
+}
+
+h4 {
+    color: red;
+}
+
+  .row {
+    display: flex;
+  }
+  
+  .column-a {
+    flex: 50%;
+  }
+  
+  .column-a {
+      float: left;
+      margin-right: 66px;
+  }
+  .center-div {
+      text-align: center;
+  }
