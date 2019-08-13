@@ -57,7 +57,7 @@ class Form extends React.Component {
     let notes = document.getElementById("notes");
 
     let theData = {
-      timestamp: Date.now().toLocaleString,
+      timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
       firstName: firstName.value,
       lastName: lastName.value,
@@ -81,7 +81,7 @@ class Form extends React.Component {
       protectionOrders: getOrders(this.state.numOrders),
       partiallyServedReasons: checkBoxValues("partially-served"),
       safeToCall: radioButtonValue("safe-to-call"),
-      safeToLeaveMessage: radioButtonValue("save-to-leave-message"),
+      safeToLeaveMessage: radioButtonValue("safe-to-leave-message"),
       contactTypes: {
         calls: contactCall.value,
         inPerson: contactInPerson.value,
@@ -596,7 +596,7 @@ class Form extends React.Component {
     }
     if (num > 10) {
       return <h4>Sorry, {num} is too many orders!</h4>;
-    } else {
+    } else { 
       return <div id="orders">{listItems}</div>;
     }
   }
@@ -694,11 +694,9 @@ class Form extends React.Component {
               Safe to leave a message?
             </label>
             <div id="safe-to-leave-message">
-              <input name="safe-to-leave-message" value="Yes" type="radio" />
-              Yes
+              <input name="safe-to-leave-message" value="Yes" type="radio" />Yes
               <br />
-              <input name="safe-to-leave-message" value="No" type="radio" />
-              No
+              <input name="safe-to-leave-message" value="No" type="radio" />No
               <br />
               <input
                 name="safe-to-leave-message"
@@ -778,6 +776,7 @@ class Form extends React.Component {
             </div>
             <hr id="services-provided"/>
             <label htmlFor="advocacy">Services Provided</label>
+            <br/>
             <label htmlFor="advocacy">Advocacy</label>
             <div id="advocacy">
               <input type="checkbox" name="advocacy" value="Economic" />

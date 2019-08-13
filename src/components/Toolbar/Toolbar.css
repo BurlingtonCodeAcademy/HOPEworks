@@ -8,13 +8,13 @@
   background: rgb(0, 0, 0);
   overflow-x: hidden;
   padding: 8px 0;
-  font-family: open sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 .toolbar a {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 25px;
   color: #2196F3;
   display: block;
 }
@@ -29,7 +29,10 @@
   .toolbar {top: 0px;}
   .toolbar {left: 50%;}
   .toolbar a {font-size: 12px;}
-  .toolbar_naviation-items {}
-
+  .toolbar_navigation {display: none;}
+  .toolbar {display: none;}
 }
 
+.toolbar_navigation-items {
+  list-style-type: none;
+}
