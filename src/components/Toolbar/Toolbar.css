@@ -1,0 +1,35 @@
+.toolbar {
+  border-radius: 10px;
+  width: 250px;
+  position: fixed;
+  z-index: 10000;
+  top: 25%;
+  left: 5px;
+  background: rgb(0, 0, 0);
+  overflow-x: hidden;
+  padding: 8px 0;
+  font-family: open sans-serif;
+}
+
+.toolbar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #2196F3;
+  display: block;
+}
+
+.toolbar a:hover {
+  color: #064579;
+}
+
+
+@media screen and (max-width: 1300px) {
+  .toolbar {padding-top: 0;}
+  .toolbar {top: 0px;}
+  .toolbar {left: 50%;}
+  .toolbar a {font-size: 12px;}
+  .toolbar_naviation-items {}
+
+}
+

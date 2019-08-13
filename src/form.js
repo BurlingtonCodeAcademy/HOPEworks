@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // import img from '/hope_works_vt_logo_';
-import { StickyContainer, Sticky } from 'react-sticky';
-
+import Toolbar from './components/Toolbar/Toolbar';
 
 class Form extends React.Component {
   constructor() {
@@ -11,7 +10,8 @@ class Form extends React.Component {
       numIncidents: 1,
       numOrders: 1,
       newUser: true,
-      newIncident: false
+      newIncident: false,
+      errorMessage: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.displayIncidents = this.displayIncidents.bind(this);
@@ -27,6 +27,14 @@ class Form extends React.Component {
   handleSubmit(evnt) {
     evnt.preventDefault();
 
+    if (this.state.numIncidents > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
+      return
+    } else if (this.state.numOrders > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many orders."})
+      return
+    }
+
     let firstName = document.getElementById("first-name");
     let lastName = document.getElementById("last-name");
     let identifiers = document.getElementById("identifiers");
@@ -36,18 +44,21 @@ class Form extends React.Component {
     let phone = document.getElementById("phone");
     let survivorGender = document.getElementById("survivor-gender");
     let dob = document.getElementById("dob");
+    let ageLow = document.getElementById("age-range-0")
+    let ageHigh = document.getElementById("age-range-1")
     let numberChildren = document.getElementById("number-children");
     let nameOfSchool = document.getElementById("name-of-school");
     let referrer = document.getElementById("hear-about");
-    let perpGender = document.getElementById("perp-gender");
     let contactCall = document.getElementById("contact-calls");
     let contactInPerson = document.getElementById("contact-in-person");
-    let contactWebChat = document.getElementById("contact-web-chat");
+    let contactEmail = document.getElementById("contact-email");
+    let contactInstantMessaging = document.getElementById("contact-instant-messaging");
     let contactOnBehalf = document.getElementById("contact-on-behalf");
-    let servicesProvided = {};
     let notes = document.getElementById("notes");
 
-    theData = {
+    let theData = {
+      timestamp: Date.now().toLocaleString,
+      newUser: this.state.newUser,
       firstName: firstName.value,
       lastName: lastName.value,
       otherIdentifiers: identifiers.value,
@@ -58,7 +69,7 @@ class Form extends React.Component {
       survivorType: radioButtonValue("survivor-type"),
       survivorGender: survivorGender.value,
       dob: dob.value,
-      ageRange: radioButtonValue("age-range"),
+      ageRange: [ageLow.value, ageHigh.value],
       language: radioButtonValue("language"),
       ethnicity: checkBoxValues("ethnicity"),
       numberChildren: numberChildren.value,
@@ -66,57 +77,28 @@ class Form extends React.Component {
       miscChars: checkBoxValues("characteristics"),
       nameOfSchool: nameOfSchool.value,
       referrer: referrer.value,
-      victimization: checkBoxValues("victimization"),
-      perpRelation: checkBoxValues("perp-relationship"),
-      perpGender: perpGender.value,
-      protectionOrder: {
-        length: radioButtonValue("order-length"),
-        type: radioButtonValue("order-type"),
-        granted: radioButtonValue("order-granted")
-      },
+      incidents: getIncidents(this.state.numIncidents),
+      protectionOrders: getOrders(this.state.numOrders),
       partiallyServedReasons: checkBoxValues("partially-served"),
       safeToCall: radioButtonValue("safe-to-call"),
       safeToLeaveMessage: radioButtonValue("save-to-leave-message"),
-      firstTime: radioButtonValue("first-time"),
       contactTypes: {
         calls: contactCall.value,
         inPerson: contactInPerson.value,
-        webChat: contactWebChat.value,
+        email: contactEmail.value,
+        instantMessaging: contactInstantMessaging.value,
         onBehalf: contactOnBehalf.value
       },
       timeSpent: radioButtonValue("time-call"),
       servicesProvided: {
-        informationAndReferral: servicesProvided.informationAndReferral.value,
-        emotionalSupport: servicesProvided.emotionalSupport.value,
-        crisisSupport: servicesProvided.crisisSupport.value,
-        safetyPlanning: servicesProvided.safetyPlanning.value,
-        housingAdvocacy: servicesProvided.housingAdvocacy.value,
-        economicAdvocacy: servicesProvided.economicAdvocacy.value,
-        educationAdvocacy: servicesProvided.educationAdvocacy.value,
-        employmentAdvocacy: servicesProvided.employmentAdvocacy.value,
-        healthCareAdvocacy: servicesProvided.healthCareAdvocacy.value,
-        immigrationAdvocacy: servicesProvided.immigrationAdvocacy.value,
-        otherAdvocacy: servicesProvided.otherAdvocacy.value,
-        saneExamAccompaniment: servicesProvided.saneExamAccompaniment.value,
-        protectionOrder: servicesProvided.protectionOrder.value,
-        otherCivilLegalSupport: servicesProvided.otherCivilLegalSupport.value,
-        criminalLegalSupport: servicesProvided.criminalLegalSupport.value,
-        languageServices: servicesProvided.languageServices.value,
-        childRelatedServices: servicesProvided.childRelatedServices.value,
-        victimsCompClaimAssistance:
-          servicesProvided.victimsCompClaimAssistance.value,
-        safeHomeEntered: servicesProvided.safeHomeEntered.value,
-        safeHomeExited: servicesProvided.safeHomeExited.value,
-        transportation: servicesProvided.transportation.value,
-        medicalAssistance: [
-          servicesProvided.medicalAssistance[0].value,
-          servicesProvided.medicalAssistance[1].value
-        ],
-        groups: [
-          servicesProvided.groups[0].value,
-          servicesProvided.groups[1].value
-        ],
-        partiallyServed: servicesProvided.partiallyServed.value
+        advocacy: checkBoxValues("advocacy"),
+        support: checkBoxValues("support"),
+        medical: checkBoxValues("medical"),
+        assistanceServices: checkBoxValues("assistance-services"),
+        informationReferral: checkBoxValues("information-referral"),
+        safeHome: checkBoxValues("safe-home"),
+        groups: checkBoxValues("groups")
+
       },
       referrals: referralValues("referrals"),
       outcomeMeasures: radioButtonValue("plan-for-safety"),
@@ -171,7 +153,7 @@ class Form extends React.Component {
     if (this.state.newUser) {
       return (
         <div>
-          <hr />
+          <hr id="demographic-content"/>
           <label htmlFor="survivor-gender">Gender</label>
           <br />
           <select id="survivor-gender">
@@ -331,7 +313,7 @@ class Form extends React.Component {
     if (this.state.newUser || (!this.state.newUser && this.state.newIncident)) {
       return (
         <div>
-          <hr />
+          <hr id="incident-information"/>
           <label htmlFor="victimization-count">Number of Incidents</label>
           <br />
           <input
@@ -424,107 +406,108 @@ class Form extends React.Component {
     let listItems = [];
     while (i < newNum) {
       listItems.push(
-        <div key={i}>
-          <label htmlFor="victimization">Victimization #{i + 1}</label>
-          <div id="victimization">
-            <input type="checkbox" name="victimization" value="Rape" />
+        <div key={i} id={"incident-" + (i + 1)}>
+          <hr/>
+          <label htmlFor={"victimization-" + (i + 1)}>Victimization #{i + 1}</label>
+          <div id={"victimization-" + (i + 1)}>
+            <input type="checkbox" name={"victimization-" + (i + 1)} value="Rape" />
             Rape
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Attempted Rape"
             />
             Attempted Rape
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Sex Trafficking"
             />
             Sex Trafficking
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Child Sexual Abuse"
             />
             Child Sexual Abuse
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Drug Facilitated SV"
             />
             Drug Facilitated SV
             <br />
-            <input type="checkbox" name="victimization" value="Stalking" />
+            <input type="checkbox" name={"victimization-" + (i + 1)} value="Stalking" />
             Stalking
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Sexual Harassment"
             />
             Sexual Harassment
             <br />
             <input
               type="checkbox"
-              name="victimization"
+              name={"victimization-" + (i + 1)}
               value="Domestic Violence"
             />
             Domestic Violence
             <br />
-            <input type="checkbox" name="victimization" value="Other" />
+            <input type="checkbox" name={"victimization-" + (i + 1)} value="Other" />
             Other:
-            <input type="text" name="victimization" className="inline-input" />
+            <input type="text" name={"victimization-" + (i + 1)} className="inline-input" />
           </div>
-          <label htmlFor="perp-relationship">
+          <label htmlFor={"perp-relationship-" + (i + 1)}>
             Perpetrator #{i + 1} Relationship
           </label>
-          <div id="perp-relationship">
+          <div id={"perp-relationship-" + (i + 1)}>
             <input
               type="checkbox"
-              name="perp-relationship"
+              name={"perp-relationship-" + (i + 1)}
               value="Acquaintance"
             />
             Acquaintance
             <br />
             <input
               type="checkbox"
-              name="perp-relationship"
+              name={"perp-relationship-" + (i + 1)}
               value="Intimate Partner"
             />
             Intimate Partner
             <br />
             <input
               type="checkbox"
-              name="perp-relationship"
+              name={"perp-relationship-" + (i + 1)}
               value="Family/Household Member"
             />
             Family/Household Member
             <br />
             <input
               type="checkbox"
-              name="perp-relationship"
+              name={"perp-relationship-" + (i + 1)}
               value="Dating Relationship"
             />
             Dating Relationship
             <br />
-            <input type="checkbox" name="perp-relationship" value="Stranger" />
+            <input type="checkbox" name={"perp-relationship-" + (i + 1)} value="Stranger" />
             Stranger
             <br />
-            <input type="checkbox" name="perp-relationship" value="Other" />
+            <input type="checkbox" name={"perp-relationship-" + (i + 1)} value="Other" />
             Other:
             <input
               type="text"
-              name="perp-relationship"
+              name={"perp-relationship-" + (i + 1)}
               className="inline-input"
             />
           </div>
-          <label htmlFor="perp-gender">Perpetrator #{i + 1} Gender</label>
+          <label htmlFor={"perp-gender-" + (i + 1)}>Perpetrator #{i + 1} Gender</label>
           <br />
-          <select id="perp-gender">
+          <select id={"perp-gender-" + (i + 1)}>
             <option value="Unknown">Unknown</option>
             <option value="Female">Female</option>
             <option value="Male">Male</option>
@@ -559,49 +542,50 @@ class Form extends React.Component {
     let listItems = [];
     while (i < newNum) {
       listItems.push(
-        <div key={i}>
-          <label htmlFor="protection-asst">
+        <div key={i} id={"order-" + (i + 1)}>
+          <hr/>
+          <label htmlFor={"protection-asst-" + (i + 1)}>
             Protection Order Assistance #{i + 1}
           </label>
-          <div id="protection-asst">
+          <div id={"protection-asst-" + (i + 1)}>
             <div>
-              <input name="order-length" value="Temporary Order" type="radio" />
+              <input name={"order-length-" + (i + 1)} value="Temporary Order" type="radio" />
               Temporary Order
               <br />
-              <input name="order-length" value="Final Order" type="radio" />
+              <input name={"order-length-" + (i + 1)} value="Final Order" type="radio" />
               Final Order
             </div>
             <br />
             <div>
-              <input name="order-type" value="Adult: DV" type="radio" />
+              <input name={"order-type-" + (i + 1)} value="Adult: DV" type="radio" />
               Adult: DV
               <br />
-              <input name="order-type" value="Adult: Stalking" type="radio" />
+              <input name={"order-type-" + (i + 1)} value="Adult: Stalking" type="radio" />
               Adult: Stalking
               <br />
-              <input name="order-type" value="Adult: SV" type="radio" />
+              <input name={"order-type-" + (i + 1)} value="Adult: SV" type="radio" />
               Adult: SV
               <br />
-              <input name="order-type" value="OBO Child: CSA" type="radio" />
+              <input name={"order-type-" + (i + 1)} value="OBO Child: CSA" type="radio" />
               OBO Child: CSA
               <br />
-              <input name="order-type" value="OBO Child: Other" type="radio" />
+              <input name={"order-type-" + (i + 1)} value="OBO Child: Other" type="radio" />
               OBO Child: Other
             </div>
             <br />
             <div>
               <label>
-                <input name="order-granted" value="Granted" type="radio" />
+                <input name={"order-granted-" + (i + 1)} value="Granted" type="radio" />
                 Granted
               </label>
               <br />
               <label>
-                <input name="order-granted" value="Denied" type="radio" />
+                <input name={"order-granted-" + (i + 1)} value="Denied" type="radio" />
                 Denied
               </label>
               <br />
               <label>
-                <input name="order-granted" value="Unknown" type="radio" />
+                <input name={"order-granted-" + (i + 1)} value="Unknown" type="radio" />
                 Unknown
               </label>
             </div>
@@ -613,13 +597,16 @@ class Form extends React.Component {
     if (num > 10) {
       return <h4>Sorry, {num} is too many orders!</h4>;
     } else {
-      return <div id="victimizations">{listItems}</div>;
+      return <div id="orders">{listItems}</div>;
     }
   }
 
   render() {
     return (
       <div id="form-page">
+          <div className="toolbar">
+            <Toolbar />
+          </div>
         <form id="the-form">
           <Link to={{ pathname: "/home" }}>
             <button>back</button>
@@ -690,7 +677,7 @@ class Form extends React.Component {
             {this.displayDemographicContent()}
             {this.displayIncidentAndOrder()}
             <hr />
-            <h2>Ongoing Services</h2>
+            <h2 id="ongoing-services">Ongoing Services</h2>
             <label htmlFor="safe-to-call">Safe to call back?</label>
             <div id="safe-to-call">
               <input name="safe-to-call" value="Yes" type="radio" />
@@ -738,8 +725,13 @@ class Form extends React.Component {
               </label>
               <br />
               <label>
-                <input id="contact-web-chat" type="number" />
-                Web Chat
+                <input id="contact-email" type="number" />
+                Email
+              </label>
+              <br />
+              <label>
+                <input id="contact-instant-messaging" type="number" />
+                Instant Messaging
               </label>
               <br />
               <label>
@@ -784,8 +776,8 @@ class Form extends React.Component {
                 ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
               </label>
             </div>
-            <hr />
-            <p>Services Provided</p>
+            <hr id="services-provided"/>
+            <label htmlFor="advocacy">Services Provided</label>
             <label htmlFor="advocacy">Advocacy</label>
             <div id="advocacy">
               <input type="checkbox" name="advocacy" value="Economic" />
@@ -855,16 +847,11 @@ class Form extends React.Component {
               <input
                 type="checkbox"
                 name="assistance-services"
-                value="Victims' Compensation Claim"
+                value="Victims' Compensation Claim (in $)"
               />
               Victims' Compensation Claim
-              <br />
-              <input
-                type="checkbox"
-                name="assistance-services"
-                value="Amount"
-              />
-              Amount: $
+              <br/>
+              <label className="indented">Amount: $</label>
               <input
                 type="number"
                 name="assistance-services"
@@ -893,7 +880,7 @@ class Form extends React.Component {
               />
               Material Assistance
               <br />
-              <div id="material-assistance-div">
+              <div id="material-assistance-div" className="indented">
                 <input
                   type="checkbox"
                   name="assistance-services"
@@ -932,7 +919,7 @@ class Form extends React.Component {
                 <input
                   type="checkbox"
                   name="assistance-services"
-                  value="other"
+                  value="Other"
                 />
                 Other
                 <br />
@@ -987,7 +974,7 @@ class Form extends React.Component {
               <br />
               <br />
             </div>
-            <hr />
+            <hr id="referrals-hr"/>
             <label htmlFor="referrals">Referrals</label>
             <br />
             <label htmlFor="referrals">to/from</label>
@@ -1347,6 +1334,7 @@ class Form extends React.Component {
               <textarea id="notes" />
             </div>
           </div>
+          <h4>{this.state.errorMessage}</h4>
           <button onClick={this.handleSubmit}>submit</button>
         </form>
       </div>
@@ -1354,193 +1342,13 @@ class Form extends React.Component {
   }
 }
 
-let theData = {
-  firstName: "",
-  lastName: "",
-  otherIdentifiers: "",
-  advocateInitials: "",
-  contactDate: "",
-  city: "",
-  phone: "",
-  survivorType: "",
-  survivorGender: "",
-  dob: "",
-  ageRange: "",
-  language: "",
-  ethnicity: "",
-  numberChildren: 0,
-  disability: "",
-  miscChars: [],
-  nameOfSchool: "",
-  referrer: "",
-  victimization: [],
-  perpRelation: [],
-  perpGender: "",
-  protectionOrder: {
-    length: "",
-    type: "",
-    granted: ""
-  },
-  partiallyServedReasons: [],
-  safeToCall: "",
-  safeToLeaveMessage: "",
-  firstTime: "",
-  contactTypes: {
-    calls: 0,
-    inPerson: 0,
-    webChat: 0,
-    onBehalf: 0
-  },
-  timeSpent: "",
-  servicesProvided: {
-    informationAndReferral: 0,
-    emotionalSupport: 0,
-    crisisSupport: 0,
-    safetyPlanning: 0,
-    housingAdvocacy: 0,
-    economicAdvocacy: 0,
-    educationAdvocacy: 0,
-    employmentAdvocacy: 0,
-    healthCareAdvocacy: 0,
-    immigrationAdvocacy: 0,
-    otherAdvocacy: 0,
-    saneExamAccompaniment: 0,
-    protectionOrder: 0,
-    otherCivilLegalSupport: 0,
-    criminalLegalSupport: 0,
-    languageServices: 0,
-    childRelatedServices: 0,
-    victimsCompClaimAssistance: 0,
-    safeHomeEntered: 0,
-    safeHomeExited: 0,
-    transportation: 0,
-    medicalAssistance: [0, ""],
-    groups: [0, ""],
-    partiallyServed: 0
-  },
-  referrals: {
-    "211": {
-      to: false,
-      from: false
-    },
-    "Campus Services": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "CUSI/State's Attorney/CAC": {
-      to: false,
-      from: false
-    },
-    DCF: {
-      to: false,
-      from: false
-    },
-    "Disability Org": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "DIVAS/Corrections/P+P": {
-      to: false,
-      from: false
-    },
-    DVAS: {
-      to: false,
-      from: false
-    },
-    "Financial Assistance Org": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "Financial Empowerment Programming": {
-      to: false,
-      from: false
-    },
-    "Health Centers": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "HOPE Works Clinical Therapist": {
-      to: false,
-      from: false
-    },
-    "Housing Org": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "Immigrant Org": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "LGBTQ Org": {
-      to: false,
-      from: false
-    },
-    "National Guard/Military Services": {
-      to: false,
-      from: false
-    },
-    "Network Program": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "Police Department": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    "Out of State Rape Crisis Services": {
-      to: false,
-      from: false
-    },
-    RAINN: {
-      to: false,
-      from: false
-    },
-    SANE: {
-      to: false,
-      from: false
-    },
-    "Support Group": {
-      to: false,
-      from: false
-    },
-    "Therapist List": {
-      to: false,
-      from: false
-    },
-    "Youth Org": {
-      to: false,
-      from: false,
-      name: ""
-    },
-    Other: {
-      to: false,
-      from: false,
-      name: ""
-    }
-  },
-  outcomeMeasures: "",
-  communityResources: "",
-  rightsAndOptions: "",
-  notes: ""
-};
-
 function radioButtonValue(name) {
   let theButtons = document.getElementsByName(name);
   for (let i = 0; i < theButtons.length; i++) {
     if (theButtons[i].checked) {
       if (theButtons[i].value === "Other") {
         return "Other: " + theButtons[i + 1].value;
-      } else if (theButtons[i].type === "text") {
-        return;
-      } else {
+      } else if (theButtons[i].type === "radio") {
         return theButtons[i].value;
       }
     }
@@ -1552,9 +1360,9 @@ function checkBoxValues(name) {
   let checkedBoxes = [];
   for (let i = 0; i < theBoxes.length; i++) {
     if (theBoxes[i].checked) {
-      if (theBoxes[i].value === "Other") {
-        checkedBoxes.push("Other: " + theBoxes[i + 1].value);
-      } else if (theBoxes[i].type !== "text") {
+      if (theBoxes[i + 1] && (theBoxes[i + 1].type === "text" || theBoxes[i + 1].type === "date" || theBoxes[i + 1].type === "number")) {
+        checkedBoxes.push(theBoxes[i].value + ": " + theBoxes[i + 1].value);
+      } else if (theBoxes[i].type === "checkbox") {
         checkedBoxes.push(theBoxes[i].value);
       }
     }
@@ -1571,12 +1379,44 @@ function referralValues(name) {
         finalValues.push(theInputs[i].value + ": " + theInputs[i + 1].value);
       } else if (theInputs[i + 2].type === "text") {
         finalValues.push(theInputs[i].value + ": " + theInputs[i + 2].value);
-      } else if (theInputs[i].type !== "text") {
+      } else if (theInputs[i].type === "checkbox") {
         finalValues.push(theInputs[i].value);
       }
     }
   }
   return finalValues;
+}
+
+function getIncidents (num) {
+  let theIncidents = [];
+  let i = 1;
+  let incidentObject = {};
+  while (i <= num) {
+    incidentObject = {
+      victimization: checkBoxValues("victimization-" + i),
+      perpRelationship: checkBoxValues("perp-relationship-" + i),
+      perpGender: document.getElementById("perp-gender-" + i).value
+    };
+    theIncidents.push(incidentObject);
+    i++;
+  }
+  return theIncidents;
+}
+
+function getOrders (num) {
+  let theOrders = [];
+  let i = 1;
+  let orderObject = {};
+  while (i <= num) {
+    orderObject = {
+      length: radioButtonValue("order-length-" + i),
+      type: radioButtonValue("order-type-" + i),
+      granted: radioButtonValue("order-granted-" + i)
+    };
+    theOrders.push(orderObject);
+    i++;
+  }
+  return theOrders;
 }
 
 export default Form;
