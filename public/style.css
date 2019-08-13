@@ -1,5 +1,5 @@
 #the-form {
-    width: 500px;
+    width: 800px;
 }
 
 #form-page {
@@ -16,7 +16,7 @@
 #login-form {
     display: flex;
     flex-direction: column;
-    width: 125px;
+    width: 300px;
     height: 500px;
     flex-wrap: wrap;
 }
@@ -75,3 +75,17 @@ body {
 h4 {
     color: red;
 }
+
+  .row {
+    display: flex;
+  }
+  
+  .column-a {
+    flex: 50%;
+  }
+  
+  .column-a {
+      float: left;
+      margin-right: 44px;
+  }
+  

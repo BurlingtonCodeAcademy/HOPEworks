@@ -264,6 +264,7 @@ class Form extends React.Component {
                     </div>
                 <div id="all-fields">
                     <br/>
+                  <div class="column-a">
                     <label htmlFor="first-name">Name of Service User </label>
                     <br/>
                     <input id="first-name" placeholder="First Name"></input>
@@ -277,6 +278,7 @@ class Form extends React.Component {
                     <br/>
                     <input id="advocate-initials" placeholder="Initials" maxLength="2"></input>
                     <br/>
+                  </div>
                     <label htmlFor="contact-date">Date of contact </label>
                     <br/>
                     <input type="date" id="contact-date"></input>
@@ -290,13 +292,10 @@ class Form extends React.Component {
                     <input id="phone" type="tel" placeholder="802-123-4567"></input>
                     <br/>
                     <div id="survivor-type">
-                        <label>
-                            <input name="survivor-type" value="Primary Survivor" type="radio"/>Primary Survivor
-                        </label>
-                        <br/>
-                        <label>
-                           <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor
-                        </label>
+                        <input name="survivor-type" value="Primary Survivor" type="radio"/>Primary Survivor                       
+                        <br/>                       
+                        <input name="survivor-type" value="Secondary Survivor" type="radio"/>Secondary Survivor
+                        
                     </div>
                     <hr/>
                     <label htmlFor="survivor-gender">Gender</label>
@@ -559,6 +558,7 @@ class Form extends React.Component {
                              <br/>
                              <input type="checkbox" name="assistance-services" value="other"/>Other
                              <br/>
+                             <br/>
                             </div>
                     </div>
                     <label htmlFor="information-referral">Information Referral</label>
@@ -567,18 +567,32 @@ class Form extends React.Component {
                         <br/>
                         <input type="checkbox" name="information-referral" value="Referral"/>Referral (please see below)
                         <br/>
-                     </div>
-                     <label htmlFor="safe-home">Safe Home</label>
-                     <div id="safe-home">
-                        <input type="checkbox" name="safe-home" value="Date Entered"/>Date Entered
-                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        <br/>
+                    </div>
+                    <label htmlFor="safe-home">Safe Home</label>
+                    <div id="safe-home">
+                        <input type="checkbox" name="safe-home" value="Date Entered"/>Date Entered 
+                        <br/>
+                        <input type="date" name="safe-home" className="input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
                         <input type="checkbox" name="safe-home" value="Date Exited"/>Date Exited
-                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        <br/>
+                        <input type="date" name="safe-home" className="input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
                         <br/>
                         <input type="checkbox" name="safe-home" value="Extension Date"/>Extention Date
-                        <input type="date" name="safe-home" className="inline-input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        <br/>
+                        <input type="date" name="safe-home" className="input"/>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                        <br/>
+                        <br/>
                     </div>
+                    <label htmlFor="groups">Groups</label>
+                    <div id="groups">
+                        <input type="checkbox" name="groups" value="Groups"/>Groups
+                        <input type="text" name="groups" className="inline-input"/>
+                        <br/>
+                        <br/>   
+                    </div>
+                    
                     <hr/>
                     <label htmlFor="referrals">Referrals</label>
                     <br/>
