@@ -18,19 +18,18 @@ app.listen(5000, function () {
   console.log('listening on 5000')
 })
 
+
+app.post('/form', (req, res) => {
+  console.log(req.body)
+})
 //-------
 
 
-app.get('/', (req, res) => {
-  db.collection('quotes').find().toArray((err, result) => {
-    if (err) return console.log(err)
-    res.send({ quotes: result })
-  })
-})
 
-app.post('/quotes', (req, res) => {
+
+app.post('/login', (req, res) => {
   console.log(req.body)
-})
+
 
 if (req.body.email &&
   req.body.username &&
@@ -47,7 +46,7 @@ if (req.body.email &&
     if (error || !user) {
       var err = new Error('Wrong email or password.');
       err.status = 401;
-      return next(err);
+      return res.redirect('/');
     }
     bcrypt.compare(password, user.password, function (err, result) {
       if (result === true) {
