@@ -1,6 +1,8 @@
 /* MAIN FORM CSS */
 #the-form {
-    width: 750px;
+    width: 500px;
+    z-index: 1;
+    margin-top: 45px;
 }
 
 #form-page {
