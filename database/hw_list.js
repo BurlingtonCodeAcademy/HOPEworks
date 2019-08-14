@@ -26,7 +26,7 @@ class FactStore {
   async collection() {
     const client = await this.client();
     const db = client.db(this.dbName);
-    const collection = db.collection('form');
+    const collection = db.collection('hw');
     return collection;
   }
 
