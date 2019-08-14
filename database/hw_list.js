@@ -4,7 +4,7 @@ const url = 'mongodb://localhost:27017';
 const moment = require('moment');
 const client = new MongoClient(url);
 
-class FactStore {
+module.exports = class DataStore {
   constructor(dbUrl) {
     this.dbUrl = dbUrl;
     this.dbClient = null;
@@ -55,10 +55,10 @@ class FactStore {
   printEntry(fact, currentDay) {
   }
 
-  async addForm(text) {
+  async addForm(data) {
     let entry = {
       when: new Date(),
-      text: text
+      data: data
     };
 
     let collection = await this.collection()
@@ -69,9 +69,9 @@ class FactStore {
     return {id: result.insertedId};
   }
 
-  async deleteFact(text) {
+  async deleteFact(data) {
     let entry = {
-      text: text
+      data: data
     };
 
      let collection = await this.collection()

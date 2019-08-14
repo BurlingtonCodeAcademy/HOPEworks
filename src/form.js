@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-// import img from '/hope_works_vt_logo_';
 import Toolbar from './components/Toolbar/Toolbar';
+import { Link } from "react-router-dom";
 
 class Form extends React.Component {
   constructor() {
@@ -24,7 +23,7 @@ class Form extends React.Component {
     this.displayIncidentAndOrder = this.displayIncidentAndOrder.bind(this);
   }
 
-  handleSubmit(evnt) {
+  async handleSubmit(evnt) {
     evnt.preventDefault();
 
     if (this.state.numIncidents > 10) {
@@ -56,7 +55,9 @@ class Form extends React.Component {
     let contactOnBehalf = document.getElementById("contact-on-behalf");
     let notes = document.getElementById("notes");
 
-    let theData = {
+    let theData;
+    
+    theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
       firstName: firstName.value,
@@ -67,19 +68,6 @@ class Form extends React.Component {
       city: cityTown.value,
       phone: phone.value,
       survivorType: radioButtonValue("survivor-type"),
-      survivorGender: survivorGender.value,
-      dob: dob.value,
-      ageRange: [ageLow.value, ageHigh.value],
-      language: radioButtonValue("language"),
-      ethnicity: checkBoxValues("ethnicity"),
-      numberChildren: numberChildren.value,
-      disability: radioButtonValue("disability"),
-      miscChars: checkBoxValues("characteristics"),
-      nameOfSchool: nameOfSchool.value,
-      referrer: referrer.value,
-      incidents: getIncidents(this.state.numIncidents),
-      protectionOrders: getOrders(this.state.numOrders),
-      partiallyServedReasons: checkBoxValues("partially-served"),
       safeToCall: radioButtonValue("safe-to-call"),
       safeToLeaveMessage: radioButtonValue("safe-to-leave-message"),
       contactTypes: {
@@ -106,7 +94,43 @@ class Form extends React.Component {
       rightsAndOptions: radioButtonValue("rights-options"),
       notes: notes.value
     };
+
+    if (this.state.newUser) {
+      theData = {
+        survivorGender: survivorGender.value,
+        dob: dob.value,
+        ageRange: [ageLow.value, ageHigh.value],
+        language: radioButtonValue("language"),
+        ethnicity: checkBoxValues("ethnicity"),
+        numberChildren: numberChildren.value,
+        disability: radioButtonValue("disability"),
+        miscChars: checkBoxValues("characteristics"),
+        nameOfSchool: nameOfSchool.value,
+        referrer: referrer.value
+      }
+    }
+
+    if (this.state.newUser || (!this.state.newUser && this.state.newIncident)) {
+      theData = {
+        incidents: getIncidents(this.state.numIncidents),
+        protectionOrders: getOrders(this.state.numOrders),
+        partiallyServedReasons: checkBoxValues("partially-served")
+      }
+    }
+
+    console.log("here is the data:")
     console.log(theData);
+
+    const response = await fetch("/form", {
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(theData)
+    });
+    if (response.status === 200) {
+      console.log("form added")
+    }
   }
 
   userTypeChange(evnt) {
@@ -613,9 +637,6 @@ class Form extends React.Component {
             <h1>H.O.P.E. Works</h1>
             <h2>SURVIVOR INFORMATION FORM</h2>
           </div>
-          <Link to={{ pathname: "/home" }}>
-            <button>back</button>
-          </Link>
           <div id="all-fields">
             <br />
             <input type="checkbox" id="new-user" onChange={this.userTypeChange} defaultChecked/>Service User is new to HOPE Works
@@ -626,6 +647,7 @@ class Form extends React.Component {
               <label htmlFor="first-name">Name of Service User </label>
               <br />
               <input id="first-name" placeholder="First Name" />
+              <br/>
               <input id="last-name" placeholder="Last Name/Initial" />
               <br />
               <label htmlFor="identifiers">
@@ -636,11 +658,7 @@ class Form extends React.Component {
               <br />
               <label htmlFor="advocate-initials">Advocate Initials </label>
               <br />
-              <input
-                id="advocate-initials"
-                placeholder="Initials"
-                maxLength="2"
-              />
+              <input id="advocate-initials" placeholder="Initials"maxLength="2" />
               <br />
             </div>
             <div className="column-b">
@@ -813,7 +831,7 @@ class Form extends React.Component {
             </div>
             <label htmlFor="support">Support</label>
             <div id="support">
-              <input type="checkbox" name="support" value="Immigration" />
+              <input type="checkbox" name="support" value="Emotional" />
               Emotional
               <br />
               <input type="checkbox" name="support" value="Crisis" />
@@ -1334,7 +1352,7 @@ class Form extends React.Component {
             </div>
           </div>
           <h4>{this.state.errorMessage}</h4>
-          <button onClick={this.handleSubmit}>submit</button>
+          <Link to={{ pathname: "/home" }}><button onClick={this.handleSubmit}>submit</button></Link>
         </form>
       </div>
     );
