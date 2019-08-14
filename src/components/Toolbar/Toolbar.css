@@ -39,33 +39,34 @@
 
 @media screen and (max-width: 944px) {
   .toolbar {
+    text-align: center;
     top: 0;
     width: 97%;
+    height: 55px;
   }
+
   .toolbar a {
-    font-size: 14px;
+    font-size: 13px;
   }
-  .toolbar_navigation {
-    display: flex;
-    flex-direction: row;
-    
-  }
+
   .toolbar_list-items {
     display: flex;
     justify-content: space-between;
-    margin: 1em;
+    margin: 12px;
     padding: 0px;
-  }
-  .toolbar_list-items a {
-    display: flex;
-    justify-content: space-between;
   }
 
   .toolbar_logo a {
-    align-items: center;
+    color: purple;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 3px;
+    margin-right: 0px;
+    padding: 0px;
   }
 }
 
-@media screen and (max-width: 944px)  {
-
+@media screen and (max-width: 758px)  {
+    .toolbar {display: none;}
 }

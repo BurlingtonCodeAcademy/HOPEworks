@@ -297,7 +297,7 @@ class Form extends React.Component {
             />
             <br />
           </div>
-          <label htmlFor="hear-about">
+          <label htmlFor="hear-about" id="hear-about">
             How did the service user hear about HOPE Works?
           </label>
           <br />
@@ -608,14 +608,14 @@ class Form extends React.Component {
             <Toolbar />
           </div>
         <form id="the-form">
-          <Link to={{ pathname: "/home" }}>
-            <button>back</button>
-          </Link>
           <div id="title">  
           {/* <img src={"./hope_works_vt_logo_.jpg"}/> */}
             <h1>H.O.P.E. Works</h1>
             <h2>SURVIVOR INFORMATION FORM</h2>
           </div>
+          <Link to={{ pathname: "/home" }}>
+            <button>back</button>
+          </Link>
           <div id="all-fields">
             <br />
             <input type="checkbox" id="new-user" onChange={this.userTypeChange} defaultChecked/>Service User is new to HOPE Works
@@ -763,7 +763,7 @@ class Form extends React.Component {
                 60 min
               </label>
               <br />
-              <label>
+              <label id="other-hours">
                 <input name="time-call" type="radio" value="Other" />
                 Other (in hours):
                 <input
