@@ -9,11 +9,11 @@ const toolbar = props => (
         <div className="toolbar_navigation-items">
           <ul className="toolbar_list-items">
             <li><a href="#all-fields">Personal Info</a></li>
-            <li><a href="#demographic-content">Demographic</a></li> 
-            <li><a href="#incident-information">Incident Info</a></li> 
-            <li><a href="#ongoing-services">Communication Details</a></li> 
-            <li><a href="#services-provided">Services Provided</a></li> 
-            <li><a href="#referrals">Referrals</a></li> 
+            <li><a href="#demographic-link">Demographic</a></li> 
+            <li><a href="#incident-info-link">Incident Info</a></li> 
+            <li><a href="#communication-link">Communication Details</a></li> 
+            <li><a href="#services-link">Services Provided</a></li> 
+            <li><a href="#groups">Referrals</a></li> 
             <li><a href="#measures">Outcome Measures</a></li> 
             <li><a href="#notes">Notes</a></li> 
           </ul>
