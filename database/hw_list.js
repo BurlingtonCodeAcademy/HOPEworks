@@ -4,6 +4,10 @@ const url = 'mongodb://localhost:27017';
 const moment = require('moment');
 const client = new MongoClient(url);
 
+module.exports = {
+  DB: 'mongodb://localhost:27017/auth'
+}
+
 class FactStore {
   constructor(dbUrl) {
     this.dbUrl = dbUrl;
@@ -21,6 +25,11 @@ class FactStore {
       console.log("Connected to database.");
       return this.dbClient;
     }
+  }
+
+  async getUser(user) {
+    const collection = await this.collection();
+    return.collection.find({user: user})
   }
 
   async collection() {

@@ -18,43 +18,47 @@ app.listen(5000, function () {
   console.log('listening on 5000')
 })
 
-//-------
 
-
-app.get('/', (req, res) => {
-  db.collection('quotes').find().toArray((err, result) => {
-    if (err) return console.log(err)
-    res.send({ quotes: result })
-  })
-})
-
-app.post('/quotes', (req, res) => {
+app.post('/form', (req, res) => {
   console.log(req.body)
 })
 
-if (req.body.email &&
-  req.body.username &&
-  req.body.password &&
-  req.body.passwordConf) {
+//-------
 
-  var userData = {
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password,
-  }
-} else if (req.body.logemail && req.body.logpassword) {
-  User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
-    if (error || !user) {
-      var err = new Error('Wrong email or password.');
-      err.status = 401;
-      return next(err);
-    }
-    bcrypt.compare(password, user.password, function (err, result) {
-      if (result === true) {
-        return callback(null, user);
-      } else {
-        return callback();
-      }    
-    })
-  });
-}
+
+
+
+app.post('/login', (req, res) => {
+  console.log(req.body) 
+  var 
+
+
+// if (req.body.email &&
+//   req.body.username &&
+//   req.body.password &&
+//   req.body.passwordConf) {
+
+
+    
+//   var userData = {
+//     email: req.body.email,
+//     username: req.body.username,
+//     password: req.body.password,
+//   }
+// } else if (req.body.logemail && req.body.logpassword) {
+//   User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
+//     if (error || !user) {
+//       var err = new Error('Wrong email or password.');
+//       err.status = 401;
+//       return res.redirect('/');
+//     }
+//     bcrypt.compare(password, user.password, function (err, result) {
+//       if (result === true) {
+//         return callback(null, user);
+//       } else {
+//         return callback();
+//       }    
+//     })
+//   });
+// }
+})
