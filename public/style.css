@@ -85,14 +85,14 @@ h4 {
 display: flex;
 }
 
-.column-a {
+/* .column-a {
 flex: 50%;
-}
+} */
 
-.column-a {
+/* .column-a {
     float: left;
     margin-right: 66px;
-}
+} */
 
 .center-div {
     text-align: center;
