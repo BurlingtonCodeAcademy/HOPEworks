@@ -1,6 +1,5 @@
 import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
-import { Link } from "react-router-dom";
 
 class Form extends React.Component {
   constructor() {
@@ -32,6 +31,8 @@ class Form extends React.Component {
     } else if (this.state.numOrders > 10) {
       this.setState({ errorMessage: "Error submitting form: Too many orders."})
       return
+    } else {
+      this.setState({ errorMessage: ""})
     }
 
     let firstName = document.getElementById("first-name");
@@ -131,7 +132,14 @@ class Form extends React.Component {
     if (response.status === 200) {
       console.log("form added")
     }
+
+    window.location.replace("/home")
   }
+//   if (location.protocol !== "https:"){
+// location.replace(window.location.href.replace("http:", 
+// "https:"));
+//}
+
 
   userTypeChange(evnt) {
     if (this.state.newUser) {
@@ -978,8 +986,7 @@ class Form extends React.Component {
               <input type="checkbox" name="safe-home" value="Extension Date" />
               Extention Date
               <br />
-              <input type="date" name="safe-home" className="input" />
-​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+              <input type="date" name="safe-home" className="input" />​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
               <br />
               <br />
             </div>
@@ -1352,7 +1359,7 @@ class Form extends React.Component {
             </div>
           </div>
           <h4>{this.state.errorMessage}</h4>
-          <Link to={{ pathname: "/home" }}><button onClick={this.handleSubmit}>submit</button></Link>
+          <button onClick={this.handleSubmit}>submit</button>
         </form>
       </div>
     );

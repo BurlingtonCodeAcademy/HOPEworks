@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient
 const bodyParser = require('body-parser')
 const app = express();
 const DataStore = require('./database/hw_list')
+const assert = require('assert');
 //const bcrypt = require('bcrypt');
 //const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
@@ -12,6 +13,21 @@ MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-a
   let db = client.db('hw') // hw --> users
   console.log('connected to mongo')
 })
+
+app.get('/forms', getAll);
+
+async function getAll(request, response) {
+  let cursor = await store.all();
+  let output = [];
+  cursor.forEach((entry) => {
+    output.push(entry);
+  }, function (err) {
+    assert.equal(null, err);
+    console.log("Sending " + output.length + " records to client");
+    response.type('application/json')
+      .send(JSON.stringify(output))
+  });
+}
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
