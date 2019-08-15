@@ -4,10 +4,6 @@ const url = 'mongodb://localhost:27017';
 const moment = require('moment');
 const client = new MongoClient(url);
 
-module.exports = {
-  DB: 'mongodb://localhost:27017/auth'
-}
-
 class FactStore {
   constructor(dbUrl) {
     this.dbUrl = dbUrl;
