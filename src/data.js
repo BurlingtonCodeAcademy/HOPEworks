@@ -17,4 +17,4 @@ class Data extends React.Component {
     }  
 }
 
-export default Data;
+export default Data; 
