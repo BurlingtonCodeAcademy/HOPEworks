@@ -22,7 +22,8 @@ class Home extends React.Component {
                   <li>search for a survivor</li>
                   <li>list them all</li>
               </ul>
-              <p>2. view aggregate data</p>
+              <Link to={{ pathname: "/data" }}>View Data</Link>
+              <br/>
               <Link to={{ pathname: "/" }}><button>log out (dummy link to login)</button></Link>
           </div>
       )

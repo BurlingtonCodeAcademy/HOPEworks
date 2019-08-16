@@ -6,6 +6,7 @@ import Home from "./home"
 import Login from "./login"
 import Form from "./form"
 import Forms from "./forms"
+import Data from "./data"
 
 class App extends React.Component {
     constructor() {
@@ -22,6 +23,7 @@ class App extends React.Component {
           <Route path="/home" component={Home} />
           <Route path="/form" component={Form} />
           <Route path="/forms" component={Forms}/>
+          <Route path="/data" component={Data}/>
         </div>
       )
     }        

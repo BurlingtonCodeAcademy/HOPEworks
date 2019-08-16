@@ -1,6 +1,6 @@
 /* MAIN FORM CSS */
 #the-form {
-    width: 500px;
+    width: 100%;
     z-index: 1;
     margin-top: 50px;
 }
@@ -108,3 +108,7 @@ flex: 50%;
 .view-form-button {
     margin: 5px;
 }
+
+@media screen and (max-width: 758px) {
+    #the-form {width: 100%;}
+  }
