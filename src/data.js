@@ -12,7 +12,15 @@ class Data extends React.Component {
       return (
           <div id="data-page">
               <h1>this is the data page</h1>
+              <form>
+        <input
+          placeholder="Search for..."
+          ref={input => this.search = input}
+          onChange={this.handleInputChange}
+        />
+      </form>
           </div>
+           
       )
     }  
 }
