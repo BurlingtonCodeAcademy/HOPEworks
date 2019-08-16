@@ -1,8 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const url = 'mongodb://localhost:27017';
-const moment = require('moment');
-const client = new MongoClient(url);
+//const url = 'mongodb://localhost:27017';
+//const moment = require('moment');
+//const client = new MongoClient(url);
+
 
 class FactStore {
   constructor(dbUrl) {
@@ -18,21 +19,24 @@ class FactStore {
       // http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html
       console.log(`Connecting to ${this.dbUrl}...`)
       this.dbClient = await MongoClient.connect(this.dbUrl, { useNewUrlParser: true })
-      console.log("Connected to database.");
+      console.log("Connected to database: " + this.dbName);
       return this.dbClient;
     }
   }
 
-  async getUser(user) {
-    const collection = await this.collection();
-    return.collection.find({user: user})
-  }
+
 
   async collection() {
     const client = await this.client();
     const db = client.db(this.dbName);
-    const collection = db.collection('hw');
+    const collection = db.collection('users');
     return collection;
+  }
+
+  async getUser(user) {
+    const u = user
+    const collection = await this.collection();
+    return collection.find({user: u}).sort([['when', 1]]);
   }
 
   async all() {
@@ -143,3 +147,5 @@ class FactStore {
 
 //front end sends post requests to express.... express calls off to middleware, then calls to db
 // })
+
+module.exports = FactStore

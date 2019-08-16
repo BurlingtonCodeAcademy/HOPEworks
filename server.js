@@ -1,8 +1,12 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const app = express();
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
+const hopeworks = require('./database/hw_list');
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017'
+const hw_class = new hopeworks(url);
+const assert = require('assert');
 
 MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
   if (err) return console.log(err)
@@ -27,10 +31,24 @@ app.post('/form', (req, res) => {
 
 
 
-app.post('/login', (req, res) => {
-  console.log(req.body) 
-  var 
+app.post('/home', findUser)
 
+async function findUser(req, res) {
+  console.log(req.body)
+  let getUser = await hw_class.getUser(parseInt(req.body.logemail.trim()))
+  //console.log(getUser)
+  var userinfo = []
+  getUser.forEach((entry) => {
+    userinfo.push(entry)
+  }, function (err) {
+    assert.equal(null, err);
+    console.log("Sending " + userinfo.length + " records to client");
+    res.type('application/json')
+      .send(JSON.stringify(userinfo)
+      )
+    })
+    console.log(userinfo)
+}
 
 // if (req.body.email &&
 //   req.body.username &&
@@ -60,4 +78,4 @@ app.post('/login', (req, res) => {
 //     })
 //   });
 // }
-})
+
