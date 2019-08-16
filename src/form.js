@@ -724,12 +724,7 @@ class Form extends React.Component {
               <br />
               <input name="safe-to-leave-message" value="No" type="radio" />No
               <br />
-              <input
-                name="safe-to-leave-message"
-                value="Unknown"
-                type="radio"
-              />
-              Unknown
+              <input name="safe-to-leave-message" value="Unknown" type="radio"/>Unknown
             </div>
             <br />
             <label htmlFor="contact">Contact</label>
@@ -792,12 +787,7 @@ class Form extends React.Component {
               <label id="other-hours">
                 <input name="time-call" type="radio" value="Other" />
                 Other (in hours):
-                <input
-                  type="number"
-                  name="time-call"
-                  className="inline-input"
-                />
-                ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                <input type="number" name="time-call" className="inline-input" />
               </label>
             </div>
             <hr id="services-provided"/>
