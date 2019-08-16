@@ -71,11 +71,11 @@ class Form extends React.Component {
 
     if (this.state.newUser) {
       theData.survivorGender = survivorGender.value;
-      theData.dob = dob.value;
+      theData.dateOfBirth = dob.value;
       theData.ageRange = [ageLow.value, ageHigh.value];
       theData.language = radioButtonValue("language");
       theData.ethnicity = checkBoxValues("ethnicity");
-      theData.numberChildren = numberChildren.value;
+      theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
       theData.miscChars = checkBoxValues("characteristics");
       theData.nameOfSchool = nameOfSchool.value;
