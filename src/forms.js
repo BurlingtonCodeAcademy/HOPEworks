@@ -32,15 +32,21 @@ class Forms extends React.Component {
             let i = 0;
             let allOrderedForms = this.orderForms(forms)
             let listItems = [];
+            let formType;
             allOrderedForms.forEach((form) => {
-            listItems.push(
-                <div key={i}>
-                    <li>{new Date(form.when).toLocaleString()}: {form.data.firstName} {form.data.lastName}
-                        <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view form</button>
-                    </li>
-                </div>
-                )
-            i++;
+                if (form.data.newUser) {
+                    formType = "Intake"
+                } else {
+                    formType = "Ongoing"
+                }
+                listItems.push(
+                    <div key={i}>
+                        <li>{new Date(form.when).toLocaleString()}: {form.data.firstName} {form.data.lastName} ({formType})
+                            <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view form</button>
+                        </li>
+                    </div>
+                    )
+                i++;
             })
             return (
                 <ul id="forms">{listItems}</ul>
@@ -59,21 +65,18 @@ class Forms extends React.Component {
     displayForm (formNum) {
         let allOrderedForms = this.orderForms(this.state.forms)
         let theForm = allOrderedForms[formNum].data;
-        console.log("displaying form number " + formNum)
-        console.log(theForm)
 
         let i = 0;
         let listItems = [];
         for (let property in theForm) {
             let formattedProperty = camelCaseToCapitalized(property)
             let formattedValue = parseFormValue(theForm[property])
-            if (formattedValue) {
+            if (formattedValue && formattedValue!=="" && formattedValue!==" ") {
                 listItems.push(
                     <div key={i}>
                         <p><strong>{formattedProperty}: </strong>{formattedValue}</p>
                     </div>
                     )
-                
             }
             i++;
         }
@@ -127,24 +130,29 @@ function camelCaseToCapitalized (string) {
 
 function parseFormValue (value) { //this function should work recursively/call itself, needs refactor
     //should put together all of the objects and arrays of the response into one string that can be returned to the form viewer
-    let theString = ""
-    if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string
-        return theString + value
-    } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
-        return theString + value.join(", ")
-    } else if (value[0] && typeof(value[0])==="object") { //input is an array of arrays (typeof returns "object" for arrays)
-        value.forEach((array) => parseFormValue(array))
-    } else if (!value[0] && typeof(value)==="object") { //input is an object
-        console.log("this is an object: ")
-        console.log(value)
-        for (let property in value) {
-            theString = theString + property + ": " + parseFormValue(value[property])
+    let theString = "";
+    function innerFunction (value) {
+        if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string (or boolean)
+            theString = theString + value + " "
+        } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
+            theString = theString + value.join(", ")
+        } else if (value[0] && typeof(value[0])==="object") { //input is an array of arrays or objects (typeof returns "object" for arrays)
+            value.forEach((array) => innerFunction(array))
+        } else if (!value[0] && typeof(value)==="object") { //input is an object
+            for (let property in value) {
+                if (value[property][0]) { //make sure that the field isn't empty
+                    innerFunction(" " + camelCaseToCapitalized(property) + ": ")
+                    innerFunction(value[property])
+                }
+            } 
+        } else {
+            console.log("unhandled exception in parseFormValue: ")
+            console.log(value)
+            return
         }
-    } else {
-        console.log("unhandled exception: ")
-        console.log(value)
-        return
     }
+    innerFunction(value)
+    return theString;
 }
 
 export default Forms;

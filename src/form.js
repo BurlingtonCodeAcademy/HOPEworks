@@ -55,10 +55,8 @@ class Form extends React.Component {
     let contactInstantMessaging = document.getElementById("contact-instant-messaging");
     let contactOnBehalf = document.getElementById("contact-on-behalf");
     let notes = document.getElementById("notes");
-
-    let theData;
     
-    theData = {
+    let theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
       firstName: firstName.value,
@@ -69,17 +67,38 @@ class Form extends React.Component {
       city: cityTown.value,
       phone: phone.value,
       survivorType: radioButtonValue("survivor-type"),
-      safeToCall: radioButtonValue("safe-to-call"),
-      safeToLeaveMessage: radioButtonValue("safe-to-leave-message"),
-      contactTypes: {
+    };
+
+    if (this.state.newUser) {
+      theData.survivorGender = survivorGender.value;
+      theData.dateOfBirth = dob.value;
+      theData.ageRange = [ageLow.value, ageHigh.value];
+      theData.language = radioButtonValue("language");
+      theData.ethnicity = checkBoxValues("ethnicity");
+      theData.numberOfChildren = numberChildren.value;
+      theData.disability = radioButtonValue("disability");
+      theData.miscChars = checkBoxValues("characteristics");
+      theData.nameOfSchool = nameOfSchool.value;
+      theData.referrer = referrer.value;
+    }
+
+    if (this.state.newUser || (!this.state.newUser && this.state.newIncident)) {
+      theData.incidents = getIncidents(this.state.numIncidents);
+      theData.protectionOrders = getOrders(this.state.numOrders);
+      theData.partiallyServedReasons = checkBoxValues("partially-served");
+    }
+
+    theData.safeToCall = radioButtonValue("safe-to-call");
+    theData.safeToLeaveMessage = radioButtonValue("safe-to-leave-message");
+    theData.contactTypes = {
         calls: contactCall.value,
         inPerson: contactInPerson.value,
         email: contactEmail.value,
         instantMessaging: contactInstantMessaging.value,
         onBehalf: contactOnBehalf.value
-      },
-      timeSpent: radioButtonValue("time-call"),
-      servicesProvided: {
+      };
+    theData.timeSpent = radioButtonValue("time-call");
+    theData.servicesProvided = {
         advocacy: checkBoxValues("advocacy"),
         support: checkBoxValues("support"),
         medical: checkBoxValues("medical"),
@@ -88,36 +107,12 @@ class Form extends React.Component {
         safeHome: checkBoxValues("safe-home"),
         groups: checkBoxValues("groups")
 
-      },
-      referrals: referralValues("referrals"),
-      outcomeMeasures: radioButtonValue("plan-for-safety"),
-      communityResources: radioButtonValue("community-resources"),
-      rightsAndOptions: radioButtonValue("rights-options"),
-      notes: notes.value
-    };
-
-    if (this.state.newUser) {
-      theData = {
-        survivorGender: survivorGender.value,
-        dob: dob.value,
-        ageRange: [ageLow.value, ageHigh.value],
-        language: radioButtonValue("language"),
-        ethnicity: checkBoxValues("ethnicity"),
-        numberChildren: numberChildren.value,
-        disability: radioButtonValue("disability"),
-        miscChars: checkBoxValues("characteristics"),
-        nameOfSchool: nameOfSchool.value,
-        referrer: referrer.value
-      }
-    }
-
-    if (this.state.newUser || (!this.state.newUser && this.state.newIncident)) {
-      theData = {
-        incidents: getIncidents(this.state.numIncidents),
-        protectionOrders: getOrders(this.state.numOrders),
-        partiallyServedReasons: checkBoxValues("partially-served")
-      }
-    }
+      };
+    theData.referrals = referralValues("referrals");
+    theData.outcomeMeasures = radioButtonValue("plan-for-safety");
+    theData.communityResources = radioButtonValue("community-resources");
+    theData.rightsAndOptions = radioButtonValue("rights-options");
+    theData.notes = notes.value;
 
     console.log("here is the data:")
     console.log(theData);
