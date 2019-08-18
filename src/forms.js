@@ -67,7 +67,7 @@ class Forms extends React.Component {
                 <ul id="forms">{listItems}</ul>
             );
         } else {
-            return null
+            return <p>getting the forms...</p>
         }
         
     }
