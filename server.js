@@ -16,6 +16,15 @@ MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-a
 
 app.get('/forms', getAll);
 
+app.get('/delete/:id', deleteForm)
+
+async function deleteForm (request, response) {
+  let id = request.params.id
+  let result = await store.deleteForm(id)
+  console.log(result)
+  response.redirect("/forms")
+}
+
 async function getAll(request, response) {
   let cursor = await store.all();
   let output = [];
@@ -39,8 +48,7 @@ app.listen(5000, function () {
 
 app.post('/form', express.json(), (req, res) => {
   console.log("express post says, the request is: ")
-  console.log(req.body)
-  console.log("express post says, the response is: GABE! is a BABE! Djengo Unchained! Aaron Will Smash you Bro! Wissell is Master! ") 
+  console.log(req.body) 
   console.log(res.body)
   addData(req, res)
 })

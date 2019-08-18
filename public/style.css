@@ -7,10 +7,6 @@
     margin-right: 25%;
 }
 
-/* label {
-    font-weight: bold
-} */
-
 #form-page {
     display: flex;
     justify-content: center;
@@ -80,6 +76,8 @@ body {
 .indented {
     margin-left: 40px;
 }
+
+
 
 /* ALERT CSS */
 h4 {

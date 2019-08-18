@@ -10,6 +10,8 @@ class Forms extends React.Component {
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
+        this.deleteForm = this.deleteForm.bind(this);
+        this.orderForms = this.orderForms.bind(this);
     }
 
     async componentDidMount() {
@@ -40,9 +42,22 @@ class Forms extends React.Component {
                     formType = "Ongoing"
                 }
                 listItems.push(
-                    <div key={i}>
+                    <div key={i} className="column-two">
                         <li>{new Date(form.when).toLocaleString()}: {form.data.firstName} {form.data.lastName} ({formType})
                             <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view form</button>
+                            <button id={"delete-button-" + i} onClick={this.showDialog}>delete form</button>
+                            <dialog id={"delete-dialog-" + i}>
+                                <form method="dialog">
+                                <div>
+                                    <h4>Are you sure you want to delete this form????</h4>
+                                    <p>{new Date(form.when).toLocaleString()}: {form.data.firstName} {form.data.lastName} ({formType})</p>
+                                </div>
+                                <menu>
+                                    <button value="cancel">Cancel</button>
+                                    <button id={"confirmBtn-" + i} value="default" onClick={this.deleteForm}>DELETE</button>
+                                </menu>
+                                </form>
+                            </dialog>
                         </li>
                     </div>
                     )
@@ -85,23 +100,42 @@ class Forms extends React.Component {
         );
     }
 
+    showDialog(event) {
+        let buttonIdNum = event.target.id.slice(-1);
+        let deleteDialog = document.getElementById("delete-dialog-" + buttonIdNum);
+        deleteDialog.showModal();
+      }
+
+    async deleteForm (event) {
+        let buttonIdNum = event.target.id.slice(-1);
+        let allOrderedForms = this.orderForms(this.state.forms)
+        let theFormId = allOrderedForms[buttonIdNum]._id;
+        console.log(theFormId)
+        await fetch("/delete/" + theFormId)
+        window.location.replace("/forms")
+    }
+
     render() {
         if (this.state.view==="list") {
             return (
+             <div>
                 <div id="forms-page">
                     <h1>hey check out these forms:</h1>
                     <div id="form-list">
                         {this.listTheForms(this.state.forms)}
                     </div>
                 </div>
+            </div>
             )
         } else if (this.state.view==="form") {
             return (
+             <div>
                 <div id="forms-page">
                     <h1>hey check out this form:</h1>
                     {this.displayForm(this.state.currentForm)}
                     <button onClick={this.viewList}>list forms</button>
                 </div>
+             </div>  
             )
         }
     }  
@@ -128,10 +162,10 @@ function camelCaseToCapitalized (string) {
     return stringArray.join('')
 }
 
-function parseFormValue (value) { //this function should work recursively/call itself, needs refactor
+function parseFormValue (value) {
     //should put together all of the objects and arrays of the response into one string that can be returned to the form viewer
     let theString = "";
-    function innerFunction (value) {
+    function innerFunction (value) { //this inner function is needed so that theString doesn't reset every time
         if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string (or boolean)
             theString = theString + value + " "
         } else if (value.length && typeof(value[0])==="string") { //input is an array of strings

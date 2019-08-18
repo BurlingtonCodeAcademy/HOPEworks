@@ -3,6 +3,7 @@ const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 const moment = require('moment');
 const client = new MongoClient(url);
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = class DataStore {
   constructor(dbUrl) {
@@ -69,18 +70,11 @@ module.exports = class DataStore {
     return {id: result.insertedId};
   }
 
-  async deleteFact(data) {
-    let entry = {
-      data: data
-    };
-
-     let collection = await this.collection()
-     let result = await collection.deleteOne(entry)
-     //assert.equal(1, result.insertedCount); // sanity check
-     console.log('Deleted fact as id ' + result.deltetedCount)
-
-     return {numDeleted: result.deltetedCount};
-  
+  async deleteForm(id) {
+    let collection = await this.collection()
+    const objectId = new ObjectId(id)
+    let query = {_id: objectId}
+    collection.remove(query)
  }
 }
 
