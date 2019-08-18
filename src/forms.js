@@ -12,12 +12,22 @@ class Forms extends React.Component {
         this.viewList = this.viewList.bind(this);
         this.deleteForm = this.deleteForm.bind(this);
         this.orderForms = this.orderForms.bind(this);
+        // this.updateFormList = this.updateFormList.bind(this);
     }
 
     async componentDidMount() {
         const response = await fetch("/forms");
         const formsObj = await response.json();
         this.setState({forms: formsObj})
+        // setInterval(this.updateFormList(), 10000)
+    }
+
+    async updateFormList () {
+        console.log("updating form list....")
+        const response = await fetch("/forms");
+        const formsObj = await response.json();
+        this.setState({forms: formsObj})
+        console.log("we did it")
     }
 
     viewForm (event) {
