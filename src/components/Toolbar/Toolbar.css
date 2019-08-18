@@ -20,7 +20,6 @@
 .toolbar a:hover {
   color: #064579;
 }
-
 .toolbar_logo {
   color: purple;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -78,4 +77,5 @@
 
 @media screen and (max-width: 758px)  {
     .toolbar {display: none;}
+  
 }

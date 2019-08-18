@@ -1,9 +1,15 @@
 /* MAIN FORM CSS */
 #the-form {
-    width: 500px;
+    width: 100%;
     z-index: 1;
     margin-top: 50px;
+    margin-left: 25%;
+    margin-right: 25%;
 }
+
+/* label {
+    font-weight: bold
+} */
 
 #form-page {
     display: flex;
@@ -12,7 +18,7 @@
 }
 
 #title {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, sans-serif;
     text-align: center;
 }
 
@@ -25,7 +31,7 @@
 
 #all-fields, h4 {
     font-size: 20px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, sans-serif;
 }
 
 /* INPUT & BUTTONS */
@@ -33,11 +39,11 @@ input, select, button {
     font-size: 20px;
     margin: 5px;
     margin-left: 0px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, sans-serif;
 }
 
 input[type="date"] {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, sans-serif;
     color: gray;
 }
 
@@ -52,7 +58,7 @@ hr {
 
 #notes {
     height: 140px;
-    width: 500px;
+    width: 100%;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
 }
@@ -85,15 +91,6 @@ h4 {
 display: flex;
 }
 
-/* .column-a {
-flex: 50%;
-} */
-
-/* .column-a {
-    float: left;
-    margin-right: 66px;
-} */
-
 .center-div {
     text-align: center;
     float: inline-end;
@@ -108,3 +105,16 @@ flex: 50%;
 .view-form-button {
     margin: 5px;
 }
+
+@media screen and (max-width: 944px) {
+    html {width: 100%;}
+    .toolbar{width: 95%;}
+} 
+
+
+@media screen and (max-width: 758px) {
+    /* #the-form {width: 100%;}
+    #form-page {display: 100%;}
+    html {width: 100%;} */
+  }
+
