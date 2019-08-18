@@ -322,7 +322,7 @@ class Form extends React.Component {
               name="characteristics"
               className="inline-input"
             />
-            <br />
+            <br id="incident-info-link"/>
           </div>
           <label htmlFor="hear-about" id="hear-about">
             How did the service user hear about HOPE Works?

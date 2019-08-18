@@ -84,13 +84,13 @@ if (req.body.email &&
       err.status = 401;
       return res.redirect('/');
     }
-    bcrypt.compare(password, user.password, function (err, result) {
-      if (result === true) {
-        return callback(null, user);
-      } else {
-        return callback();
-      }    
-    })
+//    bcrypt.compare(password, user.password, function (err, result) {
+//      if (result === true) {
+//        return callback(null, user);
+//      } else {
+//        return callback();
+//      }    
+//    })
   });
 }
 })
