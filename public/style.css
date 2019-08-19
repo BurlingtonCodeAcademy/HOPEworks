@@ -75,10 +75,8 @@ body {
 }
 
 .indented {
-    margin-left: 40px;
+    margin-left: 40px !important;
 }
-
-
 
 /* ALERT CSS */
 h4 {
@@ -103,6 +101,11 @@ display: flex;
 
 .view-form-button {
     margin: 5px;
+}
+
+.form-element {
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 @media screen and (max-width: 944px) {

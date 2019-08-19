@@ -661,7 +661,7 @@ class Form extends React.Component {
               <br />
               <label htmlFor="advocate-initials">Advocate Initials </label>
               <br />
-              <input id="advocate-initials" placeholder="Initials"maxLength="2" />
+              <input id="advocate-initials" placeholder="Initials"maxLength="3" />
               <br />
             </div>
             <div className="column-b">
@@ -1403,8 +1403,8 @@ function getIncidents (num) {
   while (i <= num) {
     incidentObject = {
       victimization: checkBoxValues("victimization-" + i),
-      perpRelationship: checkBoxValues("perp-relationship-" + i),
-      perpGender: document.getElementById("perp-gender-" + i).value
+      perpetratorRelationship: checkBoxValues("perp-relationship-" + i),
+      perpetratorGender: document.getElementById("perp-gender-" + i).value
     };
     theIncidents.push(incidentObject);
     i++;
