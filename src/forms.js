@@ -12,6 +12,7 @@ class Forms extends React.Component {
         this.viewList = this.viewList.bind(this);
         this.deleteForm = this.deleteForm.bind(this);
         this.orderForms = this.orderForms.bind(this);
+        this.displayFormElement = this.displayFormElement.bind(this);
         // this.updateFormList = this.updateFormList.bind(this);
     }
 
@@ -94,12 +95,11 @@ class Forms extends React.Component {
         let i = 0;
         let listItems = [];
         for (let property in theForm) {
-            let formattedProperty = camelCaseToCapitalized(property)
-            let formattedValue = parseFormValue(theForm[property])
-            if (formattedValue && formattedValue!=="" && formattedValue!==" ") {
+            if (theForm[property][0] || typeof(theForm[property])==="boolean" || theForm[property].advocacy) {
+                //(the value is a non-empty string or array OR the value is a non-empty boolean OR the value is the services provided object)
                 listItems.push(
                     <div key={i}>
-                        <p><strong>{formattedProperty}: </strong>{formattedValue}</p>
+                        <div className="form-element">{this.displayFormElement(property, theForm[property], null)}</div>
                     </div>
                     )
             }
@@ -108,6 +108,58 @@ class Forms extends React.Component {
         return (
             <div id="form-info">{listItems}</div>
         );
+    }
+
+    displayFormElement (property, value, key) {
+        let formattedProperty = null;
+        let theKey = 0;
+        if (property) {
+            formattedProperty = camelCaseToCapitalized(property) + ": "
+        }
+        if (key) {
+            theKey = key;
+        }
+
+        if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string (or boolean)
+            return (
+                <div key={theKey}>
+                    <label><strong>{formattedProperty}</strong>{value.toString()}</label>
+                </div>
+            )   
+        } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
+            return (
+                <div key={theKey}>
+                    <label><strong>{formattedProperty}</strong>{value.join(", ")}</label>
+                    <br/>
+                </div>
+            )
+        } else if (value[0] && typeof(value[0])==="object") { //input is an array of objects/arrays
+            let returnArray = [];
+            let newKey = 0;
+            value.forEach((object) => {
+                returnArray.push(this.displayFormElement(null, object, newKey))
+                newKey++;
+            })
+            return (
+                <div key={theKey}>
+                    <label><strong>{formattedProperty}</strong>{returnArray}</label>
+                </div>
+            )
+        } else if (!value[0] && typeof(value)==="object") { //input is an object
+            let returnArray = [];
+            let newKey = 0;
+            for (let innerProperty in value) {
+                if (value[innerProperty][0]) { //make sure that the field isn't empty
+                    returnArray.push(this.displayFormElement(innerProperty, value[innerProperty], newKey))
+                    newKey++
+                }
+            }
+            return (
+                <div key={theKey}>
+                    <label><strong>{formattedProperty}</strong>{returnArray}</label>
+                </div>
+            )
+        }
     }
 
     showDialog(event) {
@@ -152,6 +204,9 @@ class Forms extends React.Component {
 }
 
 function camelCaseToCapitalized (string) {
+    if (typeof(string)!=="string") {
+        console.log("camelCaseToCapitalized recieved a non string input")
+    }
     let stringArray = string.split('')
     let i = 0;
     while (i < stringArray.length) {
@@ -166,37 +221,10 @@ function camelCaseToCapitalized (string) {
             stringArray[i] = stringArray[i].toUpperCase()
         }
         if (stringArray[i]===" ") {
-          stringArray[i + 1] = stringArray[i + 1].toUpperCase()
+            stringArray[i + 1] = stringArray[i + 1].toUpperCase()
         }
     }
     return stringArray.join('')
-}
-
-function parseFormValue (value) {
-    //should put together all of the objects and arrays of the response into one string that can be returned to the form viewer
-    let theString = "";
-    function innerFunction (value) { //this inner function is needed so that theString doesn't reset every time
-        if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string (or boolean)
-            theString = theString + value + " "
-        } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
-            theString = theString + value.join(", ")
-        } else if (value[0] && typeof(value[0])==="object") { //input is an array of arrays or objects (typeof returns "object" for arrays)
-            value.forEach((array) => innerFunction(array))
-        } else if (!value[0] && typeof(value)==="object") { //input is an object
-            for (let property in value) {
-                if (value[property][0]) { //make sure that the field isn't empty
-                    innerFunction(" " + camelCaseToCapitalized(property) + ": ")
-                    innerFunction(value[property])
-                }
-            } 
-        } else {
-            console.log("unhandled exception in parseFormValue: ")
-            console.log(value)
-            return
-        }
-    }
-    innerFunction(value)
-    return theString;
 }
 
 export default Forms;

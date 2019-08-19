@@ -47,9 +47,6 @@ app.listen(5000, function () {
 })
 
 app.post('/form', express.json(), (req, res) => {
-  console.log("express post says, the request is: ")
-  console.log(req.body) 
-  console.log(res.body)
   addData(req, res)
 })
 

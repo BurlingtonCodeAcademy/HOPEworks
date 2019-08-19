@@ -105,6 +105,11 @@ display: flex;
     margin: 5px;
 }
 
+.form-element {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
 @media screen and (max-width: 944px) {
     html {width: 100%;}
     .toolbar{width: 95%;}
