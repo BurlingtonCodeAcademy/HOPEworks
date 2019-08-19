@@ -5,7 +5,7 @@ const assert = require('assert');
 //const client = new MongoClient(url);
 
 
-class FactStore {
+class UserStore {
   constructor(dbUrl) {
     this.dbUrl = dbUrl;
     this.dbClient = null;
@@ -61,10 +61,10 @@ class FactStore {
   //   })
    }
 
-  printEntry(fact, currentDay) {
-  }
+  // printEntry(fact, currentDay) {
+  // }
 
-  async addForm(text) {
+  async addUser(text) {
     let entry = {
       when: new Date(),
       text: text
@@ -73,12 +73,12 @@ class FactStore {
     let collection = await this.collection()
     let result = await collection.insertOne(entry)
     assert.equal(1, result.insertedCount); // sanity check
-    console.log('Inserted fact as id ' + result.insertedId)
+    console.log('Inserted user as id ' + result.insertedId)
 
     return {id: result.insertedId};
   }
 
-  async deleteFact(text) {
+  async deleteUser(text) {
     let entry = {
       text: text
     };
@@ -86,7 +86,7 @@ class FactStore {
      let collection = await this.collection()
      let result = await collection.deleteOne(entry)
      //assert.equal(1, result.insertedCount); // sanity check
-     console.log('Deleted fact as id ' + result.deltetedCount)
+     console.log('Deleted user as id ' + result.deltetedCount)
 
      return {numDeleted: result.deltetedCount};
   
@@ -148,4 +148,4 @@ class FactStore {
 //front end sends post requests to express.... express calls off to middleware, then calls to db
 // })
 
-module.exports = FactStore
+module.exports = UserStore
