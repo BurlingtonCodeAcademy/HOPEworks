@@ -94,23 +94,117 @@ class Forms extends React.Component {
 
         let i = 0;
         let listItems = [];
+
+        let ageDisplayType = null;                 // if we know the DOB, we can display an exact current age and exact age at time of contact.
+        if (theForm.dateOfBirth!=="") {
+            ageDisplayType = "dob"
+        } else if (theForm.ageRange.length > 0) { //if we only have an age range, we will have to approximate current age.
+            ageDisplayType = "range"
+        }
+
         for (let property in theForm) {
-            if (theForm[property][0] || typeof(theForm[property])==="boolean" || theForm[property].advocacy) {
-                //(the value is a non-empty string or array OR the value is a non-empty boolean OR the value is the services provided object)
+            if (property==="dateOfBirth" || property==="ageRange") {
+                if (property==="dateOfBirth") { //once we encounter the DOB property, we handle all of our cases. we don't want to handle them again when we hit the ageRange prop.
+                    let currentDate = getCurrentDate();
+                    let contactDate = null;
+                    if (theForm.contactDate!=="") {
+                        contactDate = theForm.contactDate.split("-");
+                        contactDate = contactDate.map((string) => Number(string))
+                        contactDate.push(contactDate[0])
+                        contactDate = contactDate.slice(1, 4)
+                    }
+
+                    if (ageDisplayType==="dob") {
+                        let ageAtContact;
+                        let currentAge;
+                        let birthDate;
+
+                        birthDate = theForm.dateOfBirth.split("-");
+                        birthDate = birthDate.map((string) => Number(string))
+                        birthDate.push(birthDate[0])
+                        birthDate = birthDate.slice(1, 4)
+
+                        ageAtContact = contactDate[2] - birthDate[2]
+                        if (contactDate[0] - birthDate[0] < 0) { //months
+                            ageAtContact--
+                        } else if ((contactDate[0] - birthDate[0] === 0) && (contactDate[1] - birthDate[1] < 0)) { //same month, not up to the day yet
+                            ageAtContact--
+                        }
+
+                        currentAge = currentDate[2] - birthDate[2]
+                        if (currentDate[0] - birthDate[0] < 0) {
+                            currentAge--
+                        } else if ((currentDate[0] - birthDate[0] === 0) && (currentDate[1] - birthDate[1] < 0)) {
+                            currentAge--
+                        }
+
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement(property, theForm.dateOfBirth, null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement("Age at time of contact", ageAtContact.toString(), null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement("Current age", currentAge.toString(), null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                    } else if (ageDisplayType==="range") {
+                        let approxAgeAtContact = Math.floor(((Number(theForm.ageRange[0]) + Number(theForm.ageRange[1]))/2))
+                        let approxBirthDate = [contactDate[0], contactDate[1], contactDate[2] - approxAgeAtContact]
+                        let approxCurrentAge = currentDate[2] - approxBirthDate[2]
+
+                        if (currentDate[0] - approxBirthDate[0] < 0) {
+                            approxCurrentAge--
+                        } else if ((currentDate[0] - approxBirthDate[0] === 0) && (currentDate[1] - approxBirthDate[1] < 0)) {
+                            approxCurrentAge--
+                        }
+
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement("Age Range", theForm.ageRange[0] + "-" + theForm.ageRange[1], null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement("Approximate current age", approxCurrentAge.toString(), null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                        listItems.push(
+                            <div key={i}>
+                                <div className="form-element">{this.displayFormElement("Approximate Date of Birth", approxBirthDate[2] + "-" + approxBirthDate[0] + "-" + approxBirthDate[1], null, "normal")}</div>
+                            </div>
+                            )
+                        i++;
+                    } else {
+                        console.log("unhandled exception in display form")
+                    }
+                }
+            } else if (theForm[property][0] || typeof(theForm[property])==="boolean" || (theForm[property].advocacy && isObjectNonEmpty(theForm[property]))) {
+                //(the value is a non-empty string or array OR the value is a non-empty boolean OR the value is a non-empty services provided object)
                 listItems.push(
                     <div key={i}>
-                        <div className="form-element">{this.displayFormElement(property, theForm[property], null)}</div>
+                        <div className="form-element">{this.displayFormElement(property, theForm[property], null, "normal")}</div>
                     </div>
                     )
+                i++;
             }
-            i++;
         }
         return (
             <div id="form-info">{listItems}</div>
         );
     }
 
-    displayFormElement (property, value, key) {
+    displayFormElement (property, value, key, indent) {
         let formattedProperty = null;
         let theKey = 0;
         if (property) {
@@ -120,24 +214,23 @@ class Forms extends React.Component {
             theKey = key;
         }
 
-        if (typeof(value)==='string' || typeof(value)==="boolean") { //input is a string (or boolean)
+        if (typeof(value)==='string' || typeof(value)==="boolean" || !value) { //input is a string (or boolean)
             return (
-                <div key={theKey}>
+                <div key={theKey} className={indent}>
                     <label><strong>{formattedProperty}</strong>{value.toString()}</label>
                 </div>
             )   
         } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
             return (
-                <div key={theKey}>
+                <div key={theKey} className={indent}>
                     <label><strong>{formattedProperty}</strong>{value.join(", ")}</label>
-                    <br/>
                 </div>
             )
         } else if (value[0] && typeof(value[0])==="object") { //input is an array of objects/arrays
             let returnArray = [];
             let newKey = 0;
             value.forEach((object) => {
-                returnArray.push(this.displayFormElement(null, object, newKey))
+                returnArray.push(this.displayFormElement(null, object, newKey, "indented"))
                 newKey++;
             })
             return (
@@ -150,13 +243,18 @@ class Forms extends React.Component {
             let newKey = 0;
             for (let innerProperty in value) {
                 if (value[innerProperty][0]) { //make sure that the field isn't empty
-                    returnArray.push(this.displayFormElement(innerProperty, value[innerProperty], newKey))
+                    returnArray.push(this.displayFormElement(innerProperty, value[innerProperty], newKey, "indented"))
                     newKey++
                 }
             }
             return (
-                <div key={theKey}>
-                    <label><strong>{formattedProperty}</strong>{returnArray}</label>
+                <div key={theKey} className="form-element">
+                    <label>
+                        <strong>{formattedProperty}</strong>
+                        <div className="form-element">
+                            {returnArray}
+                        </div>
+                    </label>
                 </div>
             )
         }
@@ -182,7 +280,7 @@ class Forms extends React.Component {
             return (
              <div>
                 <div id="forms-page">
-                    <h1>hey check out these forms:</h1>
+                    <h1>Submitted Forms</h1>
                     <div id="form-list">
                         {this.listTheForms(this.state.forms)}
                     </div>
@@ -193,9 +291,10 @@ class Forms extends React.Component {
             return (
              <div>
                 <div id="forms-page">
-                    <h1>hey check out this form:</h1>
+                    <h1>Survivor Information</h1>
+                    <button onClick={this.viewList}>back to form list</button>
                     {this.displayForm(this.state.currentForm)}
-                    <button onClick={this.viewList}>list forms</button>
+                    <button onClick={this.viewList}>back to form list</button>
                 </div>
              </div>  
             )
@@ -225,6 +324,24 @@ function camelCaseToCapitalized (string) {
         }
     }
     return stringArray.join('')
+    //  EDGE CASE, MISC ARTICLES (OF, THE, OR, AND, AT)
+}
+
+function isObjectNonEmpty (object) {
+    for (let property in object) {
+        if (object[property].length > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getCurrentDate () {
+    let theTime = new Date().toLocaleString()
+    let monthDayYear = theTime.split("/")
+    monthDayYear[2] = monthDayYear[2].slice(0, 4)
+    let monthDayYearNums = monthDayYear.map((string) => Number(string))
+    return monthDayYearNums;
 }
 
 export default Forms;

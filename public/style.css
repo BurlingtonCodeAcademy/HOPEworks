@@ -75,10 +75,8 @@ body {
 }
 
 .indented {
-    margin-left: 40px;
+    margin-left: 40px !important;
 }
-
-
 
 /* ALERT CSS */
 h4 {
