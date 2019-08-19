@@ -1,9 +1,8 @@
 import React from 'react';
-
 import './Toolbar.css';
 
 const toolbar = props => (
-  <header className="toobar">
+  <header className="toolbar">
      <nav className="toolbar_navigation">
         <div className="toolbar_logo">HOPE WORKS</div>
         <div className="toolbar_navigation-items">
