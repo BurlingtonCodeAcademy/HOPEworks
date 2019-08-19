@@ -18,8 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set('view engine', 'ejs')
 
-require('./database')('app');
-
 app.listen(5000, function () {
   console.log('listening on 5000')
 })
@@ -52,18 +50,6 @@ async function findUser(req, res) {
     console.log(userinfo)
 }
 
-
-// app.post('/demo',urlencodedParser,function(req,res){
-//   MongoClient.connect(url, function(err, db) {
-//   db.collection('userprofile').findOne({ name: req.body.name}, function(err, user) {
-//             if(user ===null){
-//               res.end("Login invalid");
-//            }else if (user.name === req.body.name && user.pass === req.body.pass){
-//            res.render('completeprofile',{profileData:user});
-//          } else {
-//            console.log("Credentials wrong");
-//            res.end("Login invalid");
-//          }
 // if (req.body.email &&
 //   req.body.username &&
 //   req.body.password &&
