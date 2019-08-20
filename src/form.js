@@ -1,5 +1,6 @@
 import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
+// import Sticky_Note from './components/Sticky_Note/sticky_note';
 
 class Form extends React.Component {
   constructor() {
@@ -980,9 +981,16 @@ class Form extends React.Component {
   render() {
     return (
       <div id="form-page">
+        <div id="sticky_tool">
           <div className="toolbar">
             <Toolbar />
           </div>
+          <div className="sticky_note">
+              <label htmlFor="notes">Notes: </label>
+              <br />
+              <textarea id="notes-box" />
+          </div>
+         </div>
         <form id="the-form">
           <div id="title">  
           {/* <img src={"./hope_works_vt_logo_.jpg"}/> */}
@@ -995,7 +1003,7 @@ class Form extends React.Component {
             <br />
             {this.displayNewIncidentBox()}
             <hr />
-            <div className="column-a">
+            <div>
               <label htmlFor="first-name">Name of Service User </label>
               <br />
               <input id="first-name" placeholder="First Name" />
@@ -1013,7 +1021,7 @@ class Form extends React.Component {
               <input id="advocate-initials" placeholder="Initials"maxLength="3" />
               <br />
             </div>
-            <div className="column-b">
+            <div>
               <label htmlFor="contact-date">Date of contact </label>
               <br />
               <input type="date" id="contact-date" />
@@ -1027,7 +1035,7 @@ class Form extends React.Component {
               <input id="phone" type="tel" placeholder="802-123-4567" />
               <br />
             </div>
-            <div className="center-div">
+            <div>
               <div id="survivor-type">
                 <input
                   name="survivor-type"

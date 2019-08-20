@@ -1,9 +1,8 @@
 import React from 'react';
-
 import './Toolbar.css';
 
 const toolbar = props => (
-  <header className="toobar">
+  <header className="toolbar">
      <nav className="toolbar_navigation">
         <div className="toolbar_logo">HOPE WORKS</div>
         <div className="toolbar_navigation-items">
@@ -15,7 +14,6 @@ const toolbar = props => (
             <li><a href="#services-link">Services Provided</a></li> 
             <li><a href="#groups">Referrals</a></li> 
             <li><a href="#measures">Outcome Measures</a></li> 
-            <li><a href="#notes">Notes</a></li> 
           </ul>
         </div>
      </nav>

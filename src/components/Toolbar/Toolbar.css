@@ -1,20 +1,18 @@
 .toolbar {
-  border-radius: 10px;
-  border: 2px solid rgb(0, 0, 0);
+  border: 3px solid rgb(0, 0, 0);
   width: 200px;
   position: fixed;
   z-index: 10;
-  top: 25%;
+  top: 27%;
   left: 10px;
   background: rgb(255, 247, 235);
-  font-weight: 1000px;
   margin-bottom: 0px;
 }
 .toolbar a {
   padding: 2px;
   text-decoration: none;
   font-size: 20px;
-  color: #2196F3;
+  color: rgb(35, 147, 240);
   display: block;
 }
 .toolbar a:hover {
@@ -32,6 +30,30 @@
   margin-left: -20px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
+/* STICKY NOTE */
+
+#notes-box {
+  height: 300px;
+  width: 214px;
+  font-size: 14px;
+}
+
+.sticky_note {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande';
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  position: fixed;
+  z-index: 10;
+  top: 60%;
+  left: 1%;
+}
+/* DIV AROUND STICKY NOTE AND TOOLBAR */
+/* #sticky_tool {
+  display: block;
+} */
+
+
 
 @media screen and (max-width: 944px) {
   .toolbar {
@@ -73,9 +95,19 @@
   a {
     padding-top: -40px;
   }
+  #notes-box {
+    font-size: 14px;
+    width: 168px;
+  }
+  .sticky_note {
+    font-size: 20px;
+    top: 24%;
+    left: 76%;
+  }
+
 }
 
 @media screen and (max-width: 758px)  {
     .toolbar {display: none;}
-  
+    .sticky_note {display: none;}
 }
