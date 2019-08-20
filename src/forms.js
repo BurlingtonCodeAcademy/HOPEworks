@@ -102,7 +102,7 @@ class Forms extends React.Component {
             ageDisplayType = "range"
         }
 
-        for (let property in theForm) {
+        for (let property in theForm) {                                                             //consider refactor for outcome measures section
             if (property==="dateOfBirth" || property==="ageRange") {
                 if (property==="dateOfBirth") { //once we encounter the DOB property, we handle all of our cases. we don't want to handle them again when we hit the ageRange prop.
                     let currentDate = getCurrentDate();
@@ -323,8 +323,20 @@ function camelCaseToCapitalized (string) {
             stringArray[i + 1] = stringArray[i + 1].toUpperCase()
         }
     }
-    return stringArray.join('')
-    //  EDGE CASE, MISC ARTICLES (OF, THE, OR, AND, AT)
+    let capitalizedString = stringArray.join('')
+    let capitalizedArray = capitalizedString.split(' ')
+    for (let i = 0; i < capitalizedArray.length; i++) {
+        if (capitalizedArray[i]==="Of" ||
+        capitalizedArray[i]==="And" ||
+        capitalizedArray[i]==="At" ||
+        capitalizedArray[i]==="The" ||
+        capitalizedArray[i]==="Or" ||
+        capitalizedArray[i]==="For") {
+            capitalizedArray[i] = capitalizedArray[i].toLowerCase()
+        }
+        
+    }
+    return capitalizedArray.join(" ")
 }
 
 function isObjectNonEmpty (object) {

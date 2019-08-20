@@ -38,8 +38,8 @@ class Data extends React.Component {
         if (forms && document.getElementById("Homelessness").value === "Homeless") {
             let theCount = 0;
             forms.forEach((form) => {
-                console.log(form.data.miscChars)//this is an array.
-                let homelessArray = form.data.miscChars;
+                console.log(form.data.miscellaneousCharacteristics)//this is an array.
+                let homelessArray = form.data.miscellaneousCharacteristics;
                     //console.log(homeless)//this is actually a string
                     if (homelessArray.includes("Homeless")) {
                         theCount++;
