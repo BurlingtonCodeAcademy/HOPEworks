@@ -104,7 +104,7 @@ class Form extends React.Component {
       theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
       theData.miscChars = checkBoxValues("characteristics");
-      theData.nameOfSchool = nameOfSchool.value;
+      theData.nameOfSchool = nameOfSchool;
       theData.referrer = referrer.value;
     }
 
