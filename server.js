@@ -22,7 +22,6 @@ app.listen(5000, function () {           //listens to port 5000, proxy from 3000
   console.log('listening on 5000')
 })
 
-
 app.post('/form', (req, res) => {
   console.log(req.body)
 })
@@ -45,12 +44,12 @@ async function findUser(req, res) {
   }, function (err) {
     assert.equal(null, err);
     console.log("Sending " + userinfo.length + " records to client");    //handshakes with mongodb 'hw/users' to confirm user/pw
-    if (userinfo[0].authLevel === "admin"){res.redirect("/data")}        //if user has auth level of 'admin', redirect to '/data' (which doesn't exist at the moment, but in theory would hold all relevant data, i.e. forms and user info)       
-      else if (userinfo[0].authLevel === "employee"){res.redirect("/forms")}  //if auth level 'employee', redirect to '/forms' (plural) to see all forms (again, not currently existent)
-      else if (userinfo[0].authLevel === "volunteer"){res.redirect("/form")}  //if auth level 'volunteer', redirect to '/form' (singular) which would house just a single empty form
-      else {res.redirect("/login")}  //anything else will kick you back to 'login' page
-    })
-    console.log(userinfo)
+    if (userinfo[0].authLevel === "admin") { res.redirect("/home") }        //if user has auth level of 'admin', redirect to '/data' (which doesn't exist at the moment, but in theory would hold all relevant data, i.e. forms and user info)       
+    else if (userinfo[0].authLevel === "employee") { res.redirect("/home") }  //if auth level 'employee', redirect to '/forms' (plural) to see all forms (again, not currently existent)
+    else if (userinfo[0].authLevel === "volunteer") { res.redirect("/home") }  //if auth level 'volunteer', redirect to '/form' (singular) which would house just a single empty form
+    else { res.redirect("/login") }  //anything else will kick you back to 'login' page
+  })
+  console.log(userinfo)
 }
 
 // if (req.body.email &&
@@ -59,7 +58,7 @@ async function findUser(req, res) {
 //   req.body.passwordConf) {
 
 
-    
+
 //   var userData = {
 //     email: req.body.email,
 //     username: req.body.username,
