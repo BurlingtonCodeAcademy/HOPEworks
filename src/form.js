@@ -11,7 +11,7 @@ class Form extends React.Component {
       newUser: true,
       newIncident: false,
       errorMessage: "",
-      referrals: true
+      referrals: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.displayIncidents = this.displayIncidents.bind(this);
@@ -57,13 +57,15 @@ class Form extends React.Component {
     } else if (this.state.numOrders > 10) {
       this.setState({ errorMessage: "Error submitting form: Too many orders."})
       return
-    } else if ((ageLow==="" && ageHigh!=="") || (ageLow!=="" && ageHigh==="")) {
+    } else if (this.state.newUser && ((ageLow.value==="" && ageHigh.value!=="") || (ageLow.value!=="" && ageHigh.value===""))) {
       this.setState( {errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither"} )
+      return
+    } else if (contactDate.value.length < 10) {
+      this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
       return
     } else {
       this.setState({ errorMessage: ""})
     }
-
     
     let theData = {                                                     //UPDATE HERE FOR ADAPTIVE FORM
       timestamp: new Date().toLocaleString(),
@@ -117,14 +119,13 @@ class Form extends React.Component {
         groups: checkBoxValues("groups")
 
       };
-    theData.referrals = referralValues("referrals");
+    if (this.state.referrals) {
+      theData.referrals = referralValues("referrals");
+    }
     theData.planForSafety = radioButtonValue("plan-for-safety");
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
     theData.notes = notes.value;
-
-    console.log("here is the data:")
-    console.log(theData);
 
     const response = await fetch("/form", {
       method: "POST",
@@ -347,7 +348,7 @@ class Form extends React.Component {
             />
             <br id="incident-info-link"/>
           </div>
-          <label htmlFor="hear-about" id="hear-about">
+          <label htmlFor="hear-about">
             How did the service user hear about HOPE Works?
           </label>
           <br />
