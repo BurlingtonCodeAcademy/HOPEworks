@@ -107,16 +107,6 @@
 
 }
 
-/* .sticky_note {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande';
-  font-size: 18px;
-  width: 170px;
-  position: fixed;
-  z-index: 9;
-  top: 55%;
-  left: 10px;
-} */
-
 @media screen and (max-width: 758px)  {
     .toolbar {display: none;}
     .sticky_note {display: none;}

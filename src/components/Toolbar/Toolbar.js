@@ -14,7 +14,6 @@ const toolbar = props => (
             <li><a href="#services-link">Services Provided</a></li> 
             <li><a href="#groups">Referrals</a></li> 
             <li><a href="#measures">Outcome Measures</a></li> 
-            <li><a href="#notes">Notes</a></li> 
           </ul>
         </div>
      </nav>
