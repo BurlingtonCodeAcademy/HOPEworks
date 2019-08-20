@@ -33,10 +33,10 @@
 
 /* STICKY NOTE */
 
-#notes-box {
+#notes {
   height: 300px;
   width: 214px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .sticky_note {
