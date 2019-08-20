@@ -9,7 +9,12 @@ class Form extends React.Component {
       numOrders: 1,
       newUser: true,
       newIncident: false,
+<<<<<<< HEAD
       errorMessage: ""
+=======
+      errorMessage: "",
+      referrals: false
+>>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.displayIncidents = this.displayIncidents.bind(this);
@@ -55,6 +60,25 @@ class Form extends React.Component {
     let contactInstantMessaging = document.getElementById("contact-instant-messaging");
     let contactOnBehalf = document.getElementById("contact-on-behalf");
     let notes = document.getElementById("notes");
+<<<<<<< HEAD
+=======
+
+    if (this.state.numIncidents > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
+      return
+    } else if (this.state.numOrders > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many orders."})
+      return
+    } else if (this.state.newUser && ((ageLow.value==="" && ageHigh.value!=="") || (ageLow.value!=="" && ageHigh.value===""))) {
+      this.setState( {errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither"} )
+      return
+    } else if (contactDate.value.length < 10) {
+      this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
+      return
+    } else {
+      this.setState({ errorMessage: ""})
+    }
+>>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
     
     let theData = {
       timestamp: new Date().toLocaleString(),
@@ -107,15 +131,19 @@ class Form extends React.Component {
         safeHome: checkBoxValues("safe-home"),
         groups: checkBoxValues("groups")
       };
+<<<<<<< HEAD
       
     theData.referrals = referralValues("referrals");
     theData.outcomeMeasures = radioButtonValue("plan-for-safety");
+=======
+    if (this.state.referrals) {
+      theData.referrals = referralValues("referrals");
+    }
+    theData.planForSafety = radioButtonValue("plan-for-safety");
+>>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
     theData.notes = notes.value;
-
-    console.log("here is the data:")
-    console.log(theData);
 
     const response = await fetch("/form", {
       method: "POST",
@@ -324,7 +352,7 @@ class Form extends React.Component {
             />
             <br id="incident-info-link"/>
           </div>
-          <label htmlFor="hear-about" id="hear-about">
+          <label htmlFor="hear-about">
             How did the service user hear about HOPE Works?
           </label>
           <br />

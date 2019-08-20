@@ -13,14 +13,12 @@ class Forms extends React.Component {
         this.deleteForm = this.deleteForm.bind(this);
         this.orderForms = this.orderForms.bind(this);
         this.displayFormElement = this.displayFormElement.bind(this);
-        // this.updateFormList = this.updateFormList.bind(this);
     }
 
     async componentDidMount() {
         const response = await fetch("/forms");
         const formsObj = await response.json();
         this.setState({forms: formsObj})
-        // setInterval(this.updateFormList(), 10000)
     }
 
     async updateFormList () {
@@ -53,8 +51,9 @@ class Forms extends React.Component {
                     formType = "Ongoing"
                 }
                 listItems.push(
-                    <div key={i} className="column-two">
-                        <li>{new Date(form.when).toLocaleString()}: {form.data.firstName} {form.data.lastName} ({formType})
+                    <div key={i}>
+                        <div>
+                            {reFormatDate(form.data.contactDate)}: {form.data.firstName} {form.data.lastName} ({formType})
                             <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view form</button>
                             <button id={"delete-button-" + i} onClick={this.showDialog}>delete form</button>
                             <dialog id={"delete-dialog-" + i}>
@@ -69,13 +68,13 @@ class Forms extends React.Component {
                                 </menu>
                                 </form>
                             </dialog>
-                        </li>
+                        </div>
                     </div>
                     )
                 i++;
             })
             return (
-                <ul id="forms">{listItems}</ul>
+                <div id="forms">{listItems}</div>
             );
         } else {
             return <p>getting the forms...</p>
@@ -84,7 +83,7 @@ class Forms extends React.Component {
     }
       
     orderForms(forms) {
-        forms.sort(function(a, b){return Date.parse(b.when) - Date.parse(a.when)})
+        forms.sort(function(a, b){return Date.parse(b.data.contactDate) - Date.parse(a.data.contactDate)})
         return forms;
     }
 
@@ -98,7 +97,7 @@ class Forms extends React.Component {
         let ageDisplayType = null;                 // if we know the DOB, we can display an exact current age and exact age at time of contact.
         if (theForm.dateOfBirth!=="") {
             ageDisplayType = "dob"
-        } else if (theForm.ageRange.length > 0) { //if we only have an age range, we will have to approximate current age.
+        } else if (theForm.ageRange[0]!=="") { //if we only have an age range, we will have to approximate current age.
             ageDisplayType = "range"
         }
 
@@ -140,7 +139,7 @@ class Forms extends React.Component {
 
                         listItems.push(
                             <div key={i}>
-                                <div className="form-element">{this.displayFormElement(property, theForm.dateOfBirth, null, "normal")}</div>
+                                <div className="form-element">{this.displayFormElement(property, reFormatDate(theForm.dateOfBirth), null, "normal")}</div>
                             </div>
                             )
                         i++;
@@ -181,15 +180,13 @@ class Forms extends React.Component {
                         i++;
                         listItems.push(
                             <div key={i}>
-                                <div className="form-element">{this.displayFormElement("Approximate Date of Birth", approxBirthDate[2] + "-" + approxBirthDate[0] + "-" + approxBirthDate[1], null, "normal")}</div>
+                                <div className="form-element">{this.displayFormElement("Approximate Date of Birth", approxBirthDate[0] + "/" + approxBirthDate[1] + "/" + approxBirthDate[2], null, "normal")}</div>
                             </div>
                             )
                         i++;
-                    } else {
-                        console.log("unhandled exception in display form")
                     }
                 }
-            } else if (theForm[property][0] || typeof(theForm[property])==="boolean" || (theForm[property].advocacy && isObjectNonEmpty(theForm[property]))) {
+            } else if (isValueNonEmpty(theForm[property])) {
                 //(the value is a non-empty string or array OR the value is a non-empty boolean OR the value is a non-empty services provided object)
                 listItems.push(
                     <div key={i}>
@@ -220,7 +217,7 @@ class Forms extends React.Component {
                     <label><strong>{formattedProperty}</strong>{value.toString()}</label>
                 </div>
             )   
-        } else if (value.length && typeof(value[0])==="string") { //input is an array of strings
+        } else if (value.length && value[0] && typeof(value[0])==="string") { //input is an array of strings
             return (
                 <div key={theKey} className={indent}>
                     <label><strong>{formattedProperty}</strong>{value.join(", ")}</label>
@@ -270,7 +267,6 @@ class Forms extends React.Component {
         let buttonIdNum = event.target.id.slice(-1);
         let allOrderedForms = this.orderForms(this.state.forms)
         let theFormId = allOrderedForms[buttonIdNum]._id;
-        console.log(theFormId)
         await fetch("/delete/" + theFormId)
         window.location.replace("/forms")
     }
@@ -339,13 +335,32 @@ function camelCaseToCapitalized (string) {
     return capitalizedArray.join(" ")
 }
 
-function isObjectNonEmpty (object) {
-    for (let property in object) {
-        if (object[property].length > 0) {
-            return true;
+function isValueNonEmpty (value) {
+    if (typeof(value)==="boolean") {
+        return true
+    } else if (!value) {
+        return false
+    } else if (typeof(value)==='string' && value!=="") { //input is a string (or boolean)
+        return true
+    } else if (value.constructor.toString().slice(9, 14)==="Array") { //input is an array
+        for (let innerValue of value) {
+            if (isValueNonEmpty(innerValue)) {
+                return true
+            }
         }
+        return false
+    } else if (value.constructor.toString().slice(9, 15)==="Object") { //input is a(n) (non array) object
+        for (let property in value) {
+            if (isValueNonEmpty(value[property])) {
+                return true
+            }
+        }
+        return false
+    } else {
+        console.log("isValueNonEmpty found a weird value: ")
+        console.log(value)
+        return false
     }
-    return false;
 }
 
 function getCurrentDate () {
@@ -354,6 +369,16 @@ function getCurrentDate () {
     monthDayYear[2] = monthDayYear[2].slice(0, 4)
     let monthDayYearNums = monthDayYear.map((string) => Number(string))
     return monthDayYearNums;
+}
+
+function reFormatDate (date) { //input date as YYYY-MM-DD output as MM/DD/YYYY
+    if (typeof(date)!=="string") {
+        console.log("please input a string")
+    }
+    let yearMonthDay = date.split("-")
+    yearMonthDay.push(yearMonthDay[0])
+    let monthDayYear = yearMonthDay.slice(1, 4)
+    return monthDayYear.join("/")
 }
 
 export default Forms;
