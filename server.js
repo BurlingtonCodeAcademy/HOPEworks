@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const app = express();
 const hopeworks = require('./database/hw_list')
 const assert = require('assert');
-//const bcrypt = require('bcrypt');
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
 const hw_class = new hopeworks(url);
@@ -63,6 +62,10 @@ async function getAll(request, response) {
   });
 }
 
+app.get('/forms', getAll);
+
+app.get('/delete/:id', deleteForm)
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set('view engine', 'ejs')
@@ -88,31 +91,4 @@ async function addData(request, response) {
 
 app.post('/login', (req, res) => {
   console.log(req.body)
-
-//if (req.body.email &&
-//  req.body.username &&
-//  req.body.password &&
-//  req.body.passwordConf) {
-
-//  var userData = {
-//    email: req.body.email,
-//    username: req.body.username,
-//    password: req.body.password,
-//  }
-//} else if (req.body.logemail && req.body.logpassword) {
-//  User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
-//    if (error || !user) {
-//      var err = new Error('Wrong email or password.');
-//      err.status = 401;
-//      return res.redirect('/');
-//    }
-//    bcrypt.compare(password, user.password, function (err, result) {
-//      if (result === true) {
-//        return callback(null, user);
-//      } else {
-//        return callback();
-//      }    
-//    })
-  });
-}
 })
