@@ -10,8 +10,7 @@
 #form-page {
     display: flex;
     justify-content: center;
-    /* background-color: rgb(255, 247, 235); */
-    background-image: linear-gradient(to top, rgba(21, 13, 13, 0), rgb(255, 247, 235));
+    background-color: rgb(255, 247, 235);
 }
 
 #title {

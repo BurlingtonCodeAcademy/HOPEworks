@@ -639,7 +639,7 @@ class Form extends React.Component {
           <div className="sticky_note">
               <label htmlFor="notes">Notes: </label>
               <br />
-              <textarea id="notes" />
+              <textarea id="notes-box" />
           </div>
          </div>
         <form id="the-form">
