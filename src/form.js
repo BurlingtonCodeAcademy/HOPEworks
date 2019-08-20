@@ -19,8 +19,7 @@ class Form extends React.Component {
       otherAdvocacy: "",
       otherSupport: "",
       victimsClaim: false,
-      materialAssistance: false,
-      referrals: false
+      materialAssistance: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -139,8 +138,9 @@ class Form extends React.Component {
         groups: groups.value
 
       };
-      
-    theData.referrals = referralValues("referrals");
+    if (this.state.referrals) {
+      theData.referrals = referralValues("referrals");
+    }
     theData.outcomeMeasures = radioButtonValue("plan-for-safety");
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
@@ -881,9 +881,9 @@ class Form extends React.Component {
 
   referralBoxChange () {
     if (this.state.referrals) {
-      this.setState({ referrals: false});
+      this.setState({ referrals: false} );
     } else {
-      this.setState({ referrals: true});
+      this.setState({ referrals: true} );
     }
   }
 
@@ -1405,7 +1405,7 @@ class Form extends React.Component {
               {this.displayMaterialAssistance()}
               <br/>
             </div>
-            <label htmlFor="information-referral">Information Referral</label>
+            <label htmlFor="information-referral">Information and Referral</label>
             <div id="information-referral">
               <input
                 type="checkbox"
@@ -1414,12 +1414,7 @@ class Form extends React.Component {
               />
               Information
               <br />
-              <input
-                type="checkbox"
-                name="information-referral"
-                value="Referral"
-              />
-              Referral (please see below)
+              {this.displayReferralBox()}
               <br />
               <br />
             </div>
