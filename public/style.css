@@ -1,3 +1,26 @@
+/* LOGIN CSS */
+.login-container {
+    text-align: center;
+    height: 100vh;
+    background-color: rgb(255, 247, 235);
+}
+
+.login-contents {
+    top: 10%;
+}
+
+#login-text {
+    font-size: 20px;
+}
+
+#login-box {
+    font-size: 30px;
+}
+
+.login-button {
+    font-size: 30px;
+}
+
 /* MAIN FORM CSS */
 #the-form {
     width: 100%;
@@ -53,6 +76,8 @@ hr {
 }
 
 #notes {
+    height: 140px;
+    width: 100%;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
 }
@@ -116,4 +141,5 @@ display: flex;
     #form-page {display: 100%;}
     html {width: 100%;} */
   }
+
 
