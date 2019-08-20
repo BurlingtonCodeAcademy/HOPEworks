@@ -4,9 +4,8 @@ const bodyParser = require('body-parser')
 const app = express();
 const DataStore = require('./database/hw_list')
 const assert = require('assert');
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-
 const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
+
 MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
   if (err) return console.log(err)
   let db = client.db('hw') // hw --> users
@@ -38,7 +37,9 @@ app.get('/forms', getAll);
 app.get('/delete/:id', deleteForm)
 
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.set('view engine', 'ejs')
+
 app.listen(5000, function () {
   console.log('listening on 5000')
 })

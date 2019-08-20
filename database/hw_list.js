@@ -4,7 +4,7 @@ const url = 'mongodb://localhost:27017';
 const moment = require('moment');
 const ObjectId = require('mongodb').ObjectId;
 
-class FactStore {
+module.exports = class DataStore {
   constructor(dbUrl) {
     this.dbUrl = dbUrl;                      //FactStore class which references "hw" database from (currently) local drive
     this.dbClient = null;
@@ -47,10 +47,10 @@ class FactStore {
   printEntry(fact, currentDay) {
   }
 
-  async addForm(text) {
+  async addForm(data) {
     let entry = {
       when: new Date(),                        //adding a form ('addForm') in text
-      text: text
+      data: data
     };
 
     let collection = await this.collection()
