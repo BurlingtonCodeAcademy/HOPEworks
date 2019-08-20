@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    default: ''
+    default: ''                      // "user.js" is unused currently, this would be part of implementing bcrypt down the line.
   },
   isDeleted: {
     type: Boolean,

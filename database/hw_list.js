@@ -7,7 +7,7 @@ const assert = require('assert');
 
 class FactStore {
   constructor(dbUrl) {
-    this.dbUrl = dbUrl;
+    this.dbUrl = dbUrl;                      //FactStore class which references "hw" database from (currently) local drive
     this.dbClient = null;
     this.dbName = 'hw';
   }
@@ -16,7 +16,7 @@ class FactStore {
     if (this.dbClient && this.dbClient.isConnected()) {
       return this.dbClient;
     } else {
-      // http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html
+      // http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html             //async function connecting to database
       console.log(`Connecting to ${this.dbUrl}...`)
       this.dbClient = await MongoClient.connect(this.dbUrl, { useNewUrlParser: true })
       console.log("Connected to database: " + this.dbName);
@@ -29,13 +29,13 @@ class FactStore {
   async collection() {
     const client = await this.client();
     const db = client.db(this.dbName);
-    const collection = db.collection('users');
+    const collection = db.collection('users');                    //references 'users' collection within local 'hw' database
     return collection;
   }
 
   async getUser(user) {
     const u = user
-    const collection = await this.collection();
+    const collection = await this.collection();                //'getUser' function which is currently being used by 'server.js'
     return collection.find({user: u}).sort([['when', 1]]);
   }
 
@@ -66,12 +66,12 @@ class FactStore {
 
   async addForm(text) {
     let entry = {
-      when: new Date(),
+      when: new Date(),                        //adding a form ('addForm') in text
       text: text
     };
 
     let collection = await this.collection()
-    let result = await collection.insertOne(entry)
+    let result = await collection.insertOne(entry)                           //"sanity check" which is unused at the moment
     assert.equal(1, result.insertedCount); // sanity check
     console.log('Inserted fact as id ' + result.insertedId)
 
@@ -79,7 +79,7 @@ class FactStore {
   }
 
   async deleteFact(text) {
-    let entry = {
+    let entry = {                     //"deleteFact" will in theory be renamed to something like "deleteUser"
       text: text
     };
 

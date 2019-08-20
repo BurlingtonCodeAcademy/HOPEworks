@@ -3,9 +3,9 @@ const user = require('../../models/dummyUser');
 
 module.exports = (app) => {
 
-    app.post('/user/login', (req, res, next) => {
-        const { body } = req;
-        const { email } = body;
+    app.post('/user/login', (req, res, next) => {                            // this "userRoutes" file currently not being used; ...
+        const { body } = req;                                                // .. starter code if we decide to attempt implementing ...
+        const { email } = body;                                              // .. JWT tokens for authentication.
         const { password } = body;
 
         //checking to make sure the user entered the correct email/password combo
