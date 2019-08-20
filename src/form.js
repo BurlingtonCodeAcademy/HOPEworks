@@ -10,6 +10,7 @@ class Form extends React.Component {
       newUser: true,
       newIncident: false,
       errorMessage: "",
+      errorMessage: "",
       referrals: false,
       otherLanguage: "",
       otherEthnicity: "",
@@ -18,7 +19,8 @@ class Form extends React.Component {
       otherAdvocacy: "",
       otherSupport: "",
       victimsClaim: false,
-      materialAssistance: false
+      materialAssistance: false,
+      referrals: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,6 +48,16 @@ class Form extends React.Component {
   async handleSubmit(evnt) {
     evnt.preventDefault();
 
+    if (this.state.numIncidents > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
+      return
+    } else if (this.state.numOrders > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many orders."})
+      return
+    } else {
+      this.setState({ errorMessage: ""})
+    }
+
     let firstName = document.getElementById("first-name");
     let lastName = document.getElementById("last-name");
     let identifiers = document.getElementById("identifiers");
@@ -70,24 +82,8 @@ class Form extends React.Component {
     let safeHomeExited = document.getElementById("safe-home-exited");
     let safeHomeExtension = document.getElementById("safe-home-extension");
     let notes = document.getElementById("notes");
-
-    if (this.state.numIncidents > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
-      return
-    } else if (this.state.numOrders > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many orders."})
-      return
-    } else if (this.state.newUser && ((ageLow.value==="" && ageHigh.value!=="") || (ageLow.value!=="" && ageHigh.value===""))) {
-      this.setState( {errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither"} )
-      return
-    } else if (contactDate.value.length < 10) {
-      this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
-      return
-    } else {
-      this.setState({ errorMessage: ""})
-    }
     
-    let theData = {                                                     //UPDATE HERE FOR ADAPTIVE FORM
+    let theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
       firstName: firstName.value,
@@ -108,7 +104,7 @@ class Form extends React.Component {
       theData.ethnicity = checkBoxValues("ethnicity");
       theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
-      theData.miscellaneousCharacteristics = checkBoxValues("characteristics");
+      theData.miscChars = checkBoxValues("characteristics");
       theData.nameOfSchool = nameOfSchool.value;
       theData.referrer = referrer.value;
     }
@@ -143,10 +139,9 @@ class Form extends React.Component {
         groups: groups.value
 
       };
-    if (this.state.referrals) {
-      theData.referrals = referralValues("referrals");
-    }
-    theData.planForSafety = radioButtonValue("plan-for-safety");
+      
+    theData.referrals = referralValues("referrals");
+    theData.outcomeMeasures = radioButtonValue("plan-for-safety");
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
     theData.notes = notes.value;
@@ -1197,7 +1192,6 @@ class Form extends React.Component {
   render() {
     return (
       <div id="form-page">
-        <div id="sticky_tool">
           <div className="toolbar">
             <Toolbar />
           </div>
@@ -1206,7 +1200,6 @@ class Form extends React.Component {
               <br />
               <textarea id="notes" />
           </div>
-         </div>
         <form id="the-form">
           <div id="title">  
           {/* <img src={"./hope_works_vt_logo_.jpg"}/> */}
@@ -1235,10 +1228,10 @@ class Form extends React.Component {
               <br />
               <label htmlFor="advocate-initials">Advocate Initials </label>
               <br />
-              <input id="advocate-initials" placeholder="Initials"maxLength="3" />
+              <input id="advocate-initials" placeholder="Initials"maxLength="2" />
               <br />
             </div>
-            <div>
+            <div className="column-b">
               <label htmlFor="contact-date">Date of contact </label>
               <br />
               <input type="date" id="contact-date" />
@@ -1412,7 +1405,7 @@ class Form extends React.Component {
               {this.displayMaterialAssistance()}
               <br/>
             </div>
-            <label htmlFor="information-referral">Information and Referral</label>
+            <label htmlFor="information-referral">Information Referral</label>
             <div id="information-referral">
               <input
                 type="checkbox"
@@ -1421,7 +1414,12 @@ class Form extends React.Component {
               />
               Information
               <br />
-              {this.displayReferralBox()}
+              <input
+                type="checkbox"
+                name="information-referral"
+                value="Referral"
+              />
+              Referral (please see below)
               <br />
               <br />
             </div>
@@ -1575,8 +1573,8 @@ function getIncidents (num) {
   while (i <= num) {
     incidentObject = {
       victimization: checkBoxValues("victimization-" + i),
-      perpetratorRelationship: checkBoxValues("perp-relationship-" + i),
-      perpetratorGender: document.getElementById("perp-gender-" + i).value
+      perpRelationship: checkBoxValues("perp-relationship-" + i),
+      perpGender: document.getElementById("perp-gender-" + i).value
     };
     theIncidents.push(incidentObject);
     i++;
