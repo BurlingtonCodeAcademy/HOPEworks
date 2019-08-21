@@ -47,6 +47,11 @@ input[type="number"] {
     width: 50px;
 }
 
+#log-out {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
 hr {
     border-top:1px dotted #000;
     text-align: center;
@@ -105,11 +110,58 @@ display: flex;
     margin-bottom: 1em;
 }
 
+.link-box {
+    width: 400px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.link-box:hover {
+    opacity: .7;
+}
+
+.link-box-text {
+    color: white;
+    font-weight: normal;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#the-links {
+    display: flex;
+}
+
+#new-form-box {
+    background-color: green;
+}
+
+#view-forms-box {
+    background-color: red;
+}
+
+#view-data-box {
+    background-color: purple;
+}
+
 @media screen and (max-width: 944px) {
     html {width: 100%;}
     .toolbar{width: 95%;}
 } 
 
+@media screen and (max-width: 1330px) {
+    #the-links {
+        display: flex;
+        flex-direction: column;
+    }
+} 
 
 @media screen and (max-width: 758px) {
     /* #the-form {width: 100%;}

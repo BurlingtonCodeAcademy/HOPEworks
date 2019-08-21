@@ -8,7 +8,7 @@ const assert = require('assert');
 //const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
 
-MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
+MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true }, (err, client) => {
   if (err) return console.log(err)
   let db = client.db('hw') // hw --> users
   console.log('connected to mongo')
