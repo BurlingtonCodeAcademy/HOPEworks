@@ -69,7 +69,7 @@ body {
 #form-page {
     display: flex;
     justify-content: center;
-    height: 600vh;
+    height: 100%;
     background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
 }
 .form-logo {
@@ -164,24 +164,26 @@ h4 {
 }
 
 .link-box {
-    width: 400px;
-    height: 240px;
+    width: 300px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 10px;
-}
-
-.link-box:hover {
     opacity: .7;
 }
 
+.link-box:hover {
+    opacity: 1;
+}
+
 .link-box-text {
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: normal;
     text-align: center;
     text-decoration: none;
     font-size: 30px;
+    font-weight: 500;
 }
 
 a {
@@ -194,10 +196,12 @@ a {
 
 #new-form-box {
     background-color: green;
+  
 }
 
 #view-forms-box {
     background-color: red;
+ 
 }
 
 #view-data-box {
