@@ -53,6 +53,47 @@
     margin-top: 5%;
 }
 
+/* -----------------------FORMS CSS------------------------ */
+
+#submitted-forms {
+    text-align: center;
+    margin-top: 0;
+}
+.hw-logo-forms {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding: 20px;
+}
+
+.form-bar-text {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.delete-form-button, .view-form-button {
+    display: inline-block
+}
+
+ #forms-page {
+    width: 100%;
+    height: 100vr;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.view-form-bar {
+    height: 40px;
+    display: flex;
+}
+
+#forms-page {
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+
 /*-------------------------FORM CSS---------------------------*/
 #the-form {
     width: 100%;
@@ -146,30 +187,10 @@ hr {
     margin: 5px;
 }
 
-/*-----------VIEW FORMS PAGE-----------------*/
-
-.view-form-bar {
-    height: 40px;
-    display: flex;
-}
-
-.form-bar-text {
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-}
-
 /* FORM ALERT CSS */
 h4 {
     color: red;
 }
-
-#forms-page {
-    margin-left: 40px;
-    font-size: 20px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
 
 .form-element {
     margin-top: 1em;
@@ -181,6 +202,14 @@ h4 {
 #home {
     height: 100vh;
     background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.hw-logo-forms {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding: 20px;
 }
 
 .home-logo {
@@ -241,32 +270,6 @@ a {
 #view-data-box {
     background-color: purple;
 }
-
-@media screen and (max-width: 944px) {
-
-/* -----------------------FORMS CSS------------------------ */
-    .forms-container {
-        height: 100vh;
-        background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
-    }
-
-    #submitted-forms {
-        text-align: center;
-        margin-top: 0;
-    }
-    .hw-logo-forms {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 300px;
-        padding: 20px;
-    }
-
-    .delete-form-button, .view-form-button {
-        display: inline-block
-    }
-}
-
 /*------------------------DATA PAGE-------------------- */
 
 #data-page {

@@ -53,11 +53,11 @@ class Forms extends React.Component {
                 }
                 listItems.push(
                     <div key={i}>
-                        <div className="view-form-bar">
-                            <div className="form-bar-buttons">
-                                <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view</button>
-                                <button className="delete-form-button" id={"delete-button-" + i} onClick={this.showDialog}>delete</button>
-                                <dialog id={"delete-dialog-" + i}>
+                        <div className="forms-buttons-div">
+                            {reFormatDate(form.data.contactDate)}: {form.data.firstName} {form.data.lastName} ({formType})
+                            <button className="view-form-button" id={"view-form-button-" + i} onClick={this.viewForm}>view form</button>
+                            <button className="delete-form-button" id={"delete-button-" + i} onClick={this.showDialog}>delete form</button>
+                            <dialog id={"delete-dialog-" + i}>
                                 <form method="dialog">
                                 <div>
                                     <h4>Are you sure you want to delete this form????</h4>
@@ -68,11 +68,7 @@ class Forms extends React.Component {
                                     <button id={"confirmBtn-" + i} value="default" onClick={this.deleteForm}>DELETE</button>
                                 </menu>
                                 </form>
-                                </dialog>
-                            </div>
-                            <div className="form-bar-text">
-                                {reFormatDate(form.data.contactDate)}: {form.data.firstName} {form.data.lastName} ({formType})
-                            </div>
+                            </dialog>
                         </div>
                     </div>
                     )
