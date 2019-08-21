@@ -4,10 +4,13 @@ const bodyParser = require('body-parser')
 const app = express();
 const DataStore = require('./database/hw_list')
 const assert = require('assert');
+//const bcrypt = require('bcrypt');
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/';
+const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
+const hw_class = new DataStore(url);
 const passport = require('passport')
 const profileStore = new DataStore ("localhost:27017/Profile-Store"); // rewrite later
 //const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const store = new DataStore('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority');
 
 //------------GOOGLE STRATEGY-----------//
 
@@ -88,9 +91,28 @@ MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-a
 
 app.get('/forms', getAll);
 
+async function findUser(req, res) {
+  console.log(req.body)
+  let getUser = await hw_class.findUser(req.body.logemail.trim())    //calls 'getUser' from 'hw_list.js'
+  //console.log(getUser)
+  var userinfo = []
+  getUser.forEach((entry) => {
+    userinfo.push(entry)
+  }, function (err) {
+    assert.equal(null, err);
+    console.log("Sending " + userinfo.length + " records to client");    //handshakes with mongodb 'hw/users' to confirm user/pw
+    console.log(userinfo)
+    if (userinfo[0].authLevel) {
+      if (userinfo[0].authLevel === "admin" && req.body.logpassword === userinfo[0].pw && userinfo[0].user === req.body.logemail) { res.redirect("/home") }        //if user has auth level of 'admin', redirect to '/data' (which doesn't exist at the moment, but in theory would hold all relevant data, i.e. forms and user info)       
+      else if (userinfo[0].authLevel === "employee" && req.body.logpassword === userinfo[0].pw && userinfo[0].user === req.body.logemail) { res.redirect("/home") }  //if auth level 'employee', redirect to '/forms' (plural) to see all forms (again, not currently existent)
+      else if (userinfo[0].authLevel === "volunteer" && req.body.logpassword === userinfo[0].pw && userinfo[0].user === req.body.logemail) { res.redirect("/home") }  //if auth level 'volunteer', redirect to '/form' (singular) which would house just a single empty form
+      else { res.redirect("/") }  //anything else will kick you back to 'login' page
+    } else { res.redirect('/') }
+  })
+}
 app.get('/delete/:id', deleteForm)
 
-async function deleteForm (request, response) {
+async function deleteForm(request, response) {
   let id = request.params.id
   let result = await store.deleteForm(id)
   console.log(result)
@@ -110,13 +132,11 @@ async function getAll(request, response) {
   });
 }
 
+app.post('/home', findUser)
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set('view engine', 'ejs')
-
-app.listen(5000, function () {
-  console.log('listening on 5000')
-})
 
 app.post('/form', express.json(), (req, res) => {
   addData(req, res)
@@ -136,30 +156,31 @@ async function addData(request, response) {
 app.post('/login', (req, res) => {
   console.log(req.body)
 
-if (req.body.email &&
-  req.body.username &&
-  req.body.password &&
-  req.body.passwordConf) {
 
-  var userData = {
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password,
-  }
-} else if (req.body.logemail && req.body.logpassword) {
-  User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
-    if (error || !user) {
-      var err = new Error('Wrong email or password.');
-      err.status = 401;
-      return res.redirect('/');
-    }
-//    bcrypt.compare(password, user.password, function (err, result) {
-//      if (result === true) {
-//        return callback(null, user);
-//      } else {
-//        return callback();
-//      }    
-//    })
-  });
-}
-})
+  //if (req.body.email &&
+  //  req.body.username &&
+  //  req.body.password &&
+  //  req.body.passwordConf) {
+
+  //  var userData = {
+  //    email: req.body.email,
+  //    username: req.body.username,
+  //    password: req.body.password,
+  //  }
+  //} else if (req.body.logemail && req.body.logpassword) {
+  //  User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
+  //    if (error || !user) {
+  //      var err = new Error('Wrong email or password.');
+  //      err.status = 401;
+  //      return res.redirect('/');
+  //    }
+  //    bcrypt.compare(password, user.password, function (err, result) {
+  //      if (result === true) {
+  //        return callback(null, user);
+  //      } else {
+  //        return callback();
+  //      }    
+  //    })
+});
+
+app.listen(5000);
