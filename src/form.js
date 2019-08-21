@@ -47,16 +47,6 @@ class Form extends React.Component {
   async handleSubmit(evnt) {
     evnt.preventDefault();
 
-    if (this.state.numIncidents > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
-      return
-    } else if (this.state.numOrders > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many orders."})
-      return
-    } else {
-      this.setState({ errorMessage: ""})
-    }
-
     let firstName = document.getElementById("first-name");
     let lastName = document.getElementById("last-name");
     let identifiers = document.getElementById("identifiers");
@@ -82,6 +72,25 @@ class Form extends React.Component {
     let safeHomeExtension = document.getElementById("safe-home-extension");
     let notes = document.getElementById("notes");
     
+    if (this.state.numIncidents > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
+      return
+    } else if (this.state.numOrders > 10) {
+      this.setState({ errorMessage: "Error submitting form: Too many orders."})
+      return
+    } else if (this.state.newUser && ((ageLow.value==="" && ageHigh.value!=="") || (ageLow.value!=="" && ageHigh.value===""))) {
+      this.setState( {errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither"} )
+      return
+    } else if (contactDate.value.length < 10) {
+      this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
+      return
+    } else if (firstName.value==="") {
+      this.setState( {errorMessage: "Error submitting form: the First Name field is required"} )
+      return
+    } else {
+      this.setState({ errorMessage: ""})
+    }
+
     let theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
@@ -136,7 +145,6 @@ class Form extends React.Component {
           extension: safeHomeExtension.value
         },                                
         groups: groups.value
-
       };
     if (this.state.referrals) {
       theData.referrals = referralValues("referrals");
