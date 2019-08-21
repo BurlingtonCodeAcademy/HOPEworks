@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import Hw from './images/hw.png';
 
 class Home extends React.Component {
     constructor() {
@@ -13,7 +14,8 @@ class Home extends React.Component {
       return (
             <div id="home">
             <div style={{height: "1px"}}></div>
-            <h1>Home</h1>
+            <img className="home-logo" src={Hw} alt="Hope Works"/>
+            <h1 id="home-page-text">User Home Page</h1>
             <div id="the-links">
                 <Link to={{ pathname: "/form" }}>
                     <div className="link-box" id="new-form-box">
@@ -31,7 +33,7 @@ class Home extends React.Component {
                     </div>
                 </Link>
             </div>
-            <Link to={{ pathname: "/" }}><button id="log-out">Log Out</button></Link>
+            <Link to={{ pathname: "/" }}><button id="log-out-home">Log Out</button></Link>
         </div>
       )
     }  

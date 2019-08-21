@@ -151,7 +151,7 @@ h4 {
     color: red;
 }
 
-#home, #forms-page {
+#forms-page {
     margin-left: 40px;
     font-size: 20px;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -165,13 +165,32 @@ h4 {
 
 /*------------HOME-------*/
 
+#home {
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.home-logo {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#log-out-home {
+    margin: 20px;
+    }
+
+
+#home-page-text {
+    margin-left: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif
+}
 .link-box {
     width: 300px;
     height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px;
+    margin: 20px;
     opacity: .7;
 }
 
@@ -211,6 +230,7 @@ a {
 }
 
 @media screen and (max-width: 944px) {
+
 /* -----------------------FORMS CSS------------------------ */
     .forms-container {
         height: 100vh;
@@ -289,6 +309,15 @@ a {
         display: flex;
         align-items: center;
         flex-direction: column;
+    }
+    .link-box {
+        width: 500px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px;
+        opacity: .7;
     }
 } 
 
