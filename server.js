@@ -80,7 +80,7 @@ app.get('/profile',
 
  //--------END GOOOGLE STRATEGY--------// 
 
-MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
+MongoClient.connect('mongodb+srv://HOPEworksAdmin:HOPEworks1337@hopeworks-data-asjmw.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true }, (err, client) => {
   if (err) return console.log(err)
   let db = client.db('hw') // hw --> users
   console.log('connected to mongo')

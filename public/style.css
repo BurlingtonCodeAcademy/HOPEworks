@@ -16,6 +16,7 @@
     justify-content: space-around;
     padding: 5px;
 }
+
 .hw-logo {
     width: 300px;
 }
@@ -35,7 +36,7 @@
 #login-message {
     font-size: 18px;
     color: rgb(106, 110, 110);
-    font-family: Geneva, Verdana, sans-serif
+    font-family: Geneva, Verdana, sans-serif;
 }
 
 #hr-login {
@@ -110,6 +111,11 @@ input[type="number"] {
     width: 50px;
 }
 
+#log-out {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
 hr {
     border-top:1px dotted rgb(136, 135, 135);
     text-align: center;
@@ -157,29 +163,73 @@ h4 {
     margin-bottom: 1em;
 }
 
+.link-box {
+    width: 400px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.link-box:hover {
+    opacity: .7;
+}
+
+.link-box-text {
+    color: white;
+    font-weight: normal;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#the-links {
+    display: flex;
+}
+
+#new-form-box {
+    background-color: green;
+}
+
+#view-forms-box {
+    background-color: red;
+}
+
+#view-data-box {
+    background-color: purple;
+}
+
+@media screen and (max-width: 944px) {
 /* -----------------------FORMS CSS------------------------ */
-.forms-container {
-    height: 100vh;
-    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
-}
-#submitted-forms {
-    text-align: center;
-    margin-top: 0;
-}
-.hw-logo-forms {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 300px;
-    padding: 20px;
-}
+    .forms-container {
+        height: 100vh;
+        background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    }
 
-.delete-form-button, .view-form-button {
-    display: inline-block
-}
+    #submitted-forms {
+        text-align: center;
+        margin-top: 0;
+    }
+    .hw-logo-forms {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+        padding: 20px;
+    }
 
-.forms-buttons-div {
-    text-align: center;
+    .delete-form-button, .view-form-button {
+        display: inline-block
+    }
+
+    .forms-buttons-div {
+        text-align: center;
+    }
 }
 
 /*------------------------DATA PAGE-------------------- */
@@ -214,13 +264,14 @@ h4 {
     }
 }
 
+@media screen and (max-width: 1330px) {
+    #the-links {
+        display: flex;
+        flex-direction: column;
+    }
+} 
 
-@media screen and (max-width: 758px) {
+/* @media screen and (max-width: 758px) {
     /* #the-form {width: 100%;}
     #form-page {display: 100%;}
     html {width: 100%;} */
-  }
-
-@media screen and (min-width: 355px) {}
-
-

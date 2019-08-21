@@ -11,7 +11,6 @@ class Form extends React.Component {
       newUser: true,
       newIncident: false,
       errorMessage: "",
-      errorMessage: "",
       referrals: false,
       otherLanguage: "",
       otherEthnicity: "",
@@ -405,14 +404,6 @@ class Form extends React.Component {
   }
 
   materialAssistanceChange () {
-    if (this.state.materialAssistance) {
-      this.setState( {materialAssistance: false} )
-    } else {
-      this.setState( {materialAssistance: true} )
-    }
-  }
-
-  materialAssistanceChange (evnt) {
     if (this.state.materialAssistance) {
       this.setState( {materialAssistance: false} )
     } else {
