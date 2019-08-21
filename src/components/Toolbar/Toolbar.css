@@ -95,14 +95,14 @@
   a {
     padding-top: -40px;
   }
-  #notes-box {
+  #notes {
     font-size: 14px;
     width: 168px;
   }
   .sticky_note {
     font-size: 20px;
     top: 24%;
-    left: 76%;
+    left: 75%;
   }
 
 }

@@ -1,4 +1,4 @@
-/* LOGIN CSS */
+/* --------LOGIN CSS-------- */
 .login-container {
     text-align: center;
     height: 100vh;
@@ -44,7 +44,7 @@
     margin-top: 5%;
 }
 
-/* MAIN FORM CSS */
+/* --------FORM CSS--------- */
 #the-form {
     width: 100%;
     z-index: 1;
@@ -57,6 +57,11 @@
     display: flex;
     justify-content: center;
     background-color: rgb(255, 247, 235);
+}
+
+.form-logo {
+    width: 300px;
+    margin-top: 30px;
 }
 
 #title {
@@ -76,7 +81,7 @@
     font-family: Georgia, sans-serif;
 }
 
-/* INPUT & BUTTONS */
+/* FORM INPUT & BUTTONS */
 input, select, button {
     font-size: 20px;
     margin: 5px;
@@ -154,22 +159,18 @@ display: flex;
 }
 
 @media screen and (max-width: 1030px) {
-    .hw-logo { width: 50%;}
-    .google-logo {width: 50%;}
+    html {width: 100%;}
+    .toolbar{width: 95%;}
+    .hw-logo { width: 60%;}
+    .google-logo {width: 80%;}
     .login-button{
-        width: 25%;
-        font-size: 14px;
+        width: 33%;
+        font-size: 20px;
         margin: none;
         padding: none;
         background-color: rgb(255, 255, 255);
     }
-
 }
-
-@media screen and (max-width: 944px) {
-    html {width: 100%;}
-    .toolbar{width: 95%;}
-} 
 
 
 @media screen and (max-width: 758px) {
