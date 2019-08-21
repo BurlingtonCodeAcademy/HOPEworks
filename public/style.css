@@ -243,6 +243,7 @@ a {
     text-align: center;
     height: 100vh;
     background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    font-family: Georgia, sans-serif;
 }
 
 .hw-logo-data {
