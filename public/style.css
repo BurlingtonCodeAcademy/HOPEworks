@@ -146,6 +146,19 @@ hr {
     margin: 5px;
 }
 
+/*-----------VIEW FORMS PAGE-----------------*/
+
+.view-form-bar {
+    height: 40px;
+    display: flex;
+}
+
+.form-bar-text {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
 /* FORM ALERT CSS */
 h4 {
     color: red;
@@ -227,10 +240,6 @@ a {
 
     .delete-form-button, .view-form-button {
         display: inline-block
-    }
-
-    .forms-buttons-div {
-        text-align: center;
     }
 }
 
