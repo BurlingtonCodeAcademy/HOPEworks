@@ -21,7 +21,7 @@ class Login extends React.Component {
                 <h3 id="login-message">We Believe Survivors. We Support Survivors.</h3>
                 <div className="main">
                  <div className="login-form">
-                  <form action="/" method="post">
+                  <form action="/home" method="post">
                     <input id="login-box" type="text" name="logemail" placeholder="E-mail" required="" />
                     <input id="login-box" type="password" name="logpassword" placeholder="Password" required="" />
                      <div className="tp">

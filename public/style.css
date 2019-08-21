@@ -53,6 +53,48 @@
     margin-top: 5%;
 }
 
+/* -----------------------FORMS CSS------------------------ */
+
+#submitted-forms {
+    text-align: center;
+    margin-top: 0;
+}
+.hw-logo-forms {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding: 20px;
+}
+
+.form-bar-text {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.delete-form-button, .view-form-button {
+    display: inline-block;
+    margin: 10px;
+}
+
+ #forms-page {
+    width: 100%;
+    height: 100vr;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.view-form-bar {
+    height: 40px;
+    display: flex;
+}
+
+#forms-page {
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+
 /*-------------------------FORM CSS---------------------------*/
 #the-form {
     width: 100%;
@@ -69,7 +111,7 @@ body {
 #form-page {
     display: flex;
     justify-content: center;
-    height: 600vh;
+    height: 100%;
     background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
 }
 .form-logo {
@@ -146,29 +188,10 @@ hr {
     margin: 5px;
 }
 
-/*-----------VIEW FORMS PAGE-----------------*/
-
-.view-form-bar {
-    display: flex;
-}
-
-.form-bar-text {
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-}
-
 /* FORM ALERT CSS */
 h4 {
     color: red;
 }
-
-#home, #forms-page {
-    margin-left: 40px;
-    font-size: 20px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
 
 .form-element {
     margin-top: 1em;
@@ -177,25 +200,54 @@ h4 {
 
 /*------------HOME-------*/
 
+#home {
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.hw-logo-forms {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding: 20px;
+}
+
+.home-logo {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#log-out-home {
+    margin: 20px;
+    }
+
+
+#home-page-text {
+    margin-left: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif
+}
 .link-box {
-    width: 400px;
-    height: 240px;
+    width: 300px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px;
-}
-
-.link-box:hover {
+    margin: 20px;
     opacity: .7;
 }
 
+.link-box:hover {
+    opacity: 1;
+}
+
 .link-box-text {
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: normal;
     text-align: center;
     text-decoration: none;
     font-size: 30px;
+    font-weight: 500;
 }
 
 a {
@@ -208,40 +260,17 @@ a {
 
 #new-form-box {
     background-color: green;
+  
 }
 
 #view-forms-box {
     background-color: red;
+ 
 }
 
 #view-data-box {
     background-color: purple;
 }
-
-@media screen and (max-width: 944px) {
-/* -----------------------FORMS CSS------------------------ */
-    .forms-container {
-        height: 100vh;
-        background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
-    }
-
-    #submitted-forms {
-        text-align: center;
-        margin-top: 0;
-    }
-    .hw-logo-forms {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 300px;
-        padding: 20px;
-    }
-
-    .delete-form-button, .view-form-button {
-        display: inline-block
-    }
-}
-
 /*------------------------DATA PAGE-------------------- */
 
 #data-page {
@@ -255,9 +284,23 @@ a {
 }
 
 .hw-logo-data {
-    width: 300px;
     padding: 20px;
 }
+
+.drop-down-data {
+    display: inline-block;
+    margin: 10px;
+}
+
+.drop-down-data-text {
+    background-color: purple;
+}
+
+p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 24px;
+}
+
 
 
 /*------------------------MEDIA SCREEN----------------  */
@@ -295,9 +338,23 @@ a {
         align-items: center;
         flex-direction: column;
     }
+    .link-box {
+        width: 500px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px;
+        opacity: .7;
+    }
 } 
 
-/* @media screen and (max-width: 758px) {
+@media screen and (max-width: 758px) {
     /* #the-form {width: 100%;}
-    #form-page {display: 100%;}
-    html {width: 100%;} */
+    #form-page {display: 100%;} */
+    html {width: 100%;}
+    .drop-down-data {
+        display: flex;
+        justify-content: center;
+    }
+}    

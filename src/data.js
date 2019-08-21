@@ -189,9 +189,9 @@ showGenderCount(forms) {
       <div id="data-page">
          <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
          <h1 id="data-page-title">Data</h1>
-        <form id="Victimizations">
+        <form className="drop-down-data" id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
-            <option disabled selected value="">
+            <option className="drop-down-data-text" disabled selected value="">
               Victimization
             </option>
             <option value="Rape">Rape</option>
@@ -205,7 +205,7 @@ showGenderCount(forms) {
             <option value="Other">Other</option>
           </select>
         </form>
-        <form>
+        <form className="drop-down-data">
           <select id="Homelessness" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Homelessness
@@ -214,7 +214,7 @@ showGenderCount(forms) {
             <option value="">No</option>
           </select>
         </form>
-        <form>
+        <form className="drop-down-data">
           <select id="Schools" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Schools
@@ -251,7 +251,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form>
+        <form className="drop-down-data">
           <select id="Ethnicity" onChange={this.handleInputChange}>
           <option disabled selected value="">
               Ethnicity
@@ -274,7 +274,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form>
+        <form className="drop-down-data">
             <select id="Gender" onChange={this.handleInputChange}>
             <option disabled selected value="">Gender</option>
             <option value="Unknown">Unknown</option>

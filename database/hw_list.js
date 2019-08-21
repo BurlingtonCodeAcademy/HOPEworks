@@ -13,7 +13,7 @@ module.exports = class DataStore {
   }
   async findUser(email) { // find user by email
     let collection = await this.collection()
-    return collection.find({email: email});
+    return collection.find({user: email});
   }
 
   async client() {
