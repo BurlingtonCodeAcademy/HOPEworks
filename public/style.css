@@ -1,4 +1,59 @@
-/* MAIN FORM CSS */
+/* ------------------------LOGIN CSS------------------------*/
+.login-container {
+    text-align: center;
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.login-contents {
+    padding: 10%;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.hw-logo {
+    width: 300px;
+}
+
+#google-logo {
+    width: 300px;
+}
+
+#google-button {
+   border: hidden;
+   margin-top: 20px;
+   padding: 0;
+   height: 100px;
+   background-color: transparent;
+}
+
+#login-message {
+    font-size: 18px;
+    color: rgb(106, 110, 110);
+    font-family: Geneva, Verdana, sans-serif;
+}
+
+#hr-login {
+    width: 500px;
+    color: rgb(165, 154, 154);
+}
+
+#login-box {
+    font-size: 24px;
+}
+
+.login-button {
+    font-size: 24px;
+    margin-top: 5%;
+}
+
+/*-------------------------FORM CSS---------------------------*/
 #the-form {
     width: 100%;
     z-index: 1;
@@ -7,10 +62,19 @@
     margin-right: 25%;
 }
 
+body {
+    margin: 0px;
+}
+
 #form-page {
     display: flex;
     justify-content: center;
-    background-color: rgb(255, 247, 235);
+    height: 600vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+.form-logo {
+    width: 300px;
+    margin-top: 20px;
 }
 
 #title {
@@ -30,7 +94,7 @@
     font-family: Georgia, sans-serif;
 }
 
-/* INPUT & BUTTONS */
+/* FORM INPUT & BUTTONS */
 input, select, button {
     font-size: 20px;
     margin: 5px;
@@ -47,8 +111,13 @@ input[type="number"] {
     width: 50px;
 }
 
+#log-out {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
 hr {
-    border-top:1px dotted #000;
+    border-top:1px dotted rgb(136, 135, 135);
     text-align: center;
 }
 
@@ -69,27 +138,29 @@ hr {
     border-radius: 15px, 0px, 15px, 0px;
 }
 
-body {
-    margin: 0px;
-}
-
 .indented {
     margin-left: 40px !important;
 }
 
-/* ALERT CSS */
+.view-form-button {
+    margin: 5px;
+}
+
+/*-----------VIEW FORMS PAGE-----------------*/
+
+.view-form-bar {
+    display: flex;
+}
+
+.form-bar-text {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* FORM ALERT CSS */
 h4 {
     color: red;
-}
-
-/* COLUMNS & ROWS */
-.row {
-display: flex;
-}
-
-.center-div {
-    text-align: center;
-    float: inline-end;
 }
 
 #home, #forms-page {
@@ -98,24 +169,135 @@ display: flex;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.view-form-button {
-    margin: 5px;
-}
 
 .form-element {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
+/*------------HOME-------*/
+
+.link-box {
+    width: 400px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.link-box:hover {
+    opacity: .7;
+}
+
+.link-box-text {
+    color: white;
+    font-weight: normal;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#the-links {
+    display: flex;
+}
+
+#new-form-box {
+    background-color: green;
+}
+
+#view-forms-box {
+    background-color: red;
+}
+
+#view-data-box {
+    background-color: purple;
+}
+
 @media screen and (max-width: 944px) {
+/* -----------------------FORMS CSS------------------------ */
+    .forms-container {
+        height: 100vh;
+        background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    }
+
+    #submitted-forms {
+        text-align: center;
+        margin-top: 0;
+    }
+    .hw-logo-forms {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+        padding: 20px;
+    }
+
+    .delete-form-button, .view-form-button {
+        display: inline-block
+    }
+}
+
+/*------------------------DATA PAGE-------------------- */
+
+#data-page {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    font-family: Georgia, sans-serif;
+}
+
+.hw-logo-data {
+    width: 300px;
+    padding: 20px;
+}
+
+
+/*------------------------MEDIA SCREEN----------------  */
+
+@media screen and (max-width: 1030px) {
     html {width: 100%;}
     .toolbar{width: 95%;}
+    .hw-logo { width: 60%;}
+    .login-button{
+        width: 33%;
+        font-size: 20px;
+        margin: none;
+        padding: none;
+        background-color: rgb(255, 255, 255);
+    }
+}
+
+/*------------------------HOME PAGE MEDIA QUERY----------------  */
+
+@media screen and (max-width: 1330px) {
+    #the-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .link-box {
+        width: 75vw;
+        height: 50vw;
+    }
+
+    #home {
+        margin-left: 0px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
 } 
 
-
-@media screen and (max-width: 758px) {
+/* @media screen and (max-width: 758px) {
     /* #the-form {width: 100%;}
     #form-page {display: 100%;}
     html {width: 100%;} */
-  }
-

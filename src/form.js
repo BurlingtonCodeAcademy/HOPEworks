@@ -1,5 +1,6 @@
 import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
+import Hw from './images/hw.png';
 
 class Form extends React.Component {
   constructor() {
@@ -10,8 +11,17 @@ class Form extends React.Component {
       newUser: true,
       newIncident: false,
       errorMessage: "",
-      referrals: false
+      referrals: false,
+      otherLanguage: "",
+      otherEthnicity: "",
+      nameOfSchool: "",
+      otherTimeSpent: "",
+      otherAdvocacy: "",
+      otherSupport: "",
+      victimsClaim: false,
+      materialAssistance: false
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.displayIncidents = this.displayIncidents.bind(this);
     this.numIncidentsChange = this.numIncidentsChange.bind(this);
@@ -21,20 +31,21 @@ class Form extends React.Component {
     this.newIncidentChange = this.newIncidentChange.bind(this);
     this.displayDemographicContent = this.displayDemographicContent.bind(this);
     this.displayIncidentAndOrder = this.displayIncidentAndOrder.bind(this);
+    this.displayReferralBox = this.displayReferralBox.bind(this);
+    this.referralBoxChange = this.referralBoxChange.bind(this);
+    this.displayReferrals = this.displayReferrals.bind(this);
+    this.otherLanguageChange = this.otherLanguageChange.bind(this);
+    this.otherEthnicityChange = this.otherEthnicityChange.bind(this);
+    this.nameOfSchoolChange = this.nameOfSchoolChange.bind(this);
+    this.timeSpentChange = this.timeSpentChange.bind(this);
+    this.otherAdvocacyChange = this.otherAdvocacyChange.bind(this);
+    this.otherSupportChange = this.otherSupportChange.bind(this);
+    this.victimsClaimChange = this.victimsClaimChange.bind(this);
+    this.materialAssistanceChange = this.materialAssistanceChange.bind(this);
   }
 
   async handleSubmit(evnt) {
     evnt.preventDefault();
-
-    if (this.state.numIncidents > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
-      return
-    } else if (this.state.numOrders > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many orders."})
-      return
-    } else {
-      this.setState({ errorMessage: ""})
-    }
 
     let firstName = document.getElementById("first-name");
     let lastName = document.getElementById("last-name");
@@ -48,15 +59,19 @@ class Form extends React.Component {
     let ageLow = document.getElementById("age-range-0")
     let ageHigh = document.getElementById("age-range-1")
     let numberChildren = document.getElementById("number-children");
-    let nameOfSchool = document.getElementById("name-of-school");
+    let nameOfSchool = this.state.nameOfSchool;
     let referrer = document.getElementById("hear-about");
     let contactCall = document.getElementById("contact-calls");
     let contactInPerson = document.getElementById("contact-in-person");
     let contactEmail = document.getElementById("contact-email");
     let contactInstantMessaging = document.getElementById("contact-instant-messaging");
     let contactOnBehalf = document.getElementById("contact-on-behalf");
+    let groups = document.getElementById("groups");
+    let safeHomeEntered = document.getElementById("safe-home-entered");
+    let safeHomeExited = document.getElementById("safe-home-exited");
+    let safeHomeExtension = document.getElementById("safe-home-extension");
     let notes = document.getElementById("notes");
-
+    
     if (this.state.numIncidents > 10) {
       this.setState({ errorMessage: "Error submitting form: Too many incidents."})
       return
@@ -68,6 +83,9 @@ class Form extends React.Component {
       return
     } else if (contactDate.value.length < 10) {
       this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
+      return
+    } else if (firstName.value==="") {
+      this.setState( {errorMessage: "Error submitting form: the First Name field is required"} )
       return
     } else {
       this.setState({ errorMessage: ""})
@@ -95,7 +113,7 @@ class Form extends React.Component {
       theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
       theData.miscChars = checkBoxValues("characteristics");
-      theData.nameOfSchool = nameOfSchool.value;
+      theData.nameOfSchool = nameOfSchool;
       theData.referrer = referrer.value;
     }
 
@@ -121,8 +139,12 @@ class Form extends React.Component {
         medical: checkBoxValues("medical"),
         assistanceServices: checkBoxValues("assistance-services"),
         informationReferral: checkBoxValues("information-referral"),
-        safeHome: checkBoxValues("safe-home"),
-        groups: checkBoxValues("groups")
+        safeHome: {
+          entered: safeHomeEntered.value,
+          exited: safeHomeExited.value,
+          extension: safeHomeExtension.value
+        },                                
+        groups: groups.value
       };
     if (this.state.referrals) {
       theData.referrals = referralValues("referrals");
@@ -145,11 +167,6 @@ class Form extends React.Component {
 
     window.location.replace("/home")
   }
-//   if (location.protocol !== "https:"){
-// location.replace(window.location.href.replace("http:", 
-// "https:"));
-//}
-
 
   userTypeChange(evnt) {
     if (this.state.newUser) {
@@ -191,11 +208,223 @@ class Form extends React.Component {
     this.setState({ numIncidents: evnt.target.value });
   }
 
+  displayLanguageOtherButton () {
+    if (this.state.otherLanguage==="") {
+      return (
+        <label>
+          <input name="language" type="radio" value="Other" />Other:
+          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange}/>
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input name="language" type="radio" value="Other" defaultChecked/>Other:
+          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange}/>
+        </label>
+      )
+    }
+  }
+
+  otherLanguageChange (evnt) {
+    this.setState( {otherLanguage: evnt.target.value} )
+  }
+
+  displayEthnicityOtherButton () {
+    if (this.state.otherEthnicity==="") {
+      return (
+        <label>
+          <input type="checkbox" name="ethnicity" value="Other" />Other:
+          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange}/>
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="ethnicity" value="Other" defaultChecked/>Other:
+          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange}/>
+        </label>
+      )
+    }
+  }
+
+  otherEthnicityChange (evnt) {
+    this.setState( {otherEthnicity: evnt.target.value} )
+  }
+
+  displayNameOfSchoolButton () {
+    if (this.state.nameOfSchool==="") {
+      return (
+        <label>
+          <input type="checkbox" name="characteristics" value="College student/affiliated with a college"/>College student/affiliated with a college
+          <br />
+          <label htmlFor="name-of-school">Name of school:</label>
+          <input id="name-of-school" type="text" name="characteristics" className="inline-input" onChange={this.nameOfSchoolChange}/>
+          <br id="incident-info-link"/>
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="characteristics" value="College student/affiliated with a college" defaultChecked/>College student/affiliated with a college
+          <br />
+          <label htmlFor="name-of-school">Name of school:</label>
+          <input id="name-of-school" type="text" name="characteristics" className="inline-input" onChange={this.nameOfSchoolChange}/>
+          <br id="incident-info-link"/>
+        </label>
+      )
+    }
+  }
+
+  nameOfSchoolChange (evnt) {
+    this.setState( {nameOfSchool: evnt.target.value} )
+  }
+
+  displayOtherTimeSpent () {
+    if (this.state.otherTimeSpent==="") {
+      return (
+        <label htmlFor="time-call">
+          <input name="time-call" type="radio" value="Other" />Other (in hours):
+          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange}/>
+        </label>
+      )
+    } else {
+      return (
+        <label htmlFor="time-call">
+          <input name="time-call" type="radio" value="Other" defaultChecked/>Other (in hours):
+          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange}/>
+        </label>
+      )
+    }
+  }
+
+  timeSpentChange (evnt) {
+    this.setState( {otherTimeSpent: evnt.target.value} )
+  }
+
+  displayOtherAdvocacyButton () {
+    if (this.state.otherAdvocacy==="") {
+      return (
+        <label>
+          <input type="checkbox" name="advocacy" value="Other Civil Legal"/>Other:
+          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange}/>
+          <br/>
+        ​​​​​​​​​​​​​​</label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="advocacy" value="Other Civil Legal" defaultChecked/>Other:
+          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange}/>
+          <br/>
+        ​​​​​​​​​​​​​​</label>
+      )
+    }
+  }
+
+  otherAdvocacyChange (evnt) {
+    this.setState( {otherAdvocacy: evnt.target.value} )
+  }
+
+  displayOtherSupportButton () {
+    if (this.state.otherSupport==="") {
+      return (
+        <label>
+          <input type="checkbox" name="support" value="Other" />Other:
+          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange}/>  ​​​​​​​​​​​​​​​​​​​​​​​​​​​
+          <br />
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="support" value="Other" defaultChecked/>Other:
+          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange}/>  ​​​​​​​​​​​​​​​​​​​​​​​​​​​
+          <br />
+        </label>
+      )
+    }
+  }
+
+  otherSupportChange (evnt) {
+    this.setState( {otherSupport: evnt.target.value} )
+  }
+
+  displayVictimsClaim () {
+    if (this.state.victimsClaim) {
+      return (
+        <label>
+          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange} defaultChecked/>Victims' Compensation Claim
+          <br/>
+          <label className="indented">Amount: $</label>
+          <input type="number" name="assistance-services" className="inline-input"/>
+          ​​​​​​​​​​​​​​​<br />
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange}/>Victims' Compensation Claim
+          <br/>
+        </label>
+      )
+    }
+  }
+
+  victimsClaimChange (evnt) {
+    if (this.state.victimsClaim) {
+      this.setState( {victimsClaim: false} )
+    } else {
+      this.setState( {victimsClaim: true} )
+    }
+  }
+
+  displayMaterialAssistance () {
+    if (this.state.materialAssistance) {
+      return (
+        <div>
+          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange} defaultChecked/>Material Assistance
+          <br />
+          <div id="material-assistance-div" className="indented">
+            <input type="checkbox" name="assistance-services" value="Bus Pass"/>Bus Pass
+            <br />
+            <input type="checkbox" name="assistance-services" value="Food Cart"/>Food Cart
+            <br />
+            <input type="checkbox" name="assistance-services" value="Clothes"/>Clothes
+            <br />
+            <input type="checkbox" name="assistance-services" value="Hygiene"/>Hygiene
+            <br />
+            <input type="checkbox" name="assistance-services" value="Hotel" />Hotel
+            <br />
+            <input type="checkbox" name="assistance-services" value="Other"/>Other
+            <br />
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange}/>Material Assistance
+          <br/>
+        </div>
+      )
+    }
+  }
+
+  materialAssistanceChange () {
+    if (this.state.materialAssistance) {
+      this.setState( {materialAssistance: false} )
+    } else {
+      this.setState( {materialAssistance: true} )
+    }
+  }
+
   displayDemographicContent () {
     if (this.state.newUser) {
       return (
         <div>
           <hr id="demographic-content"/>
+          <h3>Demographic Info</h3>
           <label htmlFor="survivor-gender">Gender</label>
           <br />
           <select id="survivor-gender">
@@ -233,9 +462,7 @@ class Form extends React.Component {
             <input name="language" value="ASL" type="radio" />
             ASL
             <br />
-            <input name="language" type="radio" value="Other" />
-            Other:
-            <input type="text" name="language" className="inline-input" />
+            {this.displayLanguageOtherButton()}
           </div>
           <label htmlFor="ethnicity">Ethnicity</label>
           <div id="ethnicity">
@@ -272,9 +499,7 @@ class Form extends React.Component {
             <input type="checkbox" name="ethnicity" value="Unknown" />
             Unknown
             <br />
-            <input type="checkbox" name="ethnicity" value="Other" />
-            Other:
-            <input type="text" name="ethnicity" className="inline-input" />
+            {this.displayEthnicityOtherButton()}
           </div>
           <label htmlFor="number-children">
             Number of Children in Household
@@ -323,21 +548,7 @@ class Form extends React.Component {
             />
             Low Income
             <br />
-            <input
-              type="checkbox"
-              name="characteristics"
-              value="College student/affiliated with a college"
-            />
-            College student/affiliated with a college
-            <br />
-            <label htmlFor="name-of-school">Name of school:</label>
-            <input
-              id="name-of-school"
-              type="text"
-              name="characteristics"
-              className="inline-input"
-            />
-            <br id="incident-info-link"/>
+            {this.displayNameOfSchoolButton()}
           </div>
           <label htmlFor="hear-about">
             How did the service user hear about HOPE Works?
@@ -356,6 +567,15 @@ class Form extends React.Component {
       return (
         <div>
           <hr id="incident-information"/>
+          <h3>Incident Info</h3>
+          <div id="survivor-type">
+            <input name="survivor-type" value="Primary Survivor" type="radio"/>
+            Primary Survivor
+            <br />
+            <input name="survivor-type" value="Secondary Survivor" type="radio"/>
+            Secondary Survivor
+          </div>
+          <br/>
           <label htmlFor="victimization-count">Number of Incidents</label>
           <br />
           <input
@@ -643,16 +863,346 @@ class Form extends React.Component {
     }
   }
 
+  displayReferralBox () {
+    if (this.state.referrals) {
+      return (
+        <label>
+          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange} defaultChecked/>Referral (see below when checked)
+        </label>
+      )
+    } else {
+      return (
+        <label>
+          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange}/>Referral (see below when checked)
+        </label>
+      )
+    }
+  }
+
+  referralBoxChange () {
+    if (this.state.referrals) {
+      this.setState({ referrals: false} );
+    } else {
+      this.setState({ referrals: true} );
+    }
+  }
+
+  displayReferrals () {
+    if (this.state.referrals) {
+      return (
+        <div>
+          <h3>Referrals</h3>
+          <label htmlFor="referrals">to/from</label>
+          <div id="referrals">
+            <input type="checkbox" name="referrals" value="to 211" />
+            <input type="checkbox" name="referrals" value="from 211" />
+            211
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Campus Services"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Campus Services"
+            />
+            Campus Services
+            <input
+              id="text-campus-services"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to CUSI/State's Attorney/CAC"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from CUSI/State's Attorney/CAC"
+            />
+            CUSI/State's Attorney/CAC
+            <br />
+            <input type="checkbox" name="referrals" value="to DCF" />
+            <input type="checkbox" name="referrals" value="from DCF" />
+            DCF
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Disability Org"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Disability Org"
+            />
+            Disability Org
+            <input
+              id="text-disability-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to DIVAS/Corrections/P+P"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from DIVAS/Corrections/P+P"
+            />
+            DIVAS/Corrections/P+P
+            <br />
+            <input type="checkbox" name="referrals" value="to DVAS" />
+            <input type="checkbox" name="referrals" value="from DVAS" />
+            DVAS
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Financial Assistance Org"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Financial Assistance Org"
+            />
+            Financial Assistance Org
+            <input
+              id="text-financial-assistance-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Financial Empowerment Programming"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Financial Empowerment Programming"
+            />
+            Financial Empowerment Programming
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Health Centers"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Health Centers"
+            />
+            Health Centers
+            <input
+              id="text-health-centers"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to HOPE Works Clinical Therapist"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from HOPE Works Clinical Therapist"
+            />
+            HOPE Works Clinical Therapist
+            <br />
+            <input type="checkbox" name="referrals" value="to Housing Org" />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Housing Org"
+            />
+            Housing Org
+            <input
+              id="text-housing-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Immigrant Org"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Immigrant Org"
+            />
+            Immigrant Org
+            <input
+              id="text-immigrant-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input type="checkbox" name="referrals" value="to LGBTQ Org" />
+            <input type="checkbox" name="referrals" value="from LGBTQ Org" />
+            LGBTQ Org
+            <input
+              id="text-lgbtq-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to National Guard/Military Services"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from National Guard/Military Services"
+            />
+            National Guard/Military Services
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Network Program"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Network Program"
+            />
+            Network Program
+            <input
+              id="text-network-program"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Police Department"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Police Department"
+            />
+            Police Department
+            <input
+              id="text-police-department"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Out of State Rape Crisis Services"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Out of State Rape Crisis Services"
+            />
+            Out of State Rape Crisis Services
+            <br />
+            <input type="checkbox" name="referrals" value="to RAINN" />
+            <input type="checkbox" name="referrals" value="from RAINN" />
+            RAINN
+            <br />
+            <input type="checkbox" name="referrals" value="to SANE" />
+            <input type="checkbox" name="referrals" value="from SANE" />
+            SANE
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Support Group"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Support Group"
+            />
+            Support Group
+            <br />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="to Therapist List"
+            />
+            <input
+              type="checkbox"
+              name="referrals"
+              value="from Therapist List"
+            />
+            Therapist List
+            <br />
+            <input type="checkbox" name="referrals" value="to Youth Org" />
+            <input type="checkbox" name="referrals" value="from Youth Org" />
+            Youth Org
+            <input
+              id="text-youth-org"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+            <input type="checkbox" name="referrals" value="to Other" />
+            <input type="checkbox" name="referrals" value="from Other" />
+            Other
+            <input
+              id="text-other"
+              type="text"
+              name="referrals"
+              className="inline-input"
+            />
+            <br />
+          </div>
+          <hr/>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div id="form-page">
           <div className="toolbar">
             <Toolbar />
           </div>
+          <div className="sticky_note">
+              <label htmlFor="notes">Notes: </label>
+              <br />
+              <textarea id="notes" />
+          </div>
         <form id="the-form">
           <div id="title">  
-          {/* <img src={"./hope_works_vt_logo_.jpg"}/> */}
-            <h1>H.O.P.E. Works</h1>
+           <img className="form-logo" src={Hw} alt="Hope Works"/>
             <h2>SURVIVOR INFORMATION FORM</h2>
           </div>
           <div id="all-fields">
@@ -661,7 +1211,8 @@ class Form extends React.Component {
             <br />
             {this.displayNewIncidentBox()}
             <hr />
-            <div className="column-a">
+            <div>
+              <h3>Personal Info</h3>
               <label htmlFor="first-name">Name of Service User </label>
               <br />
               <input id="first-name" placeholder="First Name" />
@@ -693,27 +1244,10 @@ class Form extends React.Component {
               <input id="phone" type="tel" placeholder="802-123-4567" />
               <br />
             </div>
-            <div className="center-div">
-              <div id="survivor-type">
-                <input
-                  name="survivor-type"
-                  value="Primary Survivor"
-                  type="radio"
-                />
-                Primary Survivor
-                <br />
-                <input
-                  name="survivor-type"
-                  value="Secondary Survivor"
-                  type="radio"
-                />
-                Secondary Survivor
-              </div>
-            </div>
             {this.displayDemographicContent()}
             {this.displayIncidentAndOrder()}
             <hr id="communication-link"/>
-            <h2 id="ongoing-services">Ongoing Services</h2>
+            <h3 id="ongoing-services">Ongoing Services</h3>
             <label htmlFor="safe-to-call">Safe to call back?</label>
             <div id="safe-to-call">
               <input name="safe-to-call" value="Yes" type="radio" />
@@ -794,15 +1328,10 @@ class Form extends React.Component {
                 60 min
               </label>
               <br />
-              <label id="other-hours">
-                <input name="time-call" type="radio" value="Other" />
-                Other (in hours):
-                <input type="number" name="time-call" className="inline-input" />
-              </label>
+              {this.displayOtherTimeSpent()}
             </div>
             <hr id="services-provided"/>
-            <label htmlFor="advocacy">Services Provided</label>
-            <br/>
+            <h3>Services Provided</h3>
             <label htmlFor="advocacy">Advocacy</label>
             <div id="advocacy">
               <input type="checkbox" name="advocacy" value="Economic" />
@@ -826,15 +1355,7 @@ class Form extends React.Component {
               <input type="checkbox" name="advocacy" value="Healthcare" />
               Healthcare
               <br />
-              <input
-                type="checkbox"
-                name="advocacy"
-                value="Other Civil Legal"
-              />
-              Other Civil Legal:
-              <input type="text" name="advocacy" className="inline-input" />
-              ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
-              <br />
+              {this.displayOtherAdvocacyButton()}
               <br />
             </div>
             <label htmlFor="support">Support</label>
@@ -848,11 +1369,7 @@ class Form extends React.Component {
               <input type="checkbox" name="support" value="Criminal Legal" />
               Criminal Legal
               <br />
-              <input type="checkbox" name="support" value="Other" />
-              Other:
-              <input type="text" name="support" className="inline-input" />
-              ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
-              <br />
+              {this.displayOtherSupportButton()}
               <br />
             </div>
             <div>
@@ -869,21 +1386,7 @@ class Form extends React.Component {
             </div>
             <label htmlFor="assistance-services">Assistance/Services</label>
             <div id="assistance-services">
-              <input
-                type="checkbox"
-                name="assistance-services"
-                value="Victims' Compensation Claim (in $)"
-              />
-              Victims' Compensation Claim
-              <br/>
-              <label className="indented">Amount: $</label>
-              <input
-                type="number"
-                name="assistance-services"
-                className="inline-input"
-              />
-              ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
-              <br />
+              {this.displayVictimsClaim()}
               <input
                 type="checkbox"
                 name="assistance-services"
@@ -898,60 +1401,10 @@ class Form extends React.Component {
               />
               Transporation
               <br />
-              <input
-                type="checkbox"
-                name="assistance-services"
-                value="Material Assistance"
-              />
-              Material Assistance
-              <br />
-              <div id="material-assistance-div" className="indented">
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Bus Pass"
-                />
-                Bus Pass
-                <br />
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Food Cart"
-                />
-                Food Cart
-                <br />
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Clothes"
-                />
-                Clothes
-                <br />
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Hygiene"
-                />
-                Hygiene
-                <br />
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Hotel"
-                />
-                Hotel
-                <br />
-                <input
-                  type="checkbox"
-                  name="assistance-services"
-                  value="Other"
-                />
-                Other
-                <br />
-                <br />
-              </div>
+              {this.displayMaterialAssistance()}
+              <br/>
             </div>
-            <label htmlFor="information-referral">Information Referral</label>
+            <label htmlFor="information-referral">Information and Referral</label>
             <div id="information-referral">
               <input
                 type="checkbox"
@@ -960,338 +1413,37 @@ class Form extends React.Component {
               />
               Information
               <br />
-              <input
-                type="checkbox"
-                name="information-referral"
-                value="Referral"
-              />
-              Referral (please see below)
+              {this.displayReferralBox()}
               <br />
               <br />
             </div>
             <label htmlFor="safe-home">Safe Home</label>
             <div id="safe-home">
-              <input type="checkbox" name="safe-home" value="Date Entered" />
               Date Entered
               <br />
-              <input type="date" name="safe-home" className="input" />
-              ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+              <input id="safe-home-entered" type="date" name="safe-home" className="input" />  ​​​​​​​​​​​​​​​​​​​​​​​​
               <br />
-              <input type="checkbox" name="safe-home" value="Date Exited" />
               Date Exited
               <br />
-              <input type="date" name="safe-home" className="input" />
+              <input id="safe-home-exited" type="date" name="safe-home" className="input" />
               ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
               <br />
-              <input type="checkbox" name="safe-home" value="Extension Date" />
               Extention Date
               <br />
-              <input type="date" name="safe-home" className="input" />​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+              <input id="safe-home-extension" type="date" name="safe-home" className="input" />​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
               <br />
               <br />
             </div>
             <label htmlFor="groups">Groups</label>
-            <div id="groups">
-              <input type="checkbox" name="groups" value="Groups" />
-              Groups
-              <input type="text" name="groups" className="inline-input" />
+            <div id="groups-div">
+              Groups:
+              <input id="groups" type="text" name="groups" className="inline-input" />
               <br />
               <br />
             </div>
             <hr id="referrals-hr"/>
-            <label htmlFor="referrals">Referrals</label>
-            <br />
-            <label htmlFor="referrals">to/from</label>
-            <div id="referrals">
-              <input type="checkbox" name="referrals" value="to 211" />
-              <input type="checkbox" name="referrals" value="from 211" />
-              211
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Campus Services"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Campus Services"
-              />
-              Campus Services
-              <input
-                id="text-campus-services"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to CUSI/State's Attorney/CAC"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from CUSI/State's Attorney/CAC"
-              />
-              CUSI/State's Attorney/CAC
-              <br />
-              <input type="checkbox" name="referrals" value="to DCF" />
-              <input type="checkbox" name="referrals" value="from DCF" />
-              DCF
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Disability Org"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Disability Org"
-              />
-              Disability Org
-              <input
-                id="text-disability-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to DIVAS/Corrections/P+P"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from DIVAS/Corrections/P+P"
-              />
-              DIVAS/Corrections/P+P
-              <br />
-              <input type="checkbox" name="referrals" value="to DVAS" />
-              <input type="checkbox" name="referrals" value="from DVAS" />
-              DVAS
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Financial Assistance Org"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Financial Assistance Org"
-              />
-              Financial Assistance Org
-              <input
-                id="text-financial-assistance-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Financial Empowerment Programming"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Financial Empowerment Programming"
-              />
-              Financial Empowerment Programming
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Health Centers"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Health Centers"
-              />
-              Health Centers
-              <input
-                id="text-health-centers"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to HOPE Works Clinical Therapist"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from HOPE Works Clinical Therapist"
-              />
-              HOPE Works Clinical Therapist
-              <br />
-              <input type="checkbox" name="referrals" value="to Housing Org" />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Housing Org"
-              />
-              Housing Org
-              <input
-                id="text-housing-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Immigrant Org"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Immigrant Org"
-              />
-              Immigrant Org
-              <input
-                id="text-immigrant-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input type="checkbox" name="referrals" value="to LGBTQ Org" />
-              <input type="checkbox" name="referrals" value="from LGBTQ Org" />
-              LGBTQ Org
-              <input
-                id="text-lgbtq-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to National Guard/Military Services"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from National Guard/Military Services"
-              />
-              National Guard/Military Services
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Network Program"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Network Program"
-              />
-              Network Program
-              <input
-                id="text-network-program"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Police Department"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Police Department"
-              />
-              Police Department
-              <input
-                id="text-police-department"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Out of State Rape Crisis Services"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Out of State Rape Crisis Services"
-              />
-              Out of State Rape Crisis Services
-              <br />
-              <input type="checkbox" name="referrals" value="to RAINN" />
-              <input type="checkbox" name="referrals" value="from RAINN" />
-              RAINN
-              <br />
-              <input type="checkbox" name="referrals" value="to SANE" />
-              <input type="checkbox" name="referrals" value="from SANE" />
-              SANE
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Support Group"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Support Group"
-              />
-              Support Group
-              <br />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="to Therapist List"
-              />
-              <input
-                type="checkbox"
-                name="referrals"
-                value="from Therapist List"
-              />
-              Therapist List
-              <br />
-              <input type="checkbox" name="referrals" value="to Youth Org" />
-              <input type="checkbox" name="referrals" value="from Youth Org" />
-              Youth Org
-              <input
-                id="text-youth-org"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-              <input type="checkbox" name="referrals" value="to Other" />
-              <input type="checkbox" name="referrals" value="from Other" />
-              Other
-              <input
-                id="text-other"
-                type="text"
-                name="referrals"
-                className="inline-input"
-              />
-              <br />
-            </div>
-            <hr />
-            <label htmlFor="measures">Outcome Measures:</label>
+            {this.displayReferrals()}
+            <h3>Outcome Measures</h3>
             <div id="measures">
               <label htmlFor="plan-for-safety">
                 Service User knows more ways to plan for their safety
@@ -1353,9 +1505,6 @@ class Form extends React.Component {
                 </label>
               </div>
               <hr />
-              <label htmlFor="notes">Notes</label>
-              <br />
-              <textarea id="notes" />
             </div>
           </div>
           <h4>{this.state.errorMessage}</h4>

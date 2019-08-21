@@ -11,21 +11,28 @@ class Home extends React.Component {
 
     render() {
       return (
-          <div id="home">
-              <h1>Welcome! This is the Home page. Below are the features:</h1>
-              <Link to={{ pathname: "/form" }}>create new form</Link>
-              <p>change my account info</p>
-              <p>(admin) manage accounts</p>
-              <Link to={{ pathname: "/forms" }}>View submitted forms</Link>
-              <p>view survivor profiles</p>
-              <ul>
-                  <li>search for a survivor</li>
-                  <li>list them all</li>
-              </ul>
-              <Link to={{ pathname: "/data" }}>View Data</Link>
-              <br/>
-              <Link to={{ pathname: "/" }}><button>log out (dummy link to login)</button></Link>
-          </div>
+            <div id="home">
+            <div style={{height: "1px"}}></div>
+            <h1>Home</h1>
+            <div id="the-links">
+                <Link to={{ pathname: "/form" }}>
+                    <div className="link-box" id="new-form-box">
+                        <h3 className="link-box-text">Create a New Form</h3>
+                    </div>
+                </Link>
+                <Link to={{ pathname: "/forms" }}>
+                    <div className="link-box" id="view-forms-box">
+                        <h3 className="link-box-text">View Submitted Forms</h3>
+                    </div>
+                </Link>
+                <Link to={{ pathname: "/data" }}>
+                    <div className="link-box" id="view-data-box">
+                        <h3 className="link-box-text">View Data</h3>
+                    </div>
+                </Link>
+            </div>
+            <Link to={{ pathname: "/" }}><button id="log-out">Log Out</button></Link>
+        </div>
       )
     }  
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import Hw from './images/hw.png';
 
 class Data extends React.Component {
   constructor() {
@@ -14,6 +15,7 @@ class Data extends React.Component {
     const response = await fetch("/forms");
     const formsObj = await response.json();
     this.setState({ forms: formsObj });
+    console.log(formsObj)
   }
 
   //counter for how many forms
@@ -22,19 +24,43 @@ class Data extends React.Component {
 
   //age range counter
 
-  //gender identity counter
+  
 
-  //ethnicity counter
+
+  formsCounter(forms) {
+    if (forms) {
+      return (<p>There are {forms.length} forms total.</p>)
+    }
+  }
+
+
+showEthnicityCount(forms) {
+  if (forms) {
+    let theCount = 0;
+    forms.forEach(form => {
+    let ethnicityArray = form.data.ethnicity;
+    ethnicityArray.forEach(ethnicity => {
+      if (ethnicity === document.getElementById("Ethnicity").value) {
+        theCount++;
+      } 
+    })
+    })
+ return (<p>There are this many {document.getElementById("Ethnicity").value}: {theCount}</p>)
+  }
+}
 
   showVictimizationCount(forms, incident) {
-    if (forms) {
+    if (!forms) {
+      return <p>Loading form data...</p>;
+    } else if (forms && !incident) {
+      return <p>Waiting for input...</p>
+    } else if (forms && incident) {
       let theCount = 0;
       forms.forEach(form => {
         let incidentArray = form.data.incidents;
         incidentArray.forEach(incidentTwo => {
           if (incidentTwo.victimization.includes(incident)) {
-            theCount++;
-            console.log(incident);
+           theCount++;
           }
         });
       });
@@ -43,16 +69,13 @@ class Data extends React.Component {
           This many {incident}'s occurred: {theCount}
         </p>
       );
-    } else {
-      return <p>loading form data...</p>;
-    }
+    } 
   }
 
   showHomelessCount(forms) {
     if (forms && document.getElementById("Homelessness").value === "Homeless") {
       let theCount = 0;
       forms.forEach(form => {
-        console.log(form.data.miscellaneousCharacteristics);
         let homelessArray = form.data.miscellaneousCharacteristics;
         if (homelessArray.includes("Homeless")) {
           theCount++;
@@ -60,18 +83,37 @@ class Data extends React.Component {
       });
       return <p>This many are homeless: {theCount}</p>;
     } else {
-      return <p>fetching homeless data...</p>;
+      return <p>Fetching homelessness data...</p>;
     }
   }
 
-  handleInputChange = () => {
+
+showGenderCount(forms) {
+  if (forms) {
+    let theCount = 0;
+    let displayGender = document.getElementById("Gender").value
+    forms.forEach(form => {
+      let gender = form.data.survivorGender;
+      if (gender === displayGender) {
+        theCount++;
+      }
+    });
+    return (<p>There are this many {displayGender}'s: {theCount}</p>);
+  }
+  }
+
+
+  
+
+handleInputChange = () => {
     this.setState({ input: document.getElementById("input").value });
   };
 
   render() {
     return (
       <div id="data-page">
-        <h1>this is the data page</h1>
+         <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
+         <h1 id="data-page-title">Data</h1>
         <form id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
             <option disabled selected value="">
@@ -135,12 +177,15 @@ class Data extends React.Component {
           </select>
         </form>
         <form>
-          <select id="Ethicity" onChange={this.handleInputChange}>
-            <option value="Asiann">Asian</option>
+          <select id="Ethnicity" onChange={this.handleInputChange}>
+          <option disabled selected value="">
+              Ethnicity
+            </option>
+            <option value="Asian">Asian</option>
             <option value="Black/African American">
               Black/African American
             </option>
-            <option value="Hispanic/Latino American">
+            <option value="Hispanic/Latino">
               Hispanic/Latino American
             </option>
             <option value="Native American/Alaskan">
@@ -154,9 +199,25 @@ class Data extends React.Component {
             <option value="">Other</option>
           </select>
         </form>
+        <form>
+            <select id="Gender" onChange={this.handleInputChange}>
+            <option disabled selected value="">Gender</option>
+            <option value="Unknown">Unknown</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Intersex">Intersex</option>
+            <option value="M→F">M→F</option>
+            <option value="F→M">F→M</option>
+            <option value="Questioning">Questioning</option>
+            <option value="Undifined">Undifined</option>
+            </select>
+        </form>
 
         {this.showVictimizationCount(this.state.forms, this.state.input)}
         {this.showHomelessCount(this.state.forms)}
+        {this.showGenderCount(this.state.forms)}
+        {this.showEthnicityCount(this.state.forms)}
+        {this.formsCounter(this.state.forms)}
       </div>
     );
   }
