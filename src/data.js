@@ -15,12 +15,7 @@ class Data extends React.Component {
     const response = await fetch("/forms");
     const formsObj = await response.json();
     this.setState({ forms: formsObj });
-    console.log(formsObj)
   }
-
-  //counter for how many forms
-
-  //schools counter for surrounding colleges and HS with an other bar
 
   //age range counter
 
@@ -102,10 +97,90 @@ showGenderCount(forms) {
   }
   }
 
-
+  showSchoolCount(forms) {
+    if (forms) {
+      let theCount = 0;
+      let displaySchool = document.getElementById("Schools").value
+      forms.forEach(form => {
+        let school = form.data.nameOfSchool;
+        if (school === displaySchool) {
+          theCount++;
+        }
+      });
+      return (<p>There are this many survivors from {displaySchool}'s: {theCount}</p>);
+    }
+  }
   
+  showAgeRange (forms) {
+    if (!forms) {
+      return <p>getting the forms (age range)</p>
+    } else if (forms) {
+      let ageRange = document.getElementById("Age-Range").value
+      let theCount = 0;
 
-handleInputChange = () => {
+      let ageLow;
+      let ageHigh;
+
+      if (ageRange==="60+") {
+        ageLow = 60;
+        ageHigh = 1000000000;
+      } else {
+        let ageArray = ageRange.split("-")
+        ageArray = ageArray.map((string) => Number(string))
+        ageLow = ageArray[0];
+        ageHigh = ageArray[1];
+      }
+
+      for (let form of forms) {
+        let theForm = form.data
+        let ageType = null;                 // if we know the DOB, we can display an exact current age and exact age at time of contact.
+        if (theForm.dateOfBirth!=="") {
+            ageType = "dob"
+        } else if (theForm.ageRange[0]!=="") { //if we only have an age range, we will have to approximate current age.
+            ageType = "range"
+        }
+        
+        let contactDateArray = theForm.contactDate.split("-") //theForm.contactDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
+        contactDateArray.push(contactDateArray[0]) //["YYYY", "MM", "DD", "YYYY"]
+        contactDateArray = contactDateArray.slice(1, 4) //["MM", "DD", "YYYY"]
+        contactDateArray = contactDateArray.map((string) => Number(string)) //[MM, DD, YYYY] (numbers)
+
+        if (ageType==="dob") {
+          let birthDateArray = theForm.dateOfBirth.split("-") //theForm.birthDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
+          birthDateArray.push(birthDateArray[0]) //["YYYY", "MM", "DD", "YYYY"]
+          birthDateArray = birthDateArray.slice(1, 4) //["MM", "DD", "YYYY"]
+          birthDateArray = birthDateArray.map((string) => Number(string)) //[MM, DD, YYYY] (numbers)
+
+          let ageAtContact = contactDateArray[2] - birthDateArray[2]
+          if (contactDateArray[0] - birthDateArray[0] < 0) { //months
+              ageAtContact--
+          } else if ((contactDateArray[0] - birthDateArray[0] === 0) && (contactDateArray[1] - birthDateArray[1] < 0)) { //same month, not up to the day yet
+              ageAtContact--              //age at contact found if age was entered in dob
+          }
+
+          console.log("(DOB) this person is " + ageAtContact)
+
+          if (ageLow <= ageAtContact && ageAtContact <= ageHigh) {
+            theCount++
+          }
+
+        } else if (ageType==="range") {
+          let lowEst = Number(theForm.ageRange[0])
+          let highEst = Number(theForm.ageRange[1])
+          let ageEst = Math.floor((lowEst + highEst)/2)
+
+          console.log("(range) this person is " + ageEst)
+
+          if (ageLow <= ageEst && ageEst <= ageHigh) {
+            theCount++
+          }
+        }
+      }
+      return (<p>There are {theCount} profiles in this {ageRange} age group</p>);
+    }
+  }
+
+  handleInputChange = () => {
     this.setState({ input: document.getElementById("input").value });
   };
 
@@ -212,12 +287,24 @@ handleInputChange = () => {
             <option value="Undifined">Undifined</option>
             </select>
         </form>
-
+        <form>
+          <select id="Age-Range" onChange={this.handleInputChange}>
+            <option disabled selected value="">Age Range</option>
+            <option value="0-12">0-12</option>
+            <option value="13-17">13-17</option>
+            <option value="18-21">18-21</option>
+            <option value="22-24">22-24</option>
+            <option value="25-59">25-59</option>
+            <option value="60+">60+</option>
+          </select>
+        </form>
+        {this.formsCounter(this.state.forms)}
         {this.showVictimizationCount(this.state.forms, this.state.input)}
         {this.showHomelessCount(this.state.forms)}
         {this.showGenderCount(this.state.forms)}
         {this.showEthnicityCount(this.state.forms)}
-        {this.formsCounter(this.state.forms)}
+        {this.showSchoolCount(this.state.forms)}
+        {this.showAgeRange(this.state.forms)}
       </div>
     );
   }
