@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Link } from "react-router-dom";
-import Hw from '/Users/spotspot/code/hopeworks/src/images/hw.png';
-import SignIn from '/Users/spotspot/code/hopeworks/src/images/sign-in-google.png';
+import Hw from './images/hw.png';
+import SignIn from './images/sign-in-google.png';
 
 class Login extends React.Component {
     constructor() {
