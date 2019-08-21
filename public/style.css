@@ -1,4 +1,4 @@
-/* --------LOGIN CSS-------- */
+/* ------------------------LOGIN CSS------------------------*/
 .login-container {
     text-align: center;
     height: 100vh;
@@ -20,8 +20,16 @@
     width: 300px;
 }
 
-.google-logo {
+#google-logo {
     width: 300px;
+}
+
+#google-button {
+   border: hidden;
+   margin-top: 20px;
+   padding: 0;
+   height: 100px;
+   background-color: transparent;
 }
 
 #login-message {
@@ -44,13 +52,17 @@
     margin-top: 5%;
 }
 
-/* --------FORM CSS--------- */
+/*-------------------------FORM CSS---------------------------*/
 #the-form {
     width: 100%;
     z-index: 1;
     margin-top: 50px;
     margin-left: 25%;
     margin-right: 25%;
+}
+
+body {
+    margin: 0px;
 }
 
 #form-page {
@@ -120,27 +132,17 @@ hr {
     border-radius: 15px, 0px, 15px, 0px;
 }
 
-body {
-    margin: 0px;
-}
-
 .indented {
     margin-left: 40px !important;
 }
 
-/* ALERT CSS */
+.view-form-button {
+    margin: 5px;
+}
+
+/* FORM ALERT CSS */
 h4 {
     color: red;
-}
-
-/* COLUMNS & ROWS */
-.row {
-display: flex;
-}
-
-.center-div {
-    text-align: center;
-    float: inline-end;
 }
 
 #home, #forms-page {
@@ -149,20 +151,60 @@ display: flex;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.view-form-button {
-    margin: 5px;
-}
 
 .form-element {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
+/* -----------------------FORMS CSS------------------------ */
+.forms-container {
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+#submitted-forms {
+    text-align: center;
+    margin-top: 0;
+}
+.hw-logo-forms {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding: 20px;
+}
+
+.delete-form-button, .view-form-button {
+    display: inline-block
+}
+
+.forms-buttons-div {
+    text-align: center;
+}
+
+/*------------------------DATA PAGE-------------------- */
+
+#data-page {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    height: 100vh;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+}
+
+.hw-logo-data {
+    width: 300px;
+    padding: 20px;
+}
+
+
+/*------------------------MEDIA SCREEN----------------  */
+
 @media screen and (max-width: 1030px) {
     html {width: 100%;}
     .toolbar{width: 95%;}
     .hw-logo { width: 60%;}
-    .google-logo {width: 80%;}
     .login-button{
         width: 33%;
         font-size: 20px;

@@ -28,8 +28,10 @@ class Login extends React.Component {
                      <input className="login-button" type="submit" value="LOGIN" />
                      </div>
                      <br />
-                     <img className="google-logo" src={SignIn} alt="Sign in with Google"/>
-                    </form>
+                     <button id="google-button">
+                       <img id="google-logo" src={SignIn} alt="Sign in with Google" onClick={this.myfunction}/>
+                     </button>
+                   </form>
                    </div>
                   </div>
               </div>
