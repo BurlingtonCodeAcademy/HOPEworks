@@ -1,6 +1,6 @@
 import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
-import Hw from '/Users/spotspot/code/hopeworks/src/images/hw.png';
+import Hw from './images/hw.png';
 
 class Form extends React.Component {
   constructor() {

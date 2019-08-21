@@ -1,5 +1,5 @@
 import React from "react";
-import Hw from '/Users/spotspot/code/hopeworks/src/images/hw.png';
+import Hw from './images/hw.png';
 class Data extends React.Component {
   constructor() {
     super();
