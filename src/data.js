@@ -1,5 +1,6 @@
 import React from "react";
 import Hw from './images/hw.png';
+
 class Data extends React.Component {
   constructor() {
     super();
@@ -14,6 +15,7 @@ class Data extends React.Component {
     const response = await fetch("/forms");
     const formsObj = await response.json();
     this.setState({ forms: formsObj });
+    console.log(formsObj)
   }
 
   //counter for how many forms
@@ -22,10 +24,30 @@ class Data extends React.Component {
 
   //age range counter
 
-  //gender identity counter
+  
 
-  //ethnicity counter
 
+  formsCounter(forms) {
+    if (forms) {
+      return (<p>There are {forms.length} forms total.</p>)
+    }
+  }
+
+
+showEthnicityCount(forms) {
+  if (forms) {
+    let theCount = 0;
+    forms.forEach(form => {
+    let ethnicityArray = form.data.ethnicity;
+    ethnicityArray.forEach(ethnicity => {
+      if (ethnicity === document.getElementById("Ethnicity").value) {
+        theCount++;
+      } 
+    })
+    })
+ return (<p>There are this many {document.getElementById("Ethnicity").value}: {theCount}</p>)
+  }
+}
 
   showVictimizationCount(forms, incident) {
     if (!forms) {
@@ -43,9 +65,11 @@ class Data extends React.Component {
         });
       });
       return (
-        <p>This many {incident}s occurred: {theCount}</p>
+        <p>
+          This many {incident}'s occurred: {theCount}
+        </p>
       );
-    }
+    } 
   }
 
   showHomelessCount(forms) {
@@ -78,19 +102,6 @@ showGenderCount(forms) {
   }
   }
 
-  showEthnicityCount(forms) {
-    if (forms) {
-      let theCount = 0;
-      let displayEthnicity = document.getElementById("Ethnicity").value
-      forms.forEach(form => {
-        let ethnicityTwo = form.data.ethnicity;
-        if (ethnicityTwo === displayEthnicity) {
-          theCount++;
-        }
-      });
-      return (<p>There are this many {displayEthnicity}'s: {theCount}</p>);
-    }
-    }
 
   
 
@@ -101,8 +112,8 @@ handleInputChange = () => {
   render() {
     return (
       <div id="data-page">
-      <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
-        <h1 id="data-page-title">Data</h1>
+         <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
+         <h1 id="data-page-title">Data</h1>
         <form id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
             <option disabled selected value="">
@@ -174,7 +185,7 @@ handleInputChange = () => {
             <option value="Black/African American">
               Black/African American
             </option>
-            <option value="Hispanic/Latino American">
+            <option value="Hispanic/Latino">
               Hispanic/Latino American
             </option>
             <option value="Native American/Alaskan">
@@ -206,6 +217,7 @@ handleInputChange = () => {
         {this.showHomelessCount(this.state.forms)}
         {this.showGenderCount(this.state.forms)}
         {this.showEthnicityCount(this.state.forms)}
+        {this.formsCounter(this.state.forms)}
       </div>
     );
   }
