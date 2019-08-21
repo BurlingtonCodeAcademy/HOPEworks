@@ -9,27 +9,19 @@ class Form extends React.Component {
       numOrders: 1,
       newUser: true,
       newIncident: false,
-<<<<<<< HEAD
-      errorMessage: ""
-=======
-      errorMessage: "",
-      referrals: false
->>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.displayIncidents = this.displayIncidents.bind(this);
-    this.numIncidentsChange = this.numIncidentsChange.bind(this);
-    this.numOrdersChange = this.numOrdersChange.bind(this);
-    this.displayOrders = this.displayOrders.bind(this);
-    this.userTypeChange = this.userTypeChange.bind(this);
-    this.newIncidentChange = this.newIncidentChange.bind(this);
-    this.displayDemographicContent = this.displayDemographicContent.bind(this);
-    this.displayIncidentAndOrder = this.displayIncidentAndOrder.bind(this);
+  }
+  this.handleSubmit = this.handleSubmit.bind(this);
+  this.displayIncidents = this.displayIncidents.bind(this);
+  this.numOrdersChange = this.numOrdersChange.bind(this);
+  this.displayOrders = this.displayOrders.bind(this);
+  this.userTypeChange = this.userTypeChange.bind(this);
+  this.newIncidentChange = this.newIncidentChange.bind(this);
+  this.displayDemographicContent = this.displayDemographicContent.bind(this);
+  this.displayIncidentAndOrder = this.displayIncidentAndOrder.bind(this);
   }
 
   async handleSubmit(evnt) {
     evnt.preventDefault();
-
     if (this.state.numIncidents > 10) {
       this.setState({ errorMessage: "Error submitting form: Too many incidents."})
       return
@@ -60,8 +52,6 @@ class Form extends React.Component {
     let contactInstantMessaging = document.getElementById("contact-instant-messaging");
     let contactOnBehalf = document.getElementById("contact-on-behalf");
     let notes = document.getElementById("notes");
-<<<<<<< HEAD
-=======
 
     if (this.state.numIncidents > 10) {
       this.setState({ errorMessage: "Error submitting form: Too many incidents."})
@@ -78,7 +68,6 @@ class Form extends React.Component {
     } else {
       this.setState({ errorMessage: ""})
     }
->>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
     
     let theData = {
       timestamp: new Date().toLocaleString(),
@@ -131,16 +120,10 @@ class Form extends React.Component {
         safeHome: checkBoxValues("safe-home"),
         groups: checkBoxValues("groups")
       };
-<<<<<<< HEAD
-      
-    theData.referrals = referralValues("referrals");
-    theData.outcomeMeasures = radioButtonValue("plan-for-safety");
-=======
     if (this.state.referrals) {
       theData.referrals = referralValues("referrals");
     }
     theData.planForSafety = radioButtonValue("plan-for-safety");
->>>>>>> c13d9587a4035153f11aa536ef1e8b8d1a23f5a0
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
     theData.notes = notes.value;

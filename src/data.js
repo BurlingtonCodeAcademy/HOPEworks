@@ -26,6 +26,7 @@ class Data extends React.Component {
 
   //ethnicity counter
 
+
   showVictimizationCount(forms, incident) {
     if (forms) {
       let theCount = 0;
@@ -33,8 +34,7 @@ class Data extends React.Component {
         let incidentArray = form.data.incidents;
         incidentArray.forEach(incidentTwo => {
           if (incidentTwo.victimization.includes(incident)) {
-            theCount++;
-            console.log(incident);
+           theCount++;
           }
         });
       });
@@ -52,7 +52,6 @@ class Data extends React.Component {
     if (forms && document.getElementById("Homelessness").value === "Homeless") {
       let theCount = 0;
       forms.forEach(form => {
-        console.log(form.data.miscellaneousCharacteristics);
         let homelessArray = form.data.miscellaneousCharacteristics;
         if (homelessArray.includes("Homeless")) {
           theCount++;
@@ -60,11 +59,42 @@ class Data extends React.Component {
       });
       return <p>This many are homeless: {theCount}</p>;
     } else {
-      return <p>fetching homeless data...</p>;
+      return <p>Fetching homelessness data...</p>;
     }
   }
 
-  handleInputChange = () => {
+
+showGenderCount(forms) {
+  if (forms) {
+    let theCount = 0;
+    let displayGender = document.getElementById("Gender").value
+    forms.forEach(form => {
+      let gender = form.data.survivorGender;
+      if (gender === displayGender) {
+        theCount++;
+      }
+    });
+    return (<p>There are this many {displayGender}'s: {theCount}</p>);
+  }
+  }
+
+  showEthnicityCount(forms) {
+    if (forms) {
+      let theCount = 0;
+      let displayEthnicity = document.getElementById("Ethnicity").value
+      forms.forEach(form => {
+        let ethnicityTwo = form.data.ethnicity;
+        if (ethnicityTwo === displayEthnicity) {
+          theCount++;
+        }
+      });
+      return (<p>There are this many {displayEthnicity}'s: {theCount}</p>);
+    }
+    }
+
+  
+
+handleInputChange = () => {
     this.setState({ input: document.getElementById("input").value });
   };
 
@@ -135,8 +165,11 @@ class Data extends React.Component {
           </select>
         </form>
         <form>
-          <select id="Ethicity" onChange={this.handleInputChange}>
-            <option value="Asiann">Asian</option>
+          <select id="Ethnicity" onChange={this.handleInputChange}>
+          <option disabled selected value="">
+              Ethnicity
+            </option>
+            <option value="Asian">Asian</option>
             <option value="Black/African American">
               Black/African American
             </option>
@@ -154,9 +187,24 @@ class Data extends React.Component {
             <option value="">Other</option>
           </select>
         </form>
+        <form>
+            <select id="Gender" onChange={this.handleInputChange}>
+            <option disabled selected value="">Gender</option>
+            <option value="Unknown">Unknown</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Intersex">Intersex</option>
+            <option value="M→F">M→F</option>
+            <option value="F→M">F→M</option>
+            <option value="Questioning">Questioning</option>
+            <option value="Undifined">Undifined</option>
+            </select>
+        </form>
 
         {this.showVictimizationCount(this.state.forms, this.state.input)}
         {this.showHomelessCount(this.state.forms)}
+        {this.showGenderCount(this.state.forms)}
+        {this.showEthnicityCount(this.state.forms)}
       </div>
     );
   }
