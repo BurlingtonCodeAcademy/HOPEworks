@@ -112,7 +112,7 @@ body {
     display: flex;
     justify-content: center;
     height: 100%;
-    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    background-color: rgb(251, 229, 184);
 }
 .form-logo {
     width: 300px;
@@ -159,7 +159,8 @@ input[type="number"] {
 }
 
 hr {
-    border-top:1px dotted rgb(136, 135, 135);
+    border-top:1px dotted black;
+    opacity: .8;
     text-align: center;
 }
 
