@@ -163,6 +163,8 @@ h4 {
     margin-bottom: 1em;
 }
 
+/*------------HOME-------*/
+
 .link-box {
     width: 400px;
     height: 240px;
@@ -264,9 +266,24 @@ a {
     }
 }
 
+/*------------------------HOME PAGE MEDIA QUERY----------------  */
+
 @media screen and (max-width: 1330px) {
     #the-links {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .link-box {
+        width: 75vw;
+        height: 50vw;
+    }
+
+    #home {
+        margin-left: 0px;
+        display: flex;
+        align-items: center;
         flex-direction: column;
     }
 } 
