@@ -90,7 +90,7 @@ class Form extends React.Component {
     } else {
       this.setState({ errorMessage: ""})
     }
-
+    
     let theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
@@ -149,7 +149,7 @@ class Form extends React.Component {
     if (this.state.referrals) {
       theData.referrals = referralValues("referrals");
     }
-    theData.outcomeMeasures = radioButtonValue("plan-for-safety");
+    theData.planForSafety = radioButtonValue("plan-for-safety");
     theData.communityResources = radioButtonValue("community-resources");
     theData.rightsAndOptions = radioButtonValue("rights-options");
     theData.notes = notes.value;
