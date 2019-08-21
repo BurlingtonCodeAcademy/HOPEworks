@@ -74,7 +74,8 @@
 }
 
 .delete-form-button, .view-form-button {
-    display: inline-block
+    display: inline-block;
+    margin: 10px;
 }
 
  #forms-page {
@@ -283,9 +284,23 @@ a {
 }
 
 .hw-logo-data {
-    width: 300px;
     padding: 20px;
 }
+
+.drop-down-data {
+    display: inline-block;
+    margin: 10px;
+}
+
+.drop-down-data-text {
+    background-color: purple;
+}
+
+p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 24px;
+}
+
 
 
 /*------------------------MEDIA SCREEN----------------  */
@@ -334,7 +349,12 @@ a {
     }
 } 
 
-/* @media screen and (max-width: 758px) {
+@media screen and (max-width: 758px) {
     /* #the-form {width: 100%;}
-    #form-page {display: 100%;}
-    html {width: 100%;} */
+    #form-page {display: 100%;} */
+    html {width: 100%;}
+    .drop-down-data {
+        display: flex;
+        justify-content: center;
+    }
+}    
