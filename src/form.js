@@ -1,5 +1,6 @@
 import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
+import Hw from '/Users/spotspot/code/hopeworks/src/images/hw.png';
 
 class Form extends React.Component {
   constructor() {
@@ -1193,8 +1194,7 @@ class Form extends React.Component {
           </div>
         <form id="the-form">
           <div id="title">  
-          {/* <img src={"./hope_works_vt_logo_.jpg"}/> */}
-            <h1>H.O.P.E. Works</h1>
+           <img className="form-logo" src={Hw} alt="Hope Works"/>
             <h2>SURVIVOR INFORMATION FORM</h2>
           </div>
           <div id="all-fields">

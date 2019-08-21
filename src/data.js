@@ -1,5 +1,5 @@
 import React from "react";
-
+import Hw from '/Users/spotspot/code/hopeworks/src/images/hw.png';
 class Data extends React.Component {
   constructor() {
     super();
@@ -71,7 +71,8 @@ class Data extends React.Component {
   render() {
     return (
       <div id="data-page">
-        <h1>this is the data page</h1>
+      <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
+        <h1 id="data-page-title">this is the data page</h1>
         <form id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
             <option disabled selected value="">

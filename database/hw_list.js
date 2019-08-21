@@ -11,6 +11,10 @@ module.exports = class DataStore {
     this.dbClient = null;
     this.dbName = 'hw';
   }
+  async findUser(email) { // find user by email
+    let collection = await this.collection()
+    return collection.find({email: email});
+  }
 
   async client() {
     if (this.dbClient && this.dbClient.isConnected()) {
