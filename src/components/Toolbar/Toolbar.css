@@ -2,11 +2,10 @@
   border: 3px solid rgb(0, 0, 0);
   width: 200px;
   position: fixed;
-  z-index: 10;
+  z-index: 13;
   top: 27%;
   left: 10px;
-  background: rgb(255, 247, 235);
-  margin-bottom: 0px;
+  background: transparent;
 }
 .toolbar a {
   padding: 2px;
@@ -22,6 +21,7 @@
   color: purple;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-weight: bolder;
+  margin-top: 5px;
   margin-left: 10px;
 }
 .toolbar_list-items {
@@ -31,7 +31,7 @@
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-/* STICKY NOTE */
+/* --------STICKY NOTE-------- */
 
 #notes {
   height: 300px;
@@ -44,7 +44,7 @@
   font-size: 20px;
   color: rgb(0, 0, 0);
   position: fixed;
-  z-index: 10;
+  z-index: 13;
   top: 60%;
   left: 1%;
 }
@@ -57,7 +57,9 @@
 
 @media screen and (max-width: 944px) {
   .toolbar {
+    z-index: 13;
     text-align: center;
+    background-color: rgb(251, 229, 184);
     top: 0;
     width: 97%;
     height: 55px;
