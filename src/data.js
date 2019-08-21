@@ -1,5 +1,5 @@
 import React from "react";
-
+import Hw from './images/hw.png';
 class Data extends React.Component {
   constructor() {
     super();
@@ -28,7 +28,11 @@ class Data extends React.Component {
 
 
   showVictimizationCount(forms, incident) {
-    if (forms) {
+    if (!forms) {
+      return <p>Loading form data...</p>;
+    } else if (forms && !incident) {
+      return <p>Waiting for input...</p>
+    } else if (forms && incident) {
       let theCount = 0;
       forms.forEach(form => {
         let incidentArray = form.data.incidents;
@@ -39,12 +43,8 @@ class Data extends React.Component {
         });
       });
       return (
-        <p>
-          This many {incident}'s occurred: {theCount}
-        </p>
+        <p>This many {incident}s occurred: {theCount}</p>
       );
-    } else {
-      return <p>loading form data...</p>;
     }
   }
 
@@ -101,7 +101,8 @@ handleInputChange = () => {
   render() {
     return (
       <div id="data-page">
-        <h1>this is the data page</h1>
+      <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
+        <h1 id="data-page-title">Data</h1>
         <form id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
             <option disabled selected value="">
