@@ -144,7 +144,7 @@ class Forms extends React.Component {
 
                         listItems.push(
                             <div key={i}>
-                                <div className="form-element">{this.displayFormElement(property, reFormatDate(theForm.dateOfBirth), null, "normal")}</div>
+                                <div className="form-element">{this.displayFormElement(property, reFormatDate(theForm.dateOfBirth), null, "normal")}</div> {/* please add this change*/ }
                             </div>
                             )
                         i++;
@@ -185,7 +185,7 @@ class Forms extends React.Component {
                         i++;
                         listItems.push(
                             <div key={i}>
-                                <div className="form-element">{this.displayFormElement("Approximate Date of Birth", approxBirthDate[0] + "/" + approxBirthDate[1] + "/" + approxBirthDate[2], null, "normal")}</div>
+                                <div className="form-element">{this.displayFormElement("Approximate Date of Birth", approxBirthDate[0] + "/" + approxBirthDate[1] + "/" + approxBirthDate[2], null, "normal")}</div> {/* please add this change*/ }
                             </div>
                             )
                         i++;
