@@ -75,13 +75,18 @@
 
 .delete-form-button, .view-form-button {
     display: inline-block;
-    margin: 10px;
+    margin: 5px;
+}
+
+.forms-container {
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
 }
 
  #forms-page {
     width: 100%;
     height: 100vr;
     background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(251, 229, 184));
+    margin-left: 20px;
 }
 
 .view-form-bar {
@@ -92,6 +97,10 @@
 #forms-page {
     font-size: 20px;
     font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#survivor-info-text {
+    margin-top: 10px;
 }
 
 
@@ -293,13 +302,13 @@ a {
     margin: 10px;
 }
 
-.drop-down-data-text {
-    background-color: purple;
-}
-
 p {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 24px;
+    font-size: 20px;
+}
+
+option {
+    font-size: 16px;
 }
 
 
@@ -358,4 +367,4 @@ p {
         display: flex;
         justify-content: center;
     }
-}    
+}   

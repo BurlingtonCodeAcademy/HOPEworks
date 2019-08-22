@@ -291,9 +291,10 @@ class Forms extends React.Component {
             )
         } else if (this.state.view==="form") {
             return (
-             <div>
+             <div className="forms-container">
                 <div id="forms-page">
-                    <h1>Survivor Information</h1>
+                    <div style={{height: "1px"}}></div>
+                    <h1 id="survivor-info-text">Survivor Information</h1>
                     <button onClick={this.viewList}>back to form list</button>
                     {this.displayForm(this.state.currentForm)}
                     <button onClick={this.viewList}>back to form list</button>

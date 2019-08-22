@@ -12,7 +12,7 @@ class Home extends React.Component {
 
     render() {
       return (
-            <div id="home">
+        <div id="home">
             <div style={{height: "1px"}}></div>
             <img className="home-logo" src={Hw} alt="Hope Works"/>
             <h1 id="home-page-text">User Home Page</h1>
