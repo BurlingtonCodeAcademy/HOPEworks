@@ -33,7 +33,7 @@ showEthnicityCount(forms) {
   if (forms) {
     let theCount = 0;
     forms.forEach(form => {
-    let ethnicityArray = form.data.ethnicity;
+    let ethnicityArray = form.data.ethnicity|| [];
     ethnicityArray.forEach(ethnicity => {
       if (ethnicity === document.getElementById("Ethnicity").value) {
         theCount++;
@@ -93,7 +93,7 @@ showGenderCount(forms) {
         theCount++;
       }
     });
-    return (<p>There are this many {displayGender}'s: {theCount}</p>);
+    return (<p>There are this many {displayGender} survivors: {theCount}</p>);
   }
   }
 
@@ -107,7 +107,7 @@ showGenderCount(forms) {
           theCount++;
         }
       });
-      return (<p>There are this many survivors from {displaySchool}'s: {theCount}</p>);
+      return (<p>There are this many survivors from {displaySchool}: {theCount}</p>);
     }
   }
   
@@ -134,17 +134,21 @@ showGenderCount(forms) {
       for (let form of forms) {
         let theForm = form.data
         let ageType = null;                 // if we know the DOB, we can display an exact current age and exact age at time of contact.
-        if (theForm.dateOfBirth!=="") {
+        if (theForm.dateOfBirth && theForm.dateOfBirth!=="") {
             ageType = "dob"
-        } else if (theForm.ageRange[0]!=="") { //if we only have an age range, we will have to approximate current age.
+        } else if (theForm.ageRange && theForm.ageRange[0]!=="") { //if we only have an age range, we will have to approximate current age.
             ageType = "range"
         }
-        
-        let contactDateArray = theForm.contactDate.split("-") //theForm.contactDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
-        contactDateArray.push(contactDateArray[0]) //["YYYY", "MM", "DD", "YYYY"]
-        contactDateArray = contactDateArray.slice(1, 4) //["MM", "DD", "YYYY"]
-        contactDateArray = contactDateArray.map((string) => Number(string)) //[MM, DD, YYYY] (numbers)
 
+        let contactDateArray;
+          
+        if (ageType==="dob" || ageType==="range") {
+          contactDateArray = theForm.contactDate.split("-") //theForm.contactDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
+          contactDateArray.push(contactDateArray[0]) //["YYYY", "MM", "DD", "YYYY"]
+          contactDateArray = contactDateArray.slice(1, 4) //["MM", "DD", "YYYY"]
+          contactDateArray = contactDateArray.map((string) => Number(string)) //[MM, DD, YYYY] (numbers)
+        }
+        
         if (ageType==="dob") {
           let birthDateArray = theForm.dateOfBirth.split("-") //theForm.birthDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
           birthDateArray.push(birthDateArray[0]) //["YYYY", "MM", "DD", "YYYY"]
@@ -158,8 +162,6 @@ showGenderCount(forms) {
               ageAtContact--              //age at contact found if age was entered in dob
           }
 
-          console.log("(DOB) this person is " + ageAtContact)
-
           if (ageLow <= ageAtContact && ageAtContact <= ageHigh) {
             theCount++
           }
@@ -168,8 +170,6 @@ showGenderCount(forms) {
           let lowEst = Number(theForm.ageRange[0])
           let highEst = Number(theForm.ageRange[1])
           let ageEst = Math.floor((lowEst + highEst)/2)
-
-          console.log("(range) this person is " + ageEst)
 
           if (ageLow <= ageEst && ageEst <= ageHigh) {
             theCount++
@@ -189,9 +189,9 @@ showGenderCount(forms) {
       <div id="data-page">
          <img className="hw-logo-data" src={Hw} alt="Hope Works"/>
          <h1 id="data-page-title">Data</h1>
-        <form className="drop-down-data" id="Victimizations">
+        <form id="Victimizations">
           <select id="input" onChange={this.handleInputChange}>
-            <option className="drop-down-data-text" disabled selected value="">
+            <option disabled selected value="">
               Victimization
             </option>
             <option value="Rape">Rape</option>
@@ -205,7 +205,7 @@ showGenderCount(forms) {
             <option value="Other">Other</option>
           </select>
         </form>
-        <form className="drop-down-data">
+        <form>
           <select id="Homelessness" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Homelessness
@@ -214,7 +214,7 @@ showGenderCount(forms) {
             <option value="">No</option>
           </select>
         </form>
-        <form className="drop-down-data">
+        <form>
           <select id="Schools" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Schools
@@ -251,7 +251,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form className="drop-down-data">
+        <form>
           <select id="Ethnicity" onChange={this.handleInputChange}>
           <option disabled selected value="">
               Ethnicity
@@ -274,7 +274,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form className="drop-down-data">
+        <form>
             <select id="Gender" onChange={this.handleInputChange}>
             <option disabled selected value="">Gender</option>
             <option value="Unknown">Unknown</option>
