@@ -17,7 +17,7 @@ class Data extends React.Component {
     this.setState({ forms: formsObj });
   }
 
-  //age range counter
+  //age range countergit [p]
 
   
 
@@ -71,17 +71,18 @@ showEthnicityCount(forms) {
     if (forms && document.getElementById("Homelessness").value === "Homeless") {
       let theCount = 0;
       forms.forEach(form => {
+        if(form.data.miscellaneousCharacteristics) {
         let homelessArray = form.data.miscellaneousCharacteristics;
         if (homelessArray.includes("Homeless")) {
           theCount++;
-        }
+        }}
       });
       return <p>This many are homeless: {theCount}</p>;
     } else {
       return <p>Fetching homelessness data...</p>;
     }
   }
-
+  
 
 showGenderCount(forms) {
   if (forms) {
@@ -140,7 +141,7 @@ showGenderCount(forms) {
             ageType = "range"
         }
 
-        let contactDateArray;
+        let contactDateArray; //apparently this variable has to be declared outside the below conditional or literally the whole app breaks
           
         if (ageType==="dob" || ageType==="range") {
           contactDateArray = theForm.contactDate.split("-") //theForm.contactDate: YYYY-MM-DD => ["YYYY", "MM", "DD"]
