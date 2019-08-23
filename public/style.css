@@ -297,7 +297,7 @@ a {
     padding: 20px;
 }
 
-.drop-down-data {
+#drop-down-data, #Victimizations {
     display: inline-block;
     margin: 10px;
 }

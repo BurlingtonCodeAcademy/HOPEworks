@@ -206,7 +206,7 @@ showGenderCount(forms) {
             <option value="Other">Other</option>
           </select>
         </form>
-        <form>
+        <form id="drop-down-data">
           <select id="Homelessness" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Homelessness
@@ -215,7 +215,7 @@ showGenderCount(forms) {
             <option value="">No</option>
           </select>
         </form>
-        <form>
+        <form id="drop-down-data">
           <select id="Schools" onChange={this.handleInputChange}>
             <option disabled selected value="">
               Schools
@@ -252,7 +252,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form>
+        <form id="drop-down-data">
           <select id="Ethnicity" onChange={this.handleInputChange}>
           <option disabled selected value="">
               Ethnicity
@@ -275,7 +275,7 @@ showGenderCount(forms) {
             <option value="">Other</option>
           </select>
         </form>
-        <form>
+        <form id="drop-down-data">
             <select id="Gender" onChange={this.handleInputChange}>
             <option disabled selected value="">Gender</option>
             <option value="Unknown">Unknown</option>
@@ -288,7 +288,7 @@ showGenderCount(forms) {
             <option value="Undifined">Undifined</option>
             </select>
         </form>
-        <form>
+        <form id="drop-down-data">
           <select id="Age-Range" onChange={this.handleInputChange}>
             <option disabled selected value="">Age Range</option>
             <option value="0-12">0-12</option>
