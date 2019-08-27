@@ -59,6 +59,38 @@
     text-align: center;
     margin-top: 0;
 }
+
+#forms-container {
+    margin-right: 40px;
+}
+
+#selectors {
+    display: flex;
+    align-items: center;
+    outline-style: solid;
+    outline-width: 1px;
+    width: 230px;
+}
+
+.selector > label {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.selector {
+    width: 230px;
+}
+
+.selector-checkboxes {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    margin-left: 15px;
+}
+
 .hw-logo-forms {
     display: block;
     margin-left: auto;
@@ -77,8 +109,6 @@
     display: inline-block;
     margin: 5px;
 }
-
-selectors
 
  #forms-page {
     height: 100vr;

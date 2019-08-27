@@ -5,21 +5,25 @@ class Forms extends React.Component {
     constructor() {
         super();
         this.state = {
-            forms: null,
+            allForms: null,
+            selectedForms: null,
             view: "list",
-            currentForm: null
+            currentForm: null,
+            victimizationSelected: false,
+            ethnicitySelected: false
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
         this.deleteForm = this.deleteForm.bind(this);
         this.orderForms = this.orderForms.bind(this);
         this.displayFormElement = this.displayFormElement.bind(this);
+        this.victimizationSelectedChange = this.victimizationSelectedChange.bind(this);
     }
 
     async componentDidMount() {
         const response = await fetch("/forms");
         const formsObj = await response.json();
-        this.setState({forms: formsObj})
+        this.setState({allForms: formsObj, selectedForms: formsObj})
     }
 
     showFormCount(forms) {
@@ -93,7 +97,7 @@ class Forms extends React.Component {
     }
 
     displayForm (formNum) {
-        let allOrderedForms = this.orderForms(this.state.forms)
+        let allOrderedForms = this.orderForms(this.state.selectedForms)
         let theForm = allOrderedForms[formNum].data;
 
         let i = 0;
@@ -277,10 +281,59 @@ class Forms extends React.Component {
 
     async deleteForm (event) {
         let buttonIdNum = event.target.id.slice(-1);
-        let allOrderedForms = this.orderForms(this.state.forms)
+        let allOrderedForms = this.orderForms(this.state.selectedForms)
         let theFormId = allOrderedForms[buttonIdNum]._id;
         await fetch("/delete/" + theFormId)
         window.location.replace("/forms")
+    }
+
+    victimizationSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.victimizationSelectedChange}>Victimization ↓</label>
+                </div>
+            )
+        } else {
+            return (
+                <div className="selector">
+                    <label onClick={this.victimizationSelectedChange}>Victimization ↑</label>
+                    <div className="selector-checkboxes">
+                        <label>
+                            <input type="checkbox" name="victimization" value="Rape"/>Rape
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Attempted Rape"/>Attempted Rape
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Sex Trafficking"/>Sex Trafficking
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Child Sexual Abuse"/>Child Sexual Abuse
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Drug Facilitated SV"/>Drug Facilitated SV
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Stalking"/>Stalking
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Sexual Harassment"/>Sexual Harassment
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Domestic Violence"/>Domestic Violence
+                        </label>
+                        <label>
+                            <input type="checkbox" name="victimization" value="Other"/>Other
+                        </label>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    victimizationSelectedChange(evnt) {
+        this.setState( {victimizationSelected: !this.state.victimizationSelected} )
     }
 
     render() {
@@ -289,19 +342,15 @@ class Forms extends React.Component {
              <div id="forms-page">
                 <img className="hw-logo-forms" src={Hw} alt="Hope Works"/>
                 <h1 id="submitted-forms">Submitted Forms</h1>
+                {this.showFormCount(this.state.selectedForms)}
                 <div id="forms-selectors">
                     <div id="forms-container">
-                        {this.showFormCount(this.state.forms)}
-                        <div id="form-list">
-                            {this.listTheForms(this.state.forms)}
-                        </div>
+                        {this.listTheForms(this.state.selectedForms)}
                     </div>
                     <div id="selectors">
+                        {this.victimizationSelector(this.state.victimizationSelected)}
                         <div className="selector">
-                            <label>selector</label>
-                        </div>
-                        <div className="selector">
-                            <label>selector</label>
+                            <label>Ethnicity</label>
                         </div>
                     </div>
                 </div>
