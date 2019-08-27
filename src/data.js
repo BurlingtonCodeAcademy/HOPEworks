@@ -33,12 +33,12 @@ showEthnicityCount(forms) {
   if (forms) {
     let theCount = 0;
     forms.forEach(form => {
-    let ethnicityArray = form.data.ethnicity|| [];
-    ethnicityArray.forEach(ethnicity => {
-      if (ethnicity === document.getElementById("Ethnicity").value) {
-        theCount++;
-      } 
-    })
+      let ethnicityArray = form.data.ethnicity|| [];
+      ethnicityArray.forEach(ethnicity => {
+        if (ethnicity === document.getElementById("Ethnicity").value) {
+          theCount++;
+        } 
+      })
     })
  return (<p>There are this many {document.getElementById("Ethnicity").value}: {theCount}</p>)
   }

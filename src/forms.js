@@ -9,15 +9,19 @@ class Forms extends React.Component {
             selectedForms: null,
             view: "list",
             currentForm: null,
-            victimizationSelected: false,
-            ethnicitySelected: false
+            victimizationDropped: false,
+            selectedVictimizations: [],
+            ethnicityDropped: false
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
         this.deleteForm = this.deleteForm.bind(this);
         this.orderForms = this.orderForms.bind(this);
         this.displayFormElement = this.displayFormElement.bind(this);
-        this.victimizationSelectedChange = this.victimizationSelectedChange.bind(this);
+        this.victimizationDroppedChange = this.victimizationDroppedChange.bind(this);
+        this.victimizationCheckedChange = this.victimizationCheckedChange.bind(this);
+        this.updateSelectedForms = this.updateSelectedForms.bind(this);
+        this.checkForVictimizationMatch = this.checkForVictimizationMatch.bind(this);
     }
 
     async componentDidMount() {
@@ -291,49 +295,97 @@ class Forms extends React.Component {
         if (!status) {
             return (
                 <div className="selector">
-                    <label onClick={this.victimizationSelectedChange}>Victimization ↓</label>
+                    <label onClick={this.victimizationDroppedChange}>Victimization ↓</label>
                 </div>
             )
         } else {
+            let i = 0;
+            let victimizationTypes = [
+                "Rape",
+                "Attempted Rape",
+                "Sex Trafficking",
+                "Child Sexual Abuse",
+                "Drug Facilitated SV",
+                "Stalking",
+                "Sexual Harassment",
+                "Domestic Violence",
+                "Other"
+            ]
+            let listItems = [];
+            victimizationTypes.forEach((victimization) => {
+                if (this.state.selectedVictimizations.includes(victimization)) {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="victimization" value={victimizationTypes[i]} onChange={this.victimizationCheckedChange} defaultChecked/>{victimizationTypes[i]}
+                        </label>
+                    )
+                } else {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="victimization" value={victimizationTypes[i]} onChange={this.victimizationCheckedChange}/>{victimizationTypes[i]}
+                        </label>
+                    )
+                }
+                i++;
+            })
             return (
                 <div className="selector">
-                    <label onClick={this.victimizationSelectedChange}>Victimization ↑</label>
+                    <label onClick={this.victimizationDroppedChange}>Victimization ↑</label>
                     <div className="selector-checkboxes">
-                        <label>
-                            <input type="checkbox" name="victimization" value="Rape"/>Rape
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Attempted Rape"/>Attempted Rape
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Sex Trafficking"/>Sex Trafficking
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Child Sexual Abuse"/>Child Sexual Abuse
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Drug Facilitated SV"/>Drug Facilitated SV
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Stalking"/>Stalking
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Sexual Harassment"/>Sexual Harassment
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Domestic Violence"/>Domestic Violence
-                        </label>
-                        <label>
-                            <input type="checkbox" name="victimization" value="Other"/>Other
-                        </label>
+                       {listItems}
                     </div>
                 </div>
-            )
+            );
         }
     }
 
-    victimizationSelectedChange(evnt) {
-        this.setState( {victimizationSelected: !this.state.victimizationSelected} )
+    victimizationCheckedChange() {
+        let theBoxes = document.getElementsByName("victimization")
+        let checkedBoxes = [];
+        for (let i = 0; i < theBoxes.length; i++) {
+            if (theBoxes[i].checked) {
+                checkedBoxes.push(theBoxes[i].value);
+            }
+        }
+        this.setState( {selectedVictimizations: checkedBoxes} )
+        if (checkedBoxes.length===0) {
+            this.updateSelectedForms(true, checkedBoxes)
+        } else {
+            this.updateSelectedForms(false, checkedBoxes)
+        }
+    }
+
+    victimizationDroppedChange(evnt) {
+        this.setState( {victimizationDropped: !this.state.victimizationDropped} )
+    }
+
+    checkForVictimizationMatch (theForm, selectedVictimizations) {
+        let matchFound = false
+        if (theForm.incidents) {          //  if the form even has any incidents
+            let theIncidents = theForm.incidents;
+            theIncidents.forEach((incident) => {  //incidents are in an array, we have to check each incident
+                incident.victimization.forEach((victimization) => { //now we have to check each victimization type ("Rape", "Attempted Rape"....)
+                    if (selectedVictimizations.includes(victimization)) {
+                        matchFound = true;
+                    }
+                })
+            })
+        }
+        return matchFound;
+    }
+
+    updateSelectedForms(noneSelected, selectedVictimizations) {
+        if (noneSelected) { // when nothing is selected 
+            this.setState( {selectedForms: this.state.allForms} ) //list all forms
+            return
+        }
+        let returnArray = []
+        this.state.allForms.forEach(form => { //we are going to check each form for a victimization that matches one of the selected victimizations
+            if (this.checkForVictimizationMatch(form.data, selectedVictimizations)) {
+                returnArray.push(form)
+            }
+        })
+        this.setState( {selectedForms: returnArray} )
     }
 
     render() {
@@ -348,7 +400,7 @@ class Forms extends React.Component {
                         {this.listTheForms(this.state.selectedForms)}
                     </div>
                     <div id="selectors">
-                        {this.victimizationSelector(this.state.victimizationSelected)}
+                        {this.victimizationSelector(this.state.victimizationDropped)}
                         <div className="selector">
                             <label>Ethnicity</label>
                         </div>
