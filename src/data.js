@@ -224,8 +224,8 @@ showGenderCount(forms) {
             <option value="Champlain">Champlain College</option>
             <option value="CCV">Community College Of Vermont</option>
             <option value="St.Mikes">Saint Michaels College</option>
-            <option value="Colcherster High School">
-              Colcherster High School
+            <option value="Colchester High School">
+              Colchester High School
             </option>
             <option value="South Burlington High School">
               South Burlington High School

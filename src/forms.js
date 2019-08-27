@@ -22,12 +22,12 @@ class Forms extends React.Component {
         this.setState({forms: formsObj})
     }
 
-    async updateFormList () {
-        console.log("updating form list....")
-        const response = await fetch("/forms");
-        const formsObj = await response.json();
-        this.setState({forms: formsObj})
-        console.log("we did it")
+    showFormCount(forms) {
+        if (!forms) {
+            return null;
+        } else {
+            return <p>Form count: {forms.length}</p>
+        }
     }
 
     viewForm (event) {
@@ -191,6 +191,13 @@ class Forms extends React.Component {
                         i++;
                     }
                 }
+            } else if (property==="contactDate") {
+                listItems.push(
+                    <div key={i}>
+                        <div className="form-element">{this.displayFormElement(property, reFormatDate(theForm[property]), null, "normal")}</div>
+                    </div>
+                    )
+                i++;
             } else if (isValueNonEmpty(theForm[property])) {
                 //(the value is a non-empty string or array OR the value is a non-empty boolean OR the value is a non-empty services provided object)
                 listItems.push(
@@ -266,7 +273,7 @@ class Forms extends React.Component {
         let buttonIdNum = event.target.id.slice(-1);
         let deleteDialog = document.getElementById("delete-dialog-" + buttonIdNum);
         deleteDialog.showModal();
-      }
+    }
 
     async deleteForm (event) {
         let buttonIdNum = event.target.id.slice(-1);
@@ -279,20 +286,31 @@ class Forms extends React.Component {
     render() {
         if (this.state.view==="list") {
             return (
-             <div className="forms-container">
-                <div id="forms-page">
-                 <img className="hw-logo-forms" src={Hw} alt="Hope Works"/>
-                    <h1 id="submitted-forms">Submitted Forms</h1>
-                    <div id="form-list">
-                        {this.listTheForms(this.state.forms)}
+             <div id="forms-page">
+                <img className="hw-logo-forms" src={Hw} alt="Hope Works"/>
+                <h1 id="submitted-forms">Submitted Forms</h1>
+                <div id="forms-selectors">
+                    <div id="forms-container">
+                        {this.showFormCount(this.state.forms)}
+                        <div id="form-list">
+                            {this.listTheForms(this.state.forms)}
+                        </div>
+                    </div>
+                    <div id="selectors">
+                        <div className="selector">
+                            <label>selector</label>
+                        </div>
+                        <div className="selector">
+                            <label>selector</label>
+                        </div>
                     </div>
                 </div>
             </div>
             )
         } else if (this.state.view==="form") {
             return (
-             <div className="forms-container">
-                <div id="forms-page">
+             <div id="forms-page">
+                <div id="forms-container">
                     <div style={{height: "1px"}}></div>
                     <h1 id="survivor-info-text">Survivor Information</h1>
                     <button onClick={this.viewList}>back to form list</button>
@@ -304,6 +322,8 @@ class Forms extends React.Component {
         }
     }  
 }
+
+//-------------------------HELPER FUNCTIONS-------------------------------//
 
 function camelCaseToCapitalized (string) {
     if (typeof(string)!=="string") {
