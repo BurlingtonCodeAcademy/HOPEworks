@@ -10,8 +10,10 @@ class Forms extends React.Component {
             view: "list",
             currentForm: null,
             victimizationDropped: false,
+            ethnicityDropped: false,
             selectedVictimizations: [],
-            ethnicityDropped: false
+            selectedEthnicities: [],
+            selectionChanging: false
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
@@ -20,8 +22,7 @@ class Forms extends React.Component {
         this.displayFormElement = this.displayFormElement.bind(this);
         this.victimizationDroppedChange = this.victimizationDroppedChange.bind(this);
         this.victimizationCheckedChange = this.victimizationCheckedChange.bind(this);
-        this.updateSelectedForms = this.updateSelectedForms.bind(this);
-        this.checkForVictimizationMatch = this.checkForVictimizationMatch.bind(this);
+        this.ethnicityDroppedChange = this.ethnicityDroppedChange.bind(this);
     }
 
     async componentDidMount() {
@@ -48,7 +49,7 @@ class Forms extends React.Component {
     }
 
     listTheForms (forms) {
-        if (forms) {
+        if (forms && forms.length!==0) {
             let i = 0;
             let allOrderedForms = this.orderForms(forms)
             let listItems = [];
@@ -89,6 +90,8 @@ class Forms extends React.Component {
             return (
                 <div id="forms">{listItems}</div>
             );
+        } else if (forms && forms.length===0) {
+            return <p>No forms match the given criteria.</p>
         } else {
             return <p>getting the forms...</p>
         }
@@ -347,45 +350,87 @@ class Forms extends React.Component {
                 checkedBoxes.push(theBoxes[i].value);
             }
         }
-        this.setState( {selectedVictimizations: checkedBoxes} )
-        if (checkedBoxes.length===0) {
-            this.updateSelectedForms(true, checkedBoxes)
-        } else {
-            this.updateSelectedForms(false, checkedBoxes)
-        }
+        this.setState( {selectedVictimizations: checkedBoxes, selectionChanging: true} )
     }
 
     victimizationDroppedChange(evnt) {
         this.setState( {victimizationDropped: !this.state.victimizationDropped} )
     }
 
-    checkForVictimizationMatch (theForm, selectedVictimizations) {
-        let matchFound = false
-        if (theForm.incidents) {          //  if the form even has any incidents
-            let theIncidents = theForm.incidents;
-            theIncidents.forEach((incident) => {  //incidents are in an array, we have to check each incident
-                incident.victimization.forEach((victimization) => { //now we have to check each victimization type ("Rape", "Attempted Rape"....)
-                    if (selectedVictimizations.includes(victimization)) {
-                        matchFound = true;
-                    }
-                })
-            })
-        }
-        return matchFound;
+    ethnicityDroppedChange(evnt) {
+        this.setState( {ethnicityDropped: !this.state.ethnicityDropped} )
     }
 
-    updateSelectedForms(noneSelected, selectedVictimizations) {
-        if (noneSelected) { // when nothing is selected 
-            this.setState( {selectedForms: this.state.allForms} ) //list all forms
-            return
+    ethnicitySelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.ethnicityDroppedChange}>Ethnicity ↓</label>
+                </div>
+            )
+        } else {
+            let i = 0;
+            let ethnicities = [
+                "Asian",
+                "Black/African American",
+                "Hispanic/Latino",
+                "Native American/Alaskan",
+                "Native Hawaiian/Pacific Islander",
+                "White/Caucasian",
+                "Unknown",
+                "Other"
+            ]
+            let listItems = [];
+            ethnicities.forEach((ethnicity) => {
+                if (this.state.selectedEthnicities.includes(ethnicity)) {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicitySelectedChange} defaultChecked/>{ethnicities[i]}
+                        </label>
+                    )
+                } else {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicitySelectedChange}/>{ethnicities[i]}
+                        </label>
+                    )
+                }
+                i++;
+            })
+            return (
+                <div className="selector">
+                    <label onClick={this.ethnicityDroppedChange}>Ethnicity ↑</label>
+                    <div className="selector-checkboxes">
+                       {listItems}
+                    </div>
+                </div>
+            );
         }
-        let returnArray = []
-        this.state.allForms.forEach(form => { //we are going to check each form for a victimization that matches one of the selected victimizations
-            if (this.checkForVictimizationMatch(form.data, selectedVictimizations)) {
-                returnArray.push(form)
-            }
-        })
-        this.setState( {selectedForms: returnArray} )
+    }
+
+    componentDidUpdate () {
+        if (this.state.selectedVictimizations.length===0 && this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
+            this.setState( {selectedForms: this.state.allForms} ) //list all forms
+        } else if (this.state.selectionChanging) { //selectedvic !== selectedforms
+            let returnArray = []
+            this.state.allForms.forEach(form => { //we are going to check each form for a victimization that matches one of the selected victimizations
+                let matchFound = false
+                if (form.data.incidents) {          //  if the form even has any incidents
+                    let theIncidents = form.data.incidents;
+                    theIncidents.forEach((incident) => {  //incidents are in an array, we have to check each incident
+                        incident.victimization.forEach((victimization) => { //now we have to check each victimization type ("Rape", "Attempted Rape"....)
+                            if (this.state.selectedVictimizations.includes(victimization)) {
+                                matchFound = true;
+                                return
+                            }
+                        })
+                        if (matchFound) return
+                    })
+                }
+                if (matchFound) returnArray.push(form)
+            })
+            this.setState( {selectedForms: returnArray, selectionChanging: false} )
+        }
     }
 
     render() {
@@ -401,9 +446,7 @@ class Forms extends React.Component {
                     </div>
                     <div id="selectors">
                         {this.victimizationSelector(this.state.victimizationDropped)}
-                        <div className="selector">
-                            <label>Ethnicity</label>
-                        </div>
+                        {this.ethnicitySelector(this.state.ethnicityDropped)}
                     </div>
                 </div>
             </div>
