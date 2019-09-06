@@ -140,6 +140,11 @@
     margin-top: 10px;
 }
 
+.date-selector {
+    width: 150px;
+    font-size: 16px;
+    margin-left: 5px;
+}
 
 /*-------------------------FORM CSS---------------------------*/
 #the-form {

@@ -13,7 +13,8 @@ class Forms extends React.Component {
             ethnicityDropped: false,
             selectedVictimizations: [],
             selectedEthnicities: [],
-            selectionChanging: false
+            selectionChanging: false,
+            selectedDates: null
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
@@ -23,6 +24,8 @@ class Forms extends React.Component {
         this.victimizationDroppedChange = this.victimizationDroppedChange.bind(this);
         this.victimizationCheckedChange = this.victimizationCheckedChange.bind(this);
         this.ethnicityDroppedChange = this.ethnicityDroppedChange.bind(this);
+        this.ethnicityCheckedChange = this.ethnicityCheckedChange.bind(this);
+        this.selectedDateChange = this.selectedDateChange.bind(this);
     }
 
     async componentDidMount() {
@@ -294,6 +297,46 @@ class Forms extends React.Component {
         window.location.replace("/forms")
     }
 
+    dateSelector() {
+        return (
+            <div className="selector">
+                <label>
+                    From: <input type="date" className="date-selector" id="from-date" onChange={this.selectedDateChange}/>
+                </label>
+                <label>
+                    to: <input type="date" className="date-selector" id="to-date" onChange={this.selectedDateChange}/>   
+                </label>
+            </div>
+        )
+    }
+
+    selectedDateChange() {
+        let theDates = document.getElementsByClassName("date-selector")
+        let dateObject = {};
+        for (let i = 0; i < 2; i++) {
+            if (theDates[i].value.length===10 && theDates[i].id==="from-date") {
+                let reFormattedDate = reFormatDate(theDates[i].value)
+                let dateNumberArray = reFormattedDate.split("/").map((string) => Number(string))
+                dateObject.from = dateNumberArray;
+            } else if (theDates[i].value.length!==10 && theDates[i].id==="from-date") {
+                dateObject.from = null;
+            } else if (theDates[i].value.length===10 && theDates[i].id==="to-date") {
+                let reFormattedDate = reFormatDate(theDates[i].value)
+                let dateNumberArray = reFormattedDate.split("/").map((string) => Number(string))
+                dateObject.to = dateNumberArray;
+            } else if (theDates[i].value.length!==10 && theDates[i].id==="to-date") {
+                dateObject.to = null;
+            }
+        }
+        
+        if (dateObject.to || dateObject.from) {
+            this.setState( {selectedDates: dateObject, selectionChanging: true} )
+        } else {
+            this.setState( {selectedDates: null, selectionChanging: true} )
+        }
+
+    }
+
     victimizationSelector(status) {
         if (!status) {
             return (
@@ -385,13 +428,13 @@ class Forms extends React.Component {
                 if (this.state.selectedEthnicities.includes(ethnicity)) {
                     listItems.push(
                         <label key={i}>
-                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicitySelectedChange} defaultChecked/>{ethnicities[i]}
+                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicityCheckedChange} defaultChecked/>{ethnicities[i]}
                         </label>
                     )
                 } else {
                     listItems.push(
                         <label key={i}>
-                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicitySelectedChange}/>{ethnicities[i]}
+                            <input type="checkbox" name="ethnicity" value={ethnicities[i]} onChange={this.ethnicityCheckedChange}/>{ethnicities[i]}
                         </label>
                     )
                 }
@@ -408,8 +451,22 @@ class Forms extends React.Component {
         }
     }
 
+    ethnicityCheckedChange() {
+        let theBoxes = document.getElementsByName("ethnicity")
+        let checkedBoxes = [];
+        for (let i = 0; i < theBoxes.length; i++) {
+            if (theBoxes[i].checked) {
+                checkedBoxes.push(theBoxes[i].value);
+            }
+        }
+        this.setState( {selectedEthnicities: checkedBoxes, selectionChanging: true} )
+    }
+
     componentDidUpdate () {
-        if (this.state.selectedVictimizations.length===0 && this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
+        if (this.state.selectedVictimizations.length===0 && 
+            this.state.selectedEthnicities.length===0 &&
+            !this.state.selectedDates &&
+            this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
             this.setState( {selectedForms: this.state.allForms} ) //list all forms
         } else if (this.state.selectionChanging) { //selectedvic !== selectedforms
             let returnArray = []
@@ -426,6 +483,38 @@ class Forms extends React.Component {
                         })
                         if (matchFound) return
                     })
+                }
+                if (form.data.ethnicity && !matchFound) { //if we already found a match then we don't need to check for anything else, we skip the following steps and push
+                    form.data.ethnicity.forEach((ethnicity) =>{
+                        if (this.state.selectedEthnicities.includes(ethnicity)) {
+                            matchFound = true;
+                            return
+                        }
+                    })
+                }
+                if (this.state.selectedDates) {// check to see if the form is in the selected date range
+                    let reFormattedContactDate = reFormatDate(form.data.contactDate)
+                    let contactDateArray = reFormattedContactDate.split("/").map((string) => Number(string))
+                    if (this.state.selectedDates.from) {
+                        let fromDateArray = this.state.selectedDates.from;
+                        if (contactDateArray[2] < fromDateArray[2]) { //if the year of the contact date is before the year of the from date
+                            matchFound = false
+                        } else if (contactDateArray[2]===fromDateArray[2] && contactDateArray[0] < fromDateArray[0]) { //same year, earlier month
+                            matchFound = false
+                        } else if (contactDateArray[2]===fromDateArray[2] && contactDateArray[0]===fromDateArray[0] && contactDateArray[1] < fromDateArray[1]) {
+                            matchFound = false
+                        }
+                    }
+                    if (this.state.selectedDates.to) {
+                        let toDateArray = this.state.selectedDates.to;
+                        if (contactDateArray[2] > toDateArray[2]) { 
+                            matchFound = false             
+                        } else if (contactDateArray[2]===toDateArray[2] && contactDateArray[0] > toDateArray[0]) { 
+                            matchFound = false
+                        } else if (contactDateArray[2]===toDateArray[2] && contactDateArray[0]===toDateArray[0] && contactDateArray[1] > toDateArray[1]) {
+                            matchFound = false
+                        }
+                    }
                 }
                 if (matchFound) returnArray.push(form)
             })
@@ -445,6 +534,7 @@ class Forms extends React.Component {
                         {this.listTheForms(this.state.selectedForms)}
                     </div>
                     <div id="selectors">
+                        {this.dateSelector()}
                         {this.victimizationSelector(this.state.victimizationDropped)}
                         {this.ethnicitySelector(this.state.ethnicityDropped)}
                     </div>
