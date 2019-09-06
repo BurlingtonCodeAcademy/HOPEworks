@@ -315,15 +315,11 @@ class Forms extends React.Component {
         let dateObject = {};
         for (let i = 0; i < 2; i++) {
             if (theDates[i].value.length===10 && theDates[i].id==="from-date") {
-                let reFormattedDate = reFormatDate(theDates[i].value)
-                let dateNumberArray = reFormattedDate.split("/").map((string) => Number(string))
-                dateObject.from = dateNumberArray;
+                dateObject.from = theDates[i].value;
             } else if (theDates[i].value.length!==10 && theDates[i].id==="from-date") {
                 dateObject.from = null;
             } else if (theDates[i].value.length===10 && theDates[i].id==="to-date") {
-                let reFormattedDate = reFormatDate(theDates[i].value)
-                let dateNumberArray = reFormattedDate.split("/").map((string) => Number(string))
-                dateObject.to = dateNumberArray;
+                dateObject.to = theDates[i].value;
             } else if (theDates[i].value.length!==10 && theDates[i].id==="to-date") {
                 dateObject.to = null;
             }
@@ -468,9 +464,13 @@ class Forms extends React.Component {
             !this.state.selectedDates &&
             this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
             this.setState( {selectedForms: this.state.allForms} ) //list all forms
-        } else if (this.state.selectionChanging) { //selectedvic !== selectedforms
-            let returnArray = []
-            this.state.allForms.forEach(form => { //we are going to check each form for a victimization that matches one of the selected victimizations
+        } else if (this.state.selectionChanging) { //selected stuff !== selectedforms
+            let victFilterOutput = []
+            this.state.allForms.forEach((form) => { //we are going to check each form for a victimization that matches one of the selected victimizations
+                if (this.state.selectedVictimizations.length===0) {
+                    victFilterOutput = this.state.allForms
+                    return
+                }
                 let matchFound = false
                 if (form.data.incidents) {          //  if the form even has any incidents
                     let theIncidents = form.data.incidents;
@@ -484,41 +484,36 @@ class Forms extends React.Component {
                         if (matchFound) return
                     })
                 }
-                if (form.data.ethnicity && !matchFound) { //if we already found a match then we don't need to check for anything else, we skip the following steps and push
-                    form.data.ethnicity.forEach((ethnicity) =>{
+                if (matchFound) victFilterOutput.push(form)
+            })
+            let ethnFilterOutput = []
+            victFilterOutput.forEach((form) => {
+                if (this.state.selectedEthnicities.length===0) {
+                    ethnFilterOutput = victFilterOutput;
+                    return
+                }
+                let matchFound = false;
+                if (form.data.ethnicity) { //if we already found a match then we don't need to check for anything else, we skip the following steps and push
+                    form.data.ethnicity.forEach((ethnicity) => {
                         if (this.state.selectedEthnicities.includes(ethnicity)) {
                             matchFound = true;
                             return
                         }
                     })
                 }
-                if (this.state.selectedDates) {// check to see if the form is in the selected date range
-                    let reFormattedContactDate = reFormatDate(form.data.contactDate)
-                    let contactDateArray = reFormattedContactDate.split("/").map((string) => Number(string))
-                    if (this.state.selectedDates.from) {
-                        let fromDateArray = this.state.selectedDates.from;
-                        if (contactDateArray[2] < fromDateArray[2]) { //if the year of the contact date is before the year of the from date
-                            matchFound = false
-                        } else if (contactDateArray[2]===fromDateArray[2] && contactDateArray[0] < fromDateArray[0]) { //same year, earlier month
-                            matchFound = false
-                        } else if (contactDateArray[2]===fromDateArray[2] && contactDateArray[0]===fromDateArray[0] && contactDateArray[1] < fromDateArray[1]) {
-                            matchFound = false
-                        }
-                    }
-                    if (this.state.selectedDates.to) {
-                        let toDateArray = this.state.selectedDates.to;
-                        if (contactDateArray[2] > toDateArray[2]) { 
-                            matchFound = false             
-                        } else if (contactDateArray[2]===toDateArray[2] && contactDateArray[0] > toDateArray[0]) { 
-                            matchFound = false
-                        } else if (contactDateArray[2]===toDateArray[2] && contactDateArray[0]===toDateArray[0] && contactDateArray[1] > toDateArray[1]) {
-                            matchFound = false
-                        }
-                    }
-                }
-                if (matchFound) returnArray.push(form)
+                if (matchFound) ethnFilterOutput.push(form)
             })
-            this.setState( {selectedForms: returnArray, selectionChanging: false} )
+            let dateFilterOutput = [];
+            ethnFilterOutput.forEach((form) => {
+                if (!this.state.selectedDates) {
+                    dateFilterOutput = ethnFilterOutput;
+                    return
+                } else {
+                    if (dateWithinRange(form.data.contactDate, this.state.selectedDates.from, this.state.selectedDates.to)) dateFilterOutput.push(form)
+                }
+            })
+            
+            this.setState( {selectedForms: dateFilterOutput, selectionChanging: false} )
         }
     }
 
@@ -640,6 +635,38 @@ function reFormatDate (date) { //input date as YYYY-MM-DD output as MM/DD/YYYY
     yearMonthDay.push(yearMonthDay[0])
     let monthDayYear = yearMonthDay.slice(1, 4)
     return monthDayYear.join("/")
+}
+
+function dateWithinRange (input, min, max) {
+    function quantifyDate (dateString) {
+        if (!dateString) return null
+        let dateStringArray = dateString.split("-") //["1950", "01", "31"]
+        return Number(dateStringArray[0] + "." + dateStringArray[1] + dateStringArray[2]) // Number(     "1950.0131"       )
+    }
+    let inputNum = quantifyDate(input);
+    let minNum = quantifyDate(min);
+    let maxNum = quantifyDate(max);
+    
+    if (minNum && maxNum) {
+        if (minNum <= inputNum && inputNum <= maxNum) {
+            return true
+        } else {
+            return false
+        }
+    } else if (minNum) {
+        if (minNum <= inputNum) {
+            return true
+        } else {
+            return false
+        }
+    } else if (maxNum) {
+        if (inputNum <= maxNum) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
 }
 
 export default Forms;
