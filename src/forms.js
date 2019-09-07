@@ -11,8 +11,10 @@ class Forms extends React.Component {
             currentForm: null,
             victimizationDropped: false,
             ethnicityDropped: false,
+            homelessDropped: false,
             selectedVictimizations: [],
             selectedEthnicities: [],
+            selectedHomeless: [],
             selectionChanging: false,
             selectedDates: null
         }
@@ -26,6 +28,8 @@ class Forms extends React.Component {
         this.ethnicityDroppedChange = this.ethnicityDroppedChange.bind(this);
         this.ethnicityCheckedChange = this.ethnicityCheckedChange.bind(this);
         this.selectedDateChange = this.selectedDateChange.bind(this);
+        this.homelessCheckedChange = this.homelessCheckedChange.bind(this);
+        this.homelessDroppedChange = this.homelessDroppedChange.bind(this);
     }
 
     async componentDidMount() {
@@ -458,10 +462,67 @@ class Forms extends React.Component {
         this.setState( {selectedEthnicities: checkedBoxes, selectionChanging: true} )
     }
 
+    homelessDroppedChange(evnt) {
+        this.setState( {homelessDropped: !this.state.homelessDropped} )
+    }
+
+    homelessSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.homelessDroppedChange}>Homelessness ↓</label>
+                </div>
+            )
+        } else {
+            let i = 0;
+            let homelessTypes = [
+                "Homeless",
+                "Non-Homeless"
+            ]
+            let listItems = [];
+            homelessTypes.forEach((type) => {
+                if (this.state.selectedHomeless.includes(type)) {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="homelessness" value={type} onChange={this.homelessCheckedChange} defaultChecked/>{type}
+                        </label>
+                    )
+                } else {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="homelessness" value={type} onChange={this.homelessCheckedChange}/>{type}
+                        </label>
+                    )
+                }
+                i++;
+            })
+            return (
+                <div className="selector">
+                    <label onClick={this.homelessDroppedChange}>Homelessness ↑</label>
+                    <div className="selector-checkboxes">
+                       {listItems}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    homelessCheckedChange() {
+        let theBoxes = document.getElementsByName("homelessness")
+        let checkedBoxes = []
+        for (let i = 0; i < theBoxes.length; i++) {
+            if (theBoxes[i].checked) {
+                checkedBoxes.push(theBoxes[i].value);
+            }
+        }
+        this.setState( {selectedHomeless: checkedBoxes, selectionChanging: true} )
+    }
+
     componentDidUpdate () {
         if (this.state.selectedVictimizations.length===0 && 
             this.state.selectedEthnicities.length===0 &&
             !this.state.selectedDates &&
+            this.state.selectedHomeless.length===0 &&
             this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
             this.setState( {selectedForms: this.state.allForms} ) //list all forms
         } else if (this.state.selectionChanging) { //selected stuff !== selectedforms
@@ -493,7 +554,7 @@ class Forms extends React.Component {
                     return
                 }
                 let matchFound = false;
-                if (form.data.ethnicity) { //if we already found a match then we don't need to check for anything else, we skip the following steps and push
+                if (form.data.ethnicity) { 
                     form.data.ethnicity.forEach((ethnicity) => {
                         if (this.state.selectedEthnicities.includes(ethnicity)) {
                             matchFound = true;
@@ -512,8 +573,22 @@ class Forms extends React.Component {
                     if (dateWithinRange(form.data.contactDate, this.state.selectedDates.from, this.state.selectedDates.to)) dateFilterOutput.push(form)
                 }
             })
+            let homelessFilterOutput = [];
+            dateFilterOutput.forEach((form) => {
+                if (this.state.selectedHomeless.length===0) {
+                    homelessFilterOutput = dateFilterOutput;
+                    return
+                }
+                if (form.data.miscellaneousCharacteristics) {
+                    if (this.state.selectedHomeless.includes("Homeless") && form.data.miscellaneousCharacteristics.includes("Homeless")) {
+                        homelessFilterOutput.push(form)
+                    } else if (this.state.selectedHomeless.includes("Non-Homeless") && !form.data.miscellaneousCharacteristics.includes("Homeless")) {
+                        homelessFilterOutput.push(form)
+                    } 
+                }
+            })
             
-            this.setState( {selectedForms: dateFilterOutput, selectionChanging: false} )
+            this.setState( {selectedForms: homelessFilterOutput, selectionChanging: false} )
         }
     }
 
@@ -532,6 +607,7 @@ class Forms extends React.Component {
                         {this.dateSelector()}
                         {this.victimizationSelector(this.state.victimizationDropped)}
                         {this.ethnicitySelector(this.state.ethnicityDropped)}
+                        {this.homelessSelector(this.state.homelessDropped)}
                     </div>
                 </div>
             </div>
