@@ -12,11 +12,13 @@ class Forms extends React.Component {
             victimizationDropped: false,
             ethnicityDropped: false,
             homelessDropped: false,
+            ageDropped: false,
             selectedVictimizations: [],
             selectedEthnicities: [],
             selectedHomeless: [],
             selectionChanging: false,
-            selectedDates: null
+            selectedDates: null,
+            selectedAges: ["", ""]
         }
         this.viewForm = this.viewForm.bind(this);
         this.viewList = this.viewList.bind(this);
@@ -30,6 +32,8 @@ class Forms extends React.Component {
         this.selectedDateChange = this.selectedDateChange.bind(this);
         this.homelessCheckedChange = this.homelessCheckedChange.bind(this);
         this.homelessDroppedChange = this.homelessDroppedChange.bind(this);
+        this.ageDroppedChange = this.ageDroppedChange.bind(this);
+        this.ageSelectionChange = this.ageSelectionChange.bind(this);
     }
 
     async componentDidMount() {
@@ -518,17 +522,49 @@ class Forms extends React.Component {
         this.setState( {selectedHomeless: checkedBoxes, selectionChanging: true} )
     }
 
+    ageDroppedChange(evnt) {
+        this.setState( {ageDropped: !this.state.ageDropped} )
+    }
+
+    ageSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.ageDroppedChange}>Age ↓</label>
+                </div>
+            )
+        } else {
+            return (
+                <div className="selector">
+                    <label onClick={this.ageDroppedChange}>Age ↑</label>
+                    <div className="selector-checkboxes">
+                        <label>
+                            From <input type="number" id="age-from" name="age-range" onChange={this.ageSelectionChange} defaultValue={this.state.selectedAges[0]}/>
+                            to <input type="number" id="age-to" name="age-range" onChange={this.ageSelectionChange} defaultValue={this.state.selectedAges[1]}/>
+                        </label>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    ageSelectionChange() {
+        let theBoxes = document.getElementsByName("age-range")
+        this.setState( {selectedAges: [theBoxes[0].value, theBoxes[1].value], selectionChanging: true} )
+    }
+
     componentDidUpdate () {
         if (this.state.selectedVictimizations.length===0 && 
             this.state.selectedEthnicities.length===0 &&
             !this.state.selectedDates &&
             this.state.selectedHomeless.length===0 &&
+            this.state.selectedAges[0]==="" && this.state.selectedAges[1]==="" &&
             this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
-            this.setState( {selectedForms: this.state.allForms} ) //list all forms
+                this.setState( {selectedForms: this.state.allForms} ) //list all forms
         } else if (this.state.selectionChanging) { //selected stuff !== selectedforms
             let victFilterOutput = []
-            this.state.allForms.forEach((form) => { //we are going to check each form for a victimization that matches one of the selected victimizations
-                if (this.state.selectedVictimizations.length===0) {
+            this.state.allForms.forEach((form) => { // we are going to go through each filter and return an array of forms that fits that filter
+                if (this.state.selectedVictimizations.length===0) { //if no forms are selected, the filter is "inactive", so all forms that were input are returned
                     victFilterOutput = this.state.allForms
                     return
                 }
@@ -587,8 +623,40 @@ class Forms extends React.Component {
                     } 
                 }
             })
+            let ageFilterOutput = [];
+            homelessFilterOutput.forEach((form) => {
+                if (this.state.selectedAges[0]==="" && this.state.selectedAges[1]==="") {
+                    ageFilterOutput = homelessFilterOutput;
+                    return
+                }
+                if ((form.data.dateOfBirth || form.data.ageRange) && (form.data.dateOfBirth!=="" || form.data.ageRange!=="")) {
+                    let theAge;
+                    let ageLow;
+                    let ageHigh;
+    
+                    if (this.state.selectedAges[0]==="") {
+                        ageLow = null;
+                    } else {
+                        ageLow = Number(this.state.selectedAges[0])
+                    }
+                    if (this.state.selectedAges[1]==="") {
+                        ageHigh = null;
+                    } else {
+                        ageHigh = Number(this.state.selectedAges[1])
+                    }
+                    
+                    if (form.data.dateOfBirth && form.data.dateOfBirth.length===10) { //is dob part of the object (not a returning user) ? if so, is it actually populated (dates have length 10)?
+                        theAge = dateDifferenceInYears(form.data.dateOfBirth, form.data.contactDate)
+                    } else if (form.data.ageRange && form.data.ageRange[0].length > 0) {
+                        theAge = (Number(form.data.ageRange[0]) + Number(form.data.ageRange[1]))/2
+                    }
+                    if (numberWithinRange(ageLow, ageHigh, theAge)) {
+                        ageFilterOutput.push(form)
+                    }
+                }
+            })
             
-            this.setState( {selectedForms: homelessFilterOutput, selectionChanging: false} )
+            this.setState( {selectedForms: ageFilterOutput, selectionChanging: false} )
         }
     }
 
@@ -608,6 +676,7 @@ class Forms extends React.Component {
                         {this.victimizationSelector(this.state.victimizationDropped)}
                         {this.ethnicitySelector(this.state.ethnicityDropped)}
                         {this.homelessSelector(this.state.homelessDropped)}
+                        {this.ageSelector(this.state.ageDropped)}
                     </div>
                 </div>
             </div>
@@ -743,6 +812,25 @@ function dateWithinRange (input, min, max) {
         }
     }
     
+}
+
+function dateDifferenceInYears (earlyDate, laterDate) {
+    let earlyDateArray = earlyDate.split("-").map((string) => Number(string))
+    let laterDateArray = laterDate.split("-").map((string) => Number(string))
+    let theDifference = laterDateArray[0] - earlyDateArray[0]
+    if (laterDateArray[1] < earlyDateArray[1]) {
+        theDifference--
+    } else if (laterDateArray[1]===earlyDateArray[1] && laterDateArray[2] < earlyDateArray[2]) {
+        theDifference--
+    }
+    return theDifference
+}
+
+function numberWithinRange (min, max, input) { //(inclusive)
+    if ((typeof(min)==="number" && typeof(max)==="number") && (min <= input && input <= max)) return true
+    else if ((typeof(min)==="number" && typeof(max)!=="number") && (min <= input)) return true
+    else if ((typeof(max)==="number" && typeof(min)!=="number") && (input <= max)) return true
+    else return false
 }
 
 export default Forms;
