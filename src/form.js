@@ -14,12 +14,13 @@ class Form extends React.Component {
       referrals: false,
       otherLanguage: "",
       otherEthnicity: "",
-      nameOfSchool: "",
       otherTimeSpent: "",
       otherAdvocacy: "",
       otherSupport: "",
       victimsClaim: false,
-      materialAssistance: false
+      materialAssistance: false,
+      isAStudent: false,
+      anotherSchool: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,12 +37,13 @@ class Form extends React.Component {
     this.displayReferrals = this.displayReferrals.bind(this);
     this.otherLanguageChange = this.otherLanguageChange.bind(this);
     this.otherEthnicityChange = this.otherEthnicityChange.bind(this);
-    this.nameOfSchoolChange = this.nameOfSchoolChange.bind(this);
     this.timeSpentChange = this.timeSpentChange.bind(this);
     this.otherAdvocacyChange = this.otherAdvocacyChange.bind(this);
     this.otherSupportChange = this.otherSupportChange.bind(this);
     this.victimsClaimChange = this.victimsClaimChange.bind(this);
     this.materialAssistanceChange = this.materialAssistanceChange.bind(this);
+    this.isAStudentChange = this.isAStudentChange.bind(this);
+    this.schoolChange = this.schoolChange.bind(this);
   }
 
   async handleSubmit(evnt) {
@@ -59,7 +61,8 @@ class Form extends React.Component {
     let ageLow = document.getElementById("age-range-0")
     let ageHigh = document.getElementById("age-range-1")
     let numberChildren = document.getElementById("number-children");
-    let nameOfSchool = this.state.nameOfSchool;
+    let nameOfSchool = document.getElementById("name-of-school");
+    let otherSchool = document.getElementById("other-school");
     let referrer = document.getElementById("hear-about");
     let contactCall = document.getElementById("contact-calls");
     let contactInPerson = document.getElementById("contact-in-person");
@@ -93,8 +96,8 @@ class Form extends React.Component {
     let theData = {
       timestamp: new Date().toLocaleString(),
       newUser: this.state.newUser,
-      firstName: firstName.value,
-      lastName: lastName.value,
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
       otherIdentifiers: identifiers.value,
       advocateInitials: advocateInitials.value,
       contactDate: contactDate.value,
@@ -112,7 +115,11 @@ class Form extends React.Component {
       theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
       theData.miscChars = checkBoxValues("characteristics");
-      theData.nameOfSchool = nameOfSchool;
+      if (this.state.isAStudent && !this.state.anotherSchool) {
+        theData.nameOfSchool = nameOfSchool.value
+      } else if (this.state.isAStudent && this.state.anotherSchool) {
+        theData.nameOfSchool = "Other: " + otherSchool.value
+      }
       theData.referrer = referrer.value;
     }
 
@@ -249,34 +256,6 @@ class Form extends React.Component {
 
   otherEthnicityChange (evnt) {
     this.setState( {otherEthnicity: evnt.target.value} )
-  }
-
-  displayNameOfSchoolButton () {
-    if (this.state.nameOfSchool==="") {
-      return (
-        <label>
-          <input type="checkbox" name="characteristics" value="College student/affiliated with a college"/>College student/affiliated with a college
-          <br />
-          <label htmlFor="name-of-school">Name of school:</label>
-          <input id="name-of-school" type="text" name="characteristics" className="inline-input" onChange={this.nameOfSchoolChange}/>
-          <br id="incident-info-link"/>
-        </label>
-      )
-    } else {
-      return (
-        <label>
-          <input type="checkbox" name="characteristics" value="College student/affiliated with a college" defaultChecked/>College student/affiliated with a college
-          <br />
-          <label htmlFor="name-of-school">Name of school:</label>
-          <input id="name-of-school" type="text" name="characteristics" className="inline-input" onChange={this.nameOfSchoolChange}/>
-          <br id="incident-info-link"/>
-        </label>
-      )
-    }
-  }
-
-  nameOfSchoolChange (evnt) {
-    this.setState( {nameOfSchool: evnt.target.value} )
   }
 
   displayOtherTimeSpent () {
@@ -427,6 +406,7 @@ class Form extends React.Component {
           <label htmlFor="survivor-gender">Gender</label>
           <br />
           <select id="survivor-gender">
+            <option value="" disabled selected>Gender</option>
             <option value="Unknown">Unknown</option>
             <option value="Female">Female</option>
             <option value="Male">Male</option>
@@ -547,7 +527,10 @@ class Form extends React.Component {
             />
             Low Income
             <br />
-            {this.displayNameOfSchoolButton()}
+            <input type="checkbox" name="characteristics" value="Student/affiliated with a school" onChange={this.isAStudentChange}/>Student/affiliated with a school
+            <br/>
+            {this.displaySchoolSelection(this.state.isAStudent)}
+            <br/>
           </div>
           <label htmlFor="hear-about">
             How did the service user hear about HOPE Works?
@@ -558,6 +541,63 @@ class Form extends React.Component {
       )
     } else {
       return null;
+    }
+  }
+
+  isAStudentChange() {
+    this.setState( {isAStudent: !this.state.isAStudent} )
+  }
+
+  displaySchoolSelection(status) {
+    if (!status) {
+      return null
+    } else {
+      return (
+        <div>
+          <select id="name-of-school" onChange={this.schoolChange}>
+            <option disabled selected value="">Schools</option>
+            <option value="UVM">UVM</option>
+            <option value="Champlain College">Champlain College</option>
+            <option value="CCV">CCV</option>
+            <option value="St. Michael's College">Saint Michael's College</option>
+            <option value="Colchester High School">Colchester High School</option>
+            <option value="South Burlington High School">South Burlington High School</option>
+            <option value="Winooski High School">Winooski High School</option>
+            <option value="Burlington High School">Burlington High School</option>
+            <option value="Essex High School">Essex High School</option>
+            <option value="Rock Point School">Rock Point School</option>
+            <option value="Rice Memorial High School">Rice Memorial High School</option>
+            <option value="Champlain Valley Union HS">Champlain Valley Union HS</option>
+            <option value="Milton High School">Milton High School</option>
+            <option value="Mount Mansfield Union High School">Mount Mansfield Union HS</option>
+            <option value="Lake Champlain Waldorf School">Lake Champlain Waldorf School</option>
+            <option value="Other">Other</option>
+          </select>
+          <br/>
+          {this.displayOtherSchool(this.state.anotherSchool)}
+        </div>
+      )
+    }
+  }
+
+  schoolChange(evnt) {
+    if (evnt.target.value==="Other") {
+      this.setState( {anotherSchool: true} )
+    } else {
+      this.setState( {anotherSchool: false} )
+    }
+  }
+
+  displayOtherSchool(status) {
+    if (!status) {
+      return null
+    } else {
+      return (
+        <div>
+          Name of other school: <input id="other-school"/>
+          <br/>
+        </div>
+      )
     }
   }
 
@@ -769,6 +809,7 @@ class Form extends React.Component {
           <label htmlFor={"perp-gender-" + (i + 1)}>Perpetrator #{i + 1} Gender</label>
           <br />
           <select id={"perp-gender-" + (i + 1)}>
+            <option value="" disabled selected>Gender</option>
             <option value="Unknown">Unknown</option>
             <option value="Female">Female</option>
             <option value="Male">Male</option>

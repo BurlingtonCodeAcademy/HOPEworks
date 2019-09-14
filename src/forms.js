@@ -660,9 +660,9 @@ class Forms extends React.Component {
             let i = 0;
             let schools = [
                 "UVM",
-                "Champlain",
+                "Champlain College",
                 "CCV",
-                "St.Mikes",
+                "St. Michael's College",
                 "Colchester High School",
                 "South Burlington High School",
                 "Winooski High School",
@@ -670,9 +670,9 @@ class Forms extends React.Component {
                 "Essex High School",
                 "Rock Point School",
                 "Rice Memorial High School",
-                "Champlain Valley Union High School",
+                "Champlain Valley Union HS",
                 "Milton High School",
-                "Mount Mansfield Union High School",
+                "Mount Mansfield Union HS",
                 "Lake Champlain Waldorf School",
                 "Other"
             ]
@@ -768,7 +768,7 @@ class Forms extends React.Component {
     }
 
     componentDidUpdate () {
-        if (this.state.selectionChanging) { //selected stuff !== selectedforms
+        if (this.state.selectionChanging) { //triggered whenever a selection changes
             let victFilterOutput = []
             this.state.allForms.forEach((form) => { // we are going to go through each filter and return an array of forms that fits that filter
                 if (this.state.selectedVictimizations.length===0) { //if no forms are selected, the filter is "inactive", so all forms that were input are returned
@@ -780,7 +780,8 @@ class Forms extends React.Component {
                     let theIncidents = form.data.incidents;
                     theIncidents.forEach((incident) => {  //incidents are in an array, we have to check each incident
                         incident.victimization.forEach((victimization) => { //now we have to check each victimization type ("Rape", "Attempted Rape"....)
-                            if (this.state.selectedVictimizations.includes(victimization)) {
+                            if ((this.state.selectedVictimizations.includes(victimization)) ||
+                            (victimization.includes("Other:") && this.state.selectedVictimizations.includes("Other"))) {
                                 matchFound = true;
                                 return
                             }
@@ -799,10 +800,12 @@ class Forms extends React.Component {
                 let matchFound = false;
                 if (form.data.ethnicity) { 
                     form.data.ethnicity.forEach((ethnicity) => {
-                        if (this.state.selectedEthnicities.includes(ethnicity)) {
+                        if ((this.state.selectedEthnicities.includes(ethnicity)) ||
+                        (ethnicity.includes("Other:") && this.state.selectedEthnicities.includes("Other"))) {
                             matchFound = true;
                             return
                         }
+
                     })
                 }
                 if (matchFound) ethnFilterOutput.push(form)
@@ -876,7 +879,8 @@ class Forms extends React.Component {
                 if (this.state.selectedSchools.length===0) {
                     schoolFilterOutput = genderFilterOutput;
                     return
-                } else if (form.data.nameOfSchool && this.state.selectedSchools.includes(form.data.nameOfSchool)) { 
+                } else if (form.data.nameOfSchool && (this.state.selectedSchools.includes(form.data.nameOfSchool) ||
+                form.data.nameOfSchool.includes("Other:") && this.state.selectedSchools.includes("Other"))) { 
                     schoolFilterOutput.push(form)
                 }
             })
@@ -892,7 +896,7 @@ class Forms extends React.Component {
                 }
             })
             
-            this.setState( {selectedForms: nameFilterOutput, selectionChanging: false} )
+            this.setState( {selectedForms: nameFilterOutput, selectionChanging: false} ) //selectionChanging prevents infinite loop
         }
     }
 
