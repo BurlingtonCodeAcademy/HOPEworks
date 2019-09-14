@@ -9,13 +9,20 @@ class Forms extends React.Component {
             selectedForms: null,
             view: "list",
             currentForm: null,
+            dateDropped: false,
             victimizationDropped: false,
             ethnicityDropped: false,
             homelessDropped: false,
             ageDropped: false,
+            genderDropped: false,
+            schoolDropped: false,
+            nameDropped: false,
             selectedVictimizations: [],
             selectedEthnicities: [],
             selectedHomeless: [],
+            selectedGenders: [],
+            selectedSchools: [],
+            selectedName: "",
             selectionChanging: false,
             selectedDates: null,
             selectedAges: ["", ""]
@@ -29,11 +36,19 @@ class Forms extends React.Component {
         this.victimizationCheckedChange = this.victimizationCheckedChange.bind(this);
         this.ethnicityDroppedChange = this.ethnicityDroppedChange.bind(this);
         this.ethnicityCheckedChange = this.ethnicityCheckedChange.bind(this);
+        this.dateDroppedChange = this.dateDroppedChange.bind(this);
         this.selectedDateChange = this.selectedDateChange.bind(this);
         this.homelessCheckedChange = this.homelessCheckedChange.bind(this);
         this.homelessDroppedChange = this.homelessDroppedChange.bind(this);
         this.ageDroppedChange = this.ageDroppedChange.bind(this);
         this.ageSelectionChange = this.ageSelectionChange.bind(this);
+        this.genderDroppedChange = this.genderDroppedChange.bind(this);
+        this.genderCheckedChange = this.genderCheckedChange.bind(this);
+        this.schoolDroppedChange = this.schoolDroppedChange.bind(this);
+        this.schoolCheckedChange = this.schoolCheckedChange.bind(this);
+        this.nameDroppedChange = this.nameDroppedChange.bind(this);
+        this.nameSearchChange = this.nameSearchChange.bind(this);
+        this.deselectAll = this.deselectAll.bind(this);
     }
 
     async componentDidMount() {
@@ -305,17 +320,32 @@ class Forms extends React.Component {
         window.location.replace("/forms")
     }
 
-    dateSelector() {
-        return (
-            <div className="selector">
-                <label>
-                    From: <input type="date" className="date-selector" id="from-date" onChange={this.selectedDateChange}/>
-                </label>
-                <label>
-                    to: <input type="date" className="date-selector" id="to-date" onChange={this.selectedDateChange}/>   
-                </label>
-            </div>
-        )
+    dateDroppedChange() {
+        this.setState( {dateDropped: !this.state.dateDropped} )
+    }
+
+    dateSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.dateDroppedChange}>Contact Date ↓</label>
+                </div>
+            )
+        } else {
+            return (
+                <div className="selector">
+                    <label onClick={this.dateDroppedChange}>Contact Date ↑</label>
+                    <div className="selector-checkboxes">
+                        <label>
+                            From: <input type="date" className="date-selector" id="from-date" onChange={this.selectedDateChange}/>
+                        </label>
+                        <label>
+                            to: <input type="date" className="date-selector" id="to-date" onChange={this.selectedDateChange}/>   
+                        </label>
+                    </div>
+                </div>
+            );
+        }
     }
 
     selectedDateChange() {
@@ -553,15 +583,192 @@ class Forms extends React.Component {
         this.setState( {selectedAges: [theBoxes[0].value, theBoxes[1].value], selectionChanging: true} )
     }
 
+    genderDroppedChange() {
+        this.setState( {genderDropped: !this.state.genderDropped} )
+    }
+
+    genderSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.genderDroppedChange}>Gender ↓</label>
+                </div>
+            )
+        } else {
+            let i = 0;
+            let genders = [
+                "Unknown",
+                "Female",
+                "Male",
+                "Intersex",
+                "M→F",
+                "F→M",
+                "Questioning",
+                "Self Defined"
+            ]
+            let listItems = [];
+            genders.forEach((gender) => {
+                if (this.state.selectedEthnicities.includes(gender)) {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="gender" value={gender} onChange={this.genderCheckedChange} defaultChecked/>{gender}
+                        </label>
+                    )
+                } else {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="gender" value={gender} onChange={this.genderCheckedChange}/>{gender}
+                        </label>
+                    )
+                }
+                i++;
+            })
+            return (
+                <div className="selector">
+                    <label onClick={this.genderDroppedChange}>Gender ↑</label>
+                    <div className="selector-checkboxes">
+                       {listItems}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    genderCheckedChange() {
+        let theBoxes = document.getElementsByName("gender")
+        let checkedBoxes = [];
+        for (let i = 0; i < theBoxes.length; i++) {
+            if (theBoxes[i].checked) {
+                checkedBoxes.push(theBoxes[i].value);
+            }
+        }
+        this.setState( {selectedGenders: checkedBoxes, selectionChanging: true} )
+    }
+
+    schoolDroppedChange() {
+        this.setState( {schoolDropped: !this.state.schoolDropped} )
+    }
+
+    schoolSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.schoolDroppedChange}>Schools ↓</label>
+                </div>
+            )
+        } else {
+            let i = 0;
+            let schools = [
+                "UVM",
+                "Champlain",
+                "CCV",
+                "St.Mikes",
+                "Colchester High School",
+                "South Burlington High School",
+                "Winooski High School",
+                "Burlington High School",
+                "Essex High School",
+                "Rock Point School",
+                "Rice Memorial High School",
+                "Champlain Valley Union High School",
+                "Milton High School",
+                "Mount Mansfield Union High School",
+                "Lake Champlain Waldorf School",
+                "Other"
+            ]
+            let listItems = [];
+            schools.forEach((school) => {
+                if (this.state.selectedSchools.includes(school)) {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="schools" value={school} onChange={this.schoolCheckedChange} defaultChecked/>{school}
+                        </label>
+                    )
+                } else {
+                    listItems.push(
+                        <label key={i}>
+                            <input type="checkbox" name="schools" value={school} onChange={this.schoolCheckedChange}/>{school}
+                        </label>
+                    )
+                }
+                i++;
+            })
+            return (
+                <div className="selector">
+                    <label onClick={this.schoolDroppedChange}>Schools ↑</label>
+                    <div className="selector-checkboxes">
+                       {listItems}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    schoolCheckedChange() {
+        let theBoxes = document.getElementsByName("schools")
+        let checkedBoxes = [];
+        for (let i = 0; i < theBoxes.length; i++) {
+            if (theBoxes[i].checked) {
+                checkedBoxes.push(theBoxes[i].value);
+            }
+        }
+        this.setState( {selectedSchools: checkedBoxes, selectionChanging: true} )
+    }
+
+    nameDroppedChange() {
+        this.setState( {nameDropped: !this.state.nameDropped} )
+    }
+
+    nameSelector(status) {
+        if (!status) {
+            return (
+                <div className="selector">
+                    <label onClick={this.nameDroppedChange}>Name Search ↓</label>
+                </div>
+            )
+        } else {
+            return (
+                <div className="selector">
+                    <label onClick={this.nameDroppedChange}>Name Search ↑</label>
+                    <div className="selector-checkboxes">
+                        <label>
+                            Name: <input id="name-search" onChange={this.nameSearchChange}/>
+                        </label>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    nameSearchChange() {
+        let nameSearchBox = document.getElementById("name-search")
+        this.setState( {selectedName: nameSearchBox.value, selectionChanging: true} )
+    }
+
+    deselectAll() {
+        this.setState( {
+            dateDropped: false,
+            victimizationDropped: false,
+            ethnicityDropped: false,
+            homelessDropped: false,
+            ageDropped: false,
+            genderDropped: false,
+            schoolDropped: false,
+            nameDropped: false,
+            selectedVictimizations: [],
+            selectedEthnicities: [],
+            selectedHomeless: [],
+            selectedGenders: [],
+            selectedSchools: [],
+            selectedName: "",
+            selectedDates: null,
+            selectedAges: ["", ""],
+            selectionChanging: true
+        } )
+    }
+
     componentDidUpdate () {
-        if (this.state.selectedVictimizations.length===0 && 
-            this.state.selectedEthnicities.length===0 &&
-            !this.state.selectedDates &&
-            this.state.selectedHomeless.length===0 &&
-            this.state.selectedAges[0]==="" && this.state.selectedAges[1]==="" &&
-            this.state.selectedForms.length!==this.state.allForms.length) { // when nothing is select .. && this.state.selectedEthnicities.length===0
-                this.setState( {selectedForms: this.state.allForms} ) //list all forms
-        } else if (this.state.selectionChanging) { //selected stuff !== selectedforms
+        if (this.state.selectionChanging) { //selected stuff !== selectedforms
             let victFilterOutput = []
             this.state.allForms.forEach((form) => { // we are going to go through each filter and return an array of forms that fits that filter
                 if (this.state.selectedVictimizations.length===0) { //if no forms are selected, the filter is "inactive", so all forms that were input are returned
@@ -655,8 +862,37 @@ class Forms extends React.Component {
                     }
                 }
             })
+            let genderFilterOutput = []
+            ageFilterOutput.forEach((form) => {
+                if (this.state.selectedGenders.length===0) {
+                    genderFilterOutput = ageFilterOutput;
+                    return
+                } else if (form.data.survivorGender && this.state.selectedGenders.includes(form.data.survivorGender)) { 
+                    genderFilterOutput.push(form)
+                }
+            })
+            let schoolFilterOutput = []
+            genderFilterOutput.forEach((form) => {
+                if (this.state.selectedSchools.length===0) {
+                    schoolFilterOutput = genderFilterOutput;
+                    return
+                } else if (form.data.nameOfSchool && this.state.selectedSchools.includes(form.data.nameOfSchool)) { 
+                    schoolFilterOutput.push(form)
+                }
+            })
+            let nameFilterOutput = []
+            schoolFilterOutput.forEach((form) => {
+                if (this.state.selectedName.length===0) {
+                    nameFilterOutput = schoolFilterOutput;
+                    return
+                }
+                let fullName = form.data.firstName + " " + form.data.lastName
+                if (fullName.toLowerCase().includes(this.state.selectedName.toLowerCase())) { 
+                    nameFilterOutput.push(form)
+                }
+            })
             
-            this.setState( {selectedForms: ageFilterOutput, selectionChanging: false} )
+            this.setState( {selectedForms: nameFilterOutput, selectionChanging: false} )
         }
     }
 
@@ -672,11 +908,17 @@ class Forms extends React.Component {
                         {this.listTheForms(this.state.selectedForms)}
                     </div>
                     <div id="selectors">
-                        {this.dateSelector()}
+                        <div className="selector">
+                            <label onClick={this.deselectAll}>Clear all selections</label>
+                        </div>
+                        {this.dateSelector(this.state.dateDropped)}
                         {this.victimizationSelector(this.state.victimizationDropped)}
                         {this.ethnicitySelector(this.state.ethnicityDropped)}
                         {this.homelessSelector(this.state.homelessDropped)}
                         {this.ageSelector(this.state.ageDropped)}
+                        {this.genderSelector(this.state.genderDropped)}
+                        {this.schoolSelector(this.state.schoolDropped)}
+                        {this.nameSelector(this.state.nameDropped)}
                     </div>
                 </div>
             </div>
