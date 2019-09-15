@@ -879,8 +879,8 @@ class Forms extends React.Component {
                 if (this.state.selectedSchools.length===0) {
                     schoolFilterOutput = genderFilterOutput;
                     return
-                } else if (form.data.nameOfSchool && (this.state.selectedSchools.includes(form.data.nameOfSchool) ||
-                form.data.nameOfSchool.includes("Other:") && this.state.selectedSchools.includes("Other"))) { 
+                } else if ((form.data.nameOfSchool && this.state.selectedSchools.includes(form.data.nameOfSchool)) ||
+                (form.data.nameOfSchool.includes("Other:") && this.state.selectedSchools.includes("Other"))) { 
                     schoolFilterOutput.push(form)
                 }
             })
