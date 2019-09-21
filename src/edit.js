@@ -20,7 +20,8 @@ class Edit extends React.Component {
       victimsClaim: false,
       materialAssistance: false,
       isAStudent: false,
-      anotherSchool: false
+      anotherSchool: false,
+      preEditForm: null
     };
 
     this.handleSubmitEdit = this.handleSubmitEdit.bind(this);
@@ -54,19 +55,25 @@ class Edit extends React.Component {
             numIncidents: formData.incidents.length,
             numOrders: formData.protectionOrders.length,
             newUser: formData.newUser,
-            
-            
             preEditForm: theForm
         })
         if (!formData.newUser && formData.newUser) {
-            this.setState( {newIncident: true} )
-        } else {
-            this.setState( {newIncident: false} )
+          this.setState( {newIncident: true} )
         }
         if (formData.servicesProvided.informationReferral.includes("Referral")) {
-            this.setState( {referrals: true} )
-        } else {
-            this.setState( {referrals: false} )
+          this.setState( {referrals: true} )
+        }
+        if (formData.servicesProvided.assistanceServices.includes("Victims' Compensation Claim (in $)")) {
+          this.setState( {victimsClaim: true} ) 
+        }
+        if (formData.servicesProvided.assistanceServices.includes("Material Assistance")) {
+          this.setState( {victimsClaim: true} ) 
+        }
+        if (formData.miscellaneousCharacteristics.includes("Student/affiliated with a school")) {
+          this.setState( {isAStudent: true} )
+          if (formData.nameOfSchool.includes("Other:")) {
+            this.setState( {anotherSchool: true} )
+          }
         }
     }
   }
@@ -139,7 +146,7 @@ class Edit extends React.Component {
       theData.ethnicity = checkBoxValues("ethnicity");
       theData.numberOfChildren = numberChildren.value;
       theData.disability = radioButtonValue("disability");
-      theData.miscChars = checkBoxValues("characteristics");
+      theData.miscellaneousCharacteristics = checkBoxValues("characteristics");
       if (this.state.isAStudent && !this.state.anotherSchool) {
         theData.nameOfSchool = nameOfSchool.value
       } else if (this.state.isAStudent && this.state.anotherSchool) {
@@ -1283,33 +1290,33 @@ class Edit extends React.Component {
                   <h3>Personal Info</h3>
                   <label htmlFor="first-name">Name of Service User </label>
                   <br />
-                  <input id="first-name" placeholder="First Name" />
+                  <input id="first-name" placeholder="First Name" defaultValue={this.state.preEditForm.data.firstName}/>
                   <br/>
-                  <input id="last-name" placeholder="Last Name/Initial" />
+                  <input id="last-name" placeholder="Last Name/Initial" defaultValue={this.state.preEditForm.data.lastName}/>
                   <br />
                   <label htmlFor="identifiers">
                     Other identifiers for Service User
                   </label>
                   <br />
-                  <input id="identifiers" placeholder="Favorite color, etc." />
+                  <input id="identifiers" placeholder="Favorite color, etc." defaultValue={this.state.preEditForm.data.otherIdentifiers}/>
                   <br />
                   <label htmlFor="advocate-initials">Advocate Initials </label>
                   <br />
-                  <input id="advocate-initials" placeholder="Initials"maxLength="2" />
+                  <input id="advocate-initials" placeholder="Initials" maxLength="3" defaultValue={this.state.preEditForm.data.advocateInitials}/>
                   <br />
                 </div>
                 <div className="column-b">
                   <label htmlFor="contact-date">Date of contact </label>
                   <br />
-                  <input type="date" id="contact-date" />
+                  <input type="date" id="contact-date" defaultValue={this.state.preEditForm.data.contactDate}/>
                   <br />
                   <label htmlFor="city-town">City/Town </label>
                   <br />
-                  <input id="city-town" placeholder="City/Town" />
+                  <input id="city-town" placeholder="City/Town" defaultValue={this.state.preEditForm.data.city}/>
                   <br />
                   <label htmlFor="phone">Phone Number </label>
                   <br id="demographic-link"/>
-                  <input id="phone" type="tel" placeholder="802-123-4567" />
+                  <input id="phone" type="tel" placeholder="802-123-4567" defaultValue={this.state.preEditForm.data.phone}/>
                   <br />
                 </div>
                 {this.displayDemographicContent()}

@@ -1268,7 +1268,7 @@ class Form extends React.Component {
               <br />
               <label htmlFor="advocate-initials">Advocate Initials </label>
               <br />
-              <input id="advocate-initials" placeholder="Initials" maxLength="2" />
+              <input id="advocate-initials" placeholder="Initials" maxLength="3" />
               <br />
             </div>
             <div className="column-b">
