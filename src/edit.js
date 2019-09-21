@@ -2,7 +2,7 @@ import React from "react";
 import Toolbar from './components/Toolbar/Toolbar';
 import Hw from './images/hw.png';
 
-class Form extends React.Component {
+class Edit extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -20,11 +20,10 @@ class Form extends React.Component {
       victimsClaim: false,
       materialAssistance: false,
       isAStudent: false,
-      anotherSchool: false,
-      preEditForm: null
+      anotherSchool: false
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitEdit = this.handleSubmitEdit.bind(this);
     this.displayIncidents = this.displayIncidents.bind(this);
     this.numIncidentsChange = this.numIncidentsChange.bind(this);
     this.numOrdersChange = this.numOrdersChange.bind(this);
@@ -47,7 +46,32 @@ class Form extends React.Component {
     this.schoolChange = this.schoolChange.bind(this);
   }
 
-  async handleSubmit(evnt) {
+  componentDidMount() {
+    if (this.props.editingForm) {
+        let theForm = this.props.editingForm
+        let formData = this.props.editingForm.data
+        this.setState({
+            numIncidents: formData.incidents.length,
+            numOrders: formData.protectionOrders.length,
+            newUser: formData.newUser,
+            
+            
+            preEditForm: theForm
+        })
+        if (!formData.newUser && formData.newUser) {
+            this.setState( {newIncident: true} )
+        } else {
+            this.setState( {newIncident: false} )
+        }
+        if (formData.servicesProvided.informationReferral.includes("Referral")) {
+            this.setState( {referrals: true} )
+        } else {
+            this.setState( {referrals: false} )
+        }
+    }
+  }
+
+  async handleSubmitEdit(evnt) {
     evnt.preventDefault();
 
     let firstName = document.getElementById("first-name");
@@ -75,24 +99,24 @@ class Form extends React.Component {
     let safeHomeExited = document.getElementById("safe-home-exited");
     let safeHomeExtension = document.getElementById("safe-home-extension");
     let notes = document.getElementById("notes");
-
+    
     if (this.state.numIncidents > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many incidents." })
+      this.setState({ errorMessage: "Error submitting form: Too many incidents."})
       return
     } else if (this.state.numOrders > 10) {
-      this.setState({ errorMessage: "Error submitting form: Too many orders." })
+      this.setState({ errorMessage: "Error submitting form: Too many orders."})
       return
-    } else if (this.state.newUser && ((ageLow.value === "" && ageHigh.value !== "") || (ageLow.value !== "" && ageHigh.value === ""))) {
-      this.setState({ errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither" })
+    } else if (this.state.newUser && ((ageLow.value==="" && ageHigh.value!=="") || (ageLow.value!=="" && ageHigh.value===""))) {
+      this.setState( {errorMessage: "Error submitting form: Only one of the Age Range fields is filled; please fill both or neither"} )
       return
     } else if (contactDate.value.length < 10) {
-      this.setState({ errorMessage: "Error submitting form: the Contact Date field is required" })
+      this.setState( {errorMessage: "Error submitting form: the Contact Date field is required"} )
       return
-    } else if (firstName.value === "") {
-      this.setState({ errorMessage: "Error submitting form: the First Name field is required" })
+    } else if (firstName.value==="") {
+      this.setState( {errorMessage: "Error submitting form: the First Name field is required"} )
       return
     } else {
-      this.setState({ errorMessage: "" })
+      this.setState({ errorMessage: ""})
     }
     let theData = {
       timestamp: new Date().toLocaleString(),
@@ -133,26 +157,26 @@ class Form extends React.Component {
     theData.safeToCall = radioButtonValue("safe-to-call");
     theData.safeToLeaveMessage = radioButtonValue("safe-to-leave-message");
     theData.contactTypes = {
-      calls: contactCall.value,
-      inPerson: contactInPerson.value,
-      email: contactEmail.value,
-      instantMessaging: contactInstantMessaging.value,
-      onBehalf: contactOnBehalf.value
-    };
+        calls: contactCall.value,
+        inPerson: contactInPerson.value,
+        email: contactEmail.value,
+        instantMessaging: contactInstantMessaging.value,
+        onBehalf: contactOnBehalf.value
+      };
     theData.timeSpent = radioButtonValue("time-call");
     theData.servicesProvided = {
-      advocacy: checkBoxValues("advocacy"),
-      support: checkBoxValues("support"),
-      medical: checkBoxValues("medical"),
-      assistanceServices: checkBoxValues("assistance-services"),
-      informationReferral: checkBoxValues("information-referral"),
-      safeHome: {
-        entered: safeHomeEntered.value,
-        exited: safeHomeExited.value,
-        extension: safeHomeExtension.value
-      },
-      groups: groups.value
-    };
+        advocacy: checkBoxValues("advocacy"),
+        support: checkBoxValues("support"),
+        medical: checkBoxValues("medical"),
+        assistanceServices: checkBoxValues("assistance-services"),
+        informationReferral: checkBoxValues("information-referral"),
+        safeHome: {
+          entered: safeHomeEntered.value,
+          exited: safeHomeExited.value,
+          extension: safeHomeExtension.value
+        },                                
+        groups: groups.value
+      };
     if (this.state.referrals) {
       theData.referrals = referralValues("referrals");
     }
@@ -163,7 +187,7 @@ class Form extends React.Component {
 
     const response = await fetch("/form", {
       method: "POST",
-      headers: {
+      headers:{
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(theData)
@@ -177,9 +201,9 @@ class Form extends React.Component {
 
   userTypeChange(evnt) {
     if (this.state.newUser) {
-      this.setState({ newUser: false });
+      this.setState({ newUser: false});
     } else {
-      this.setState({ newUser: true });
+      this.setState({ newUser: true});
     }
   }
 
@@ -190,13 +214,13 @@ class Form extends React.Component {
       if (this.state.newIncident) {
         return (
           <label htmlFor="new-incident">
-            <input id="new-incident" type="checkbox" onChange={this.newIncidentChange} defaultChecked />New Incident(s)
+              <input id="new-incident" type="checkbox" onChange={this.newIncidentChange} defaultChecked/>New Incident(s)
           </label>
         )
       } else {
         return (
           <label htmlFor="new-incident">
-            <input id="new-incident" type="checkbox" onChange={this.newIncidentChange} />New Incident(s)
+              <input id="new-incident" type="checkbox" onChange={this.newIncidentChange}/>New Incident(s)
           </label>
         )
       }
@@ -215,167 +239,167 @@ class Form extends React.Component {
     this.setState({ numIncidents: evnt.target.value });
   }
 
-  displayLanguageOtherButton() {
-    if (this.state.otherLanguage === "") {
+  displayLanguageOtherButton () {
+    if (this.state.otherLanguage==="") {
       return (
         <label>
           <input name="language" type="radio" value="Other" />Other:
-          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange} />
+          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange}/>
         </label>
       )
     } else {
       return (
         <label>
-          <input name="language" type="radio" value="Other" defaultChecked />Other:
-          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange} />
+          <input name="language" type="radio" value="Other" defaultChecked/>Other:
+          <input type="text" name="language" className="inline-input" onChange={this.otherLanguageChange}/>
         </label>
       )
     }
   }
 
-  otherLanguageChange(evnt) {
-    this.setState({ otherLanguage: evnt.target.value })
+  otherLanguageChange (evnt) {
+    this.setState( {otherLanguage: evnt.target.value} )
   }
 
-  displayEthnicityOtherButton() {
-    if (this.state.otherEthnicity === "") {
+  displayEthnicityOtherButton () {
+    if (this.state.otherEthnicity==="") {
       return (
         <label>
           <input type="checkbox" name="ethnicity" value="Other" />Other:
-          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange} />
+          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange}/>
         </label>
       )
     } else {
       return (
         <label>
-          <input type="checkbox" name="ethnicity" value="Other" defaultChecked />Other:
-          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange} />
+          <input type="checkbox" name="ethnicity" value="Other" defaultChecked/>Other:
+          <input type="text" name="ethnicity" className="inline-input" onChange={this.otherEthnicityChange}/>
         </label>
       )
     }
   }
 
-  otherEthnicityChange(evnt) {
-    this.setState({ otherEthnicity: evnt.target.value })
+  otherEthnicityChange (evnt) {
+    this.setState( {otherEthnicity: evnt.target.value} )
   }
 
-  displayOtherTimeSpent() {
-    if (this.state.otherTimeSpent === "") {
+  displayOtherTimeSpent () {
+    if (this.state.otherTimeSpent==="") {
       return (
         <label htmlFor="time-call">
           <input name="time-call" type="radio" value="Other" />Other (in hours):
-          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange} />
+          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange}/>
         </label>
       )
     } else {
       return (
         <label htmlFor="time-call">
-          <input name="time-call" type="radio" value="Other" defaultChecked />Other (in hours):
-          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange} />
+          <input name="time-call" type="radio" value="Other" defaultChecked/>Other (in hours):
+          <input type="number" name="time-call" className="inline-input" onChange={this.timeSpentChange}/>
         </label>
       )
     }
   }
 
-  timeSpentChange(evnt) {
-    this.setState({ otherTimeSpent: evnt.target.value })
+  timeSpentChange (evnt) {
+    this.setState( {otherTimeSpent: evnt.target.value} )
   }
 
-  displayOtherAdvocacyButton() {
-    if (this.state.otherAdvocacy === "") {
+  displayOtherAdvocacyButton () {
+    if (this.state.otherAdvocacy==="") {
       return (
         <label>
-          <input type="checkbox" name="advocacy" value="Other Civil Legal" />Other:
-          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange} />
-          <br />
-        </label>
+          <input type="checkbox" name="advocacy" value="Other Civil Legal"/>Other:
+          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange}/>
+          <br/>
+        ​​​​​​​​​​​​​​</label>
       )
     } else {
       return (
         <label>
-          <input type="checkbox" name="advocacy" value="Other Civil Legal" defaultChecked />Other:
-          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange} />
-          <br />
-        </label>
+          <input type="checkbox" name="advocacy" value="Other Civil Legal" defaultChecked/>Other:
+          <input type="text" name="advocacy" className="inline-input" onChange={this.otherAdvocacyChange}/>
+          <br/>
+        ​​​​​​​​​​​​​​</label>
       )
     }
   }
 
-  otherAdvocacyChange(evnt) {
-    this.setState({ otherAdvocacy: evnt.target.value })
+  otherAdvocacyChange (evnt) {
+    this.setState( {otherAdvocacy: evnt.target.value} )
   }
 
-  displayOtherSupportButton() {
-    if (this.state.otherSupport === "") {
+  displayOtherSupportButton () {
+    if (this.state.otherSupport==="") {
       return (
         <label>
           <input type="checkbox" name="support" value="Other" />Other:
-          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange} />
+          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange}/>  ​​​​​​​​​​​​​​​​​​​​​​​​​​​
           <br />
         </label>
       )
     } else {
       return (
         <label>
-          <input type="checkbox" name="support" value="Other" defaultChecked />Other:
-          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange} />
+          <input type="checkbox" name="support" value="Other" defaultChecked/>Other:
+          <input type="text" name="support" className="inline-input" onChange={this.otherSupportChange}/>  ​​​​​​​​​​​​​​​​​​​​​​​​​​​
           <br />
         </label>
       )
     }
   }
 
-  otherSupportChange(evnt) {
-    this.setState({ otherSupport: evnt.target.value })
+  otherSupportChange (evnt) {
+    this.setState( {otherSupport: evnt.target.value} )
   }
 
-  displayVictimsClaim() {
+  displayVictimsClaim () {
     if (this.state.victimsClaim) {
       return (
         <label>
-          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange} defaultChecked />Victims' Compensation Claim
-          <br />
+          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange} defaultChecked/>Victims' Compensation Claim
+          <br/>
           <label className="indented">Amount: $</label>
-          <input type="number" name="assistance-services" className="inline-input" />
-          <br />
+          <input type="number" name="assistance-services" className="inline-input"/>
+          ​​​​​​​​​​​​​​​<br />
         </label>
       )
     } else {
       return (
         <label>
-          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange} />Victims' Compensation Claim
-          <br />
+          <input type="checkbox" name="assistance-services" value="Victims' Compensation Claim (in $)" onChange={this.victimsClaimChange}/>Victims' Compensation Claim
+          <br/>
         </label>
       )
     }
   }
 
-  victimsClaimChange(evnt) {
+  victimsClaimChange (evnt) {
     if (this.state.victimsClaim) {
-      this.setState({ victimsClaim: false })
+      this.setState( {victimsClaim: false} )
     } else {
-      this.setState({ victimsClaim: true })
+      this.setState( {victimsClaim: true} )
     }
   }
 
-  displayMaterialAssistance() {
+  displayMaterialAssistance () {
     if (this.state.materialAssistance) {
       return (
         <div>
-          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange} defaultChecked />Material Assistance
+          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange} defaultChecked/>Material Assistance
           <br />
           <div id="material-assistance-div" className="indented">
-            <input type="checkbox" name="assistance-services" value="Bus Pass" />Bus Pass
+            <input type="checkbox" name="assistance-services" value="Bus Pass"/>Bus Pass
             <br />
-            <input type="checkbox" name="assistance-services" value="Food Cart" />Food Cart
+            <input type="checkbox" name="assistance-services" value="Food Cart"/>Food Cart
             <br />
-            <input type="checkbox" name="assistance-services" value="Clothes" />Clothes
+            <input type="checkbox" name="assistance-services" value="Clothes"/>Clothes
             <br />
-            <input type="checkbox" name="assistance-services" value="Hygiene" />Hygiene
+            <input type="checkbox" name="assistance-services" value="Hygiene"/>Hygiene
             <br />
             <input type="checkbox" name="assistance-services" value="Hotel" />Hotel
             <br />
-            <input type="checkbox" name="assistance-services" value="Other" />Other
+            <input type="checkbox" name="assistance-services" value="Other"/>Other
             <br />
           </div>
         </div>
@@ -383,26 +407,26 @@ class Form extends React.Component {
     } else {
       return (
         <div>
-          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange} />Material Assistance
-          <br />
+          <input type="checkbox" name="assistance-services" value="Material Assistance" onChange={this.materialAssistanceChange}/>Material Assistance
+          <br/>
         </div>
       )
     }
   }
 
-  materialAssistanceChange() {
+  materialAssistanceChange () {
     if (this.state.materialAssistance) {
-      this.setState({ materialAssistance: false })
+      this.setState( {materialAssistance: false} )
     } else {
-      this.setState({ materialAssistance: true })
+      this.setState( {materialAssistance: true} )
     }
   }
 
-  displayDemographicContent() {
+  displayDemographicContent () {
     if (this.state.newUser) {
       return (
         <div>
-          <hr id="demographic-content" />
+          <hr id="demographic-content"/>
           <h3>Demographic Info</h3>
           <label htmlFor="survivor-gender">Gender</label>
           <br />
@@ -528,10 +552,10 @@ class Form extends React.Component {
             />
             Low Income
             <br />
-            <input type="checkbox" name="characteristics" value="Student/affiliated with a school" onChange={this.isAStudentChange} />Student/affiliated with a school
-            <br />
+            <input type="checkbox" name="characteristics" value="Student/affiliated with a school" onChange={this.isAStudentChange}/>Student/affiliated with a school
+            <br/>
             {this.displaySchoolSelection(this.state.isAStudent)}
-            <br />
+            <br/>
           </div>
           <label htmlFor="hear-about">
             How did the service user hear about HOPE Works?
@@ -546,7 +570,7 @@ class Form extends React.Component {
   }
 
   isAStudentChange() {
-    this.setState({ isAStudent: !this.state.isAStudent })
+    this.setState( {isAStudent: !this.state.isAStudent} )
   }
 
   displaySchoolSelection(status) {
@@ -574,7 +598,7 @@ class Form extends React.Component {
             <option value="Lake Champlain Waldorf School">Lake Champlain Waldorf School</option>
             <option value="Other">Other</option>
           </select>
-          <br />
+          <br/>
           {this.displayOtherSchool(this.state.anotherSchool)}
         </div>
       )
@@ -582,10 +606,10 @@ class Form extends React.Component {
   }
 
   schoolChange(evnt) {
-    if (evnt.target.value === "Other") {
-      this.setState({ anotherSchool: true })
+    if (evnt.target.value==="Other") {
+      this.setState( {anotherSchool: true} )
     } else {
-      this.setState({ anotherSchool: false })
+      this.setState( {anotherSchool: false} )
     }
   }
 
@@ -595,27 +619,27 @@ class Form extends React.Component {
     } else {
       return (
         <div>
-          Name of other school: <input id="other-school" />
-          <br />
+          Name of other school: <input id="other-school"/>
+          <br/>
         </div>
       )
     }
   }
 
-  displayIncidentAndOrder() {
+  displayIncidentAndOrder () {
     if (this.state.newUser || (!this.state.newUser && this.state.newIncident)) {
       return (
         <div>
-          <hr id="incident-information" />
+          <hr id="incident-information"/>
           <h3>Incident Info</h3>
           <div id="survivor-type">
-            <input name="survivor-type" value="Primary Survivor" type="radio" />
+            <input name="survivor-type" value="Primary Survivor" type="radio"/>
             Primary Survivor
             <br />
-            <input name="survivor-type" value="Secondary Survivor" type="radio" />
+            <input name="survivor-type" value="Secondary Survivor" type="radio"/>
             Secondary Survivor
           </div>
-          <br />
+          <br/>
           <label htmlFor="victimization-count">Number of Incidents</label>
           <br />
           <input
@@ -692,7 +716,7 @@ class Form extends React.Component {
             Transportation
           </div>
         </div>
-
+        
       )
     } else {
       return null;
@@ -709,7 +733,7 @@ class Form extends React.Component {
     while (i < newNum) {
       listItems.push(
         <div key={i} id={"incident-" + (i + 1)}>
-          <hr />
+          <hr/>
           <label htmlFor={"victimization-" + (i + 1)}>Victimization #{i + 1}</label>
           <div id={"victimization-" + (i + 1)}>
             <input type="checkbox" name={"victimization-" + (i + 1)} value="Rape" />
@@ -846,7 +870,7 @@ class Form extends React.Component {
     while (i < newNum) {
       listItems.push(
         <div key={i} id={"order-" + (i + 1)}>
-          <hr />
+          <hr/>
           <label htmlFor={"protection-asst-" + (i + 1)}>
             Protection Order Assistance #{i + 1}
           </label>
@@ -899,36 +923,36 @@ class Form extends React.Component {
     }
     if (num > 10) {
       return <h4>Sorry, {num} is too many orders!</h4>;
-    } else {
+    } else { 
       return <div id="orders">{listItems}</div>;
     }
   }
 
-  displayReferralBox() {
+  displayReferralBox () {
     if (this.state.referrals) {
       return (
         <label>
-          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange} defaultChecked />Referral (see below when checked)
+          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange} defaultChecked/>Referral (see below when checked)
         </label>
       )
     } else {
       return (
         <label>
-          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange} />Referral (see below when checked)
+          <input type="checkbox" name="information-referral" value="Referral" onChange={this.referralBoxChange}/>Referral (see below when checked)
         </label>
       )
     }
   }
 
-  referralBoxChange() {
+  referralBoxChange () {
     if (this.state.referrals) {
-      this.setState({ referrals: false });
+      this.setState({ referrals: false} );
     } else {
-      this.setState({ referrals: true });
+      this.setState({ referrals: true} );
     }
   }
 
-  displayReferrals() {
+  displayReferrals () {
     if (this.state.referrals) {
       return (
         <div>
@@ -1222,7 +1246,7 @@ class Form extends React.Component {
             />
             <br />
           </div>
-          <hr />
+          <hr/>
         </div>
       )
     } else {
@@ -1231,328 +1255,332 @@ class Form extends React.Component {
   }
 
   render() {
-    return (
-      <div id="form-page">
-        <div className="toolbar">
-          <Toolbar />
-        </div>
-        <div className="sticky_note">
-          <label htmlFor="notes">Notes: </label>
-          <br />
-          <textarea id="notes" />
-        </div>
-        <form id="the-form">
-          <div id="title">
-            <img className="form-logo" src={Hw} alt="Hope Works" />
-            <h2>SURVIVOR INFORMATION FORM</h2>
+    if (!this.state.preEditForm) {
+        return <p>No form selected</p>
+    } else {
+        return (
+          <div id="form-page">
+              <div className="toolbar">
+                <Toolbar />
+              </div>
+              <div className="sticky_note">
+                  <label htmlFor="notes">Notes: </label>
+                  <br />
+                  <textarea id="notes" />
+              </div>
+            <form id="the-form">
+              <div id="title">  
+               <img className="form-logo" src={Hw} alt="Hope Works"/>
+                <h2>SURVIVOR INFORMATION FORM</h2>
+              </div>
+              <div id="all-fields">
+                <br />
+                <input type="checkbox" id="new-user" onChange={this.userTypeChange} defaultChecked/>Service User is new to HOPE Works
+                <br />
+                {this.displayNewIncidentBox()}
+                <hr />
+                <div>
+                  <h3>Personal Info</h3>
+                  <label htmlFor="first-name">Name of Service User </label>
+                  <br />
+                  <input id="first-name" placeholder="First Name" />
+                  <br/>
+                  <input id="last-name" placeholder="Last Name/Initial" />
+                  <br />
+                  <label htmlFor="identifiers">
+                    Other identifiers for Service User
+                  </label>
+                  <br />
+                  <input id="identifiers" placeholder="Favorite color, etc." />
+                  <br />
+                  <label htmlFor="advocate-initials">Advocate Initials </label>
+                  <br />
+                  <input id="advocate-initials" placeholder="Initials"maxLength="2" />
+                  <br />
+                </div>
+                <div className="column-b">
+                  <label htmlFor="contact-date">Date of contact </label>
+                  <br />
+                  <input type="date" id="contact-date" />
+                  <br />
+                  <label htmlFor="city-town">City/Town </label>
+                  <br />
+                  <input id="city-town" placeholder="City/Town" />
+                  <br />
+                  <label htmlFor="phone">Phone Number </label>
+                  <br id="demographic-link"/>
+                  <input id="phone" type="tel" placeholder="802-123-4567" />
+                  <br />
+                </div>
+                {this.displayDemographicContent()}
+                {this.displayIncidentAndOrder()}
+                <hr id="communication-link"/>
+                <h3 id="ongoing-services">Ongoing Services</h3>
+                <label htmlFor="safe-to-call">Safe to call back?</label>
+                <div id="safe-to-call">
+                  <input name="safe-to-call" value="Yes" type="radio" />
+                  Yes
+                  <br />
+                  <input name="safe-to-call" value="No" type="radio" />
+                  No
+                  <br />
+                  <input name="safe-to-call" value="Unknown" type="radio" />
+                  Unknown
+                </div>
+                <br />
+                <label htmlFor="safe-to-leave-message">
+                  Safe to leave a message?
+                </label>
+                <div id="safe-to-leave-message">
+                  <input name="safe-to-leave-message" value="Yes" type="radio" />Yes
+                  <br />
+                  <input name="safe-to-leave-message" value="No" type="radio" />No
+                  <br />
+                  <input name="safe-to-leave-message" value="Unknown" type="radio"/>Unknown
+                </div>
+                <br />
+                <label htmlFor="contact">Contact</label>
+                <br />
+                <label htmlFor="contact">
+                  (indicate the number of contacts through each method per day)
+                </label>
+                <div id="contact">
+                  <label>
+                    <input id="contact-calls" type="number" />
+                    Calls with Service User
+                  </label>
+                  <br />
+                  <label>
+                    <input id="contact-in-person" type="number" />
+                    In-person with Service User
+                  </label>
+                  <br />
+                  <label>
+                    <input id="contact-email" type="number" />
+                    Email
+                  </label>
+                  <br />
+                  <label>
+                    <input id="contact-instant-messaging" type="number" />
+                    Instant Messaging
+                  </label>
+                  <br />
+                  <label>
+                    <input id="contact-on-behalf" type="number" />
+                    On Behalf of Service User
+                  </label>
+                </div>
+                <br />
+                <div id="time-call">
+                  Total time spent
+                  <br />
+                </div>
+                <div id="time-call">
+                  <label>
+                    <input name="time-call" value="15 min" type="radio" />
+                    15 min
+                  </label>
+                  <br />
+                  <label>
+                    <input name="time-call" value="30 min" type="radio" />
+                    30 min
+                  </label>
+                  <br />
+                  <label>
+                    <input name="time-call" value="45 min" type="radio" />
+                    45 min
+                  </label>
+                  <br />
+                  <label id="services-link">
+                    <input name="time-call" value="60 min" type="radio" />
+                    60 min
+                  </label>
+                  <br />
+                  {this.displayOtherTimeSpent()}
+                </div>
+                <hr id="services-provided"/>
+                <h3>Services Provided</h3>
+                <label htmlFor="advocacy">Advocacy</label>
+                <div id="advocacy">
+                  <input type="checkbox" name="advocacy" value="Economic" />
+                  Economic
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Financial" />
+                  Financial
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Housing" />
+                  Housing
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Education" />
+                  Education
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Employment" />
+                  Employment
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Immigration" />
+                  Immigrantion
+                  <br />
+                  <input type="checkbox" name="advocacy" value="Healthcare" />
+                  Healthcare
+                  <br />
+                  {this.displayOtherAdvocacyButton()}
+                  <br />
+                </div>
+                <label htmlFor="support">Support</label>
+                <div id="support">
+                  <input type="checkbox" name="support" value="Emotional" />
+                  Emotional
+                  <br />
+                  <input type="checkbox" name="support" value="Crisis" />
+                  Crisis
+                  <br />
+                  <input type="checkbox" name="support" value="Criminal Legal" />
+                  Criminal Legal
+                  <br />
+                  {this.displayOtherSupportButton()}
+                  <br />
+                </div>
+                <div>
+                  <label htmlFor="Medical">Medical</label>
+                  <div id="medical" />
+                  <input
+                    type="checkbox"
+                    name="medical"
+                    value="SANE Exam Accompaniment"
+                  />
+                  SANE Exam Accompaniment
+                  <br />
+                  <br />
+                </div>
+                <label htmlFor="assistance-services">Assistance/Services</label>
+                <div id="assistance-services">
+                  {this.displayVictimsClaim()}
+                  <input
+                    type="checkbox"
+                    name="assistance-services"
+                    value="Language"
+                  />
+                  Language
+                  <br />
+                  <input
+                    type="checkbox"
+                    name="assistance-services"
+                    value="Transporation"
+                  />
+                  Transporation
+                  <br />
+                  {this.displayMaterialAssistance()}
+                  <br/>
+                </div>
+                <label htmlFor="information-referral">Information and Referral</label>
+                <div id="information-referral">
+                  <input
+                    type="checkbox"
+                    name="information-referral"
+                    value="Information"
+                  />
+                  Information
+                  <br />
+                  {this.displayReferralBox()}
+                  <br />
+                  <br />
+                </div>
+                <label htmlFor="safe-home">Safe Home</label>
+                <div id="safe-home">
+                  Date Entered
+                  <br />
+                  <input id="safe-home-entered" type="date" name="safe-home" className="input" />  ​​​​​​​​​​​​​​​​​​​​​​​​
+                  <br />
+                  Date Exited
+                  <br />
+                  <input id="safe-home-exited" type="date" name="safe-home" className="input" />
+                  ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                  <br />
+                  Extention Date
+                  <br />
+                  <input id="safe-home-extension" type="date" name="safe-home" className="input" />​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                  <br />
+                  <br />
+                </div>
+                <label htmlFor="groups">Groups</label>
+                <div id="groups-div">
+                  Groups:
+                  <input id="groups" type="text" name="groups" className="inline-input" />
+                  <br />
+                  <br />
+                </div>
+                <hr id="referrals-hr"/>
+                {this.displayReferrals()}
+                <h3>Outcome Measures</h3>
+                <div id="measures">
+                  <label htmlFor="plan-for-safety">
+                    Service User knows more ways to plan for their safety
+                  </label>
+                  <div id="plan-for-safety">
+                    <label>
+                      <input name="plan-for-safety" value="Yes" type="radio" />
+                      Yes
+                    </label>
+                    <br />
+                    <label>
+                      <input name="plan-for-safety" value="No" type="radio" />
+                      No
+                    </label>
+                    <br />
+                    <label>
+                      <input name="plan-for-safety" value="N/A" type="radio" />
+                      N/A
+                    </label>
+                  </div>
+                  <br />
+                  <label htmlFor="community-resources">
+                    Service User knows more about community resources
+                  </label>
+                  <div id="community-resources">
+                    <label>
+                      <input name="community-resources" value="Yes" type="radio" />
+                      Yes
+                    </label>
+                    <br />
+                    <label>
+                      <input name="community-resources" value="No" type="radio" />
+                      No
+                    </label>
+                    <br />
+                    <label>
+                      <input name="community-resources" value="N/A" type="radio" />
+                      N/A
+                    </label>
+                  </div>
+                  <br />
+                  <label htmlFor="rights-options">
+                    Service User knows more about their rights and options
+                  </label>
+                  <div id="rights-options">
+                    <label>
+                      <input name="rights-options" value="Yes" type="radio" />
+                      Yes
+                    </label>
+                    <br />
+                    <label>
+                      <input name="rights-options" value="No" type="radio" />
+                      No
+                    </label>
+                    <br />
+                    <label>
+                      <input name="rights-options" value="N/A" type="radio" />
+                      N/A
+                    </label>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <h4>{this.state.errorMessage}</h4>
+              <button onClick={this.handleSubmitEdit}>submit edits</button>
+            </form>
           </div>
-          <div id="all-fields">
-            <br />
-            <input type="checkbox" id="new-user" onChange={this.userTypeChange} defaultChecked />Service User is new to HOPE Works
-            <br />
-            {this.displayNewIncidentBox()}
-            <hr />
-            <div>
-              <h3>Personal Info</h3>
-              <label htmlFor="first-name">Name of Service User </label>
-              <br />
-              <input id="first-name" placeholder="First Name" />
-              <br />
-              <input id="last-name" placeholder="Last Name/Initial" />
-              <br />
-              <label htmlFor="identifiers">
-                Other identifiers for Service User
-              </label>
-              <br />
-              <input id="identifiers" placeholder="Favorite color, etc." />
-              <br />
-              <label htmlFor="advocate-initials">Advocate Initials </label>
-              <br />
-              <input id="advocate-initials" placeholder="Initials" maxLength="2" />
-              <br />
-            </div>
-            <div className="column-b">
-              <label htmlFor="contact-date">Date of contact </label>
-              <br />
-              <input type="date" id="contact-date" />
-              <br />
-              <label htmlFor="city-town">City/Town </label>
-              <br />
-              <input id="city-town" placeholder="City/Town" />
-              <br />
-              <label htmlFor="phone">Phone Number </label>
-              <br id="demographic-link" />
-              <input id="phone" type="tel" placeholder="802-123-4567" />
-              <br />
-            </div>
-            {this.displayDemographicContent()}
-            {this.displayIncidentAndOrder()}
-            <hr id="communication-link" />
-            <h3 id="ongoing-services">Ongoing Services</h3>
-            <label htmlFor="safe-to-call">Safe to call back?</label>
-            <div id="safe-to-call">
-              <input name="safe-to-call" value="Yes" type="radio" />
-              Yes
-              <br />
-              <input name="safe-to-call" value="No" type="radio" />
-              No
-              <br />
-              <input name="safe-to-call" value="Unknown" type="radio" />
-              Unknown
-            </div>
-            <br />
-            <label htmlFor="safe-to-leave-message">
-              Safe to leave a message?
-            </label>
-            <div id="safe-to-leave-message">
-              <input name="safe-to-leave-message" value="Yes" type="radio" />Yes
-              <br />
-              <input name="safe-to-leave-message" value="No" type="radio" />No
-              <br />
-              <input name="safe-to-leave-message" value="Unknown" type="radio" />Unknown
-            </div>
-            <br />
-            <label htmlFor="contact">Contact</label>
-            <br />
-            <label htmlFor="contact">
-              (indicate the number of contacts through each method per day)
-            </label>
-            <div id="contact">
-              <label>
-                <input id="contact-calls" type="number" />
-                Calls with Service User
-              </label>
-              <br />
-              <label>
-                <input id="contact-in-person" type="number" />
-                In-person with Service User
-              </label>
-              <br />
-              <label>
-                <input id="contact-email" type="number" />
-                Email
-              </label>
-              <br />
-              <label>
-                <input id="contact-instant-messaging" type="number" />
-                Instant Messaging
-              </label>
-              <br />
-              <label>
-                <input id="contact-on-behalf" type="number" />
-                On Behalf of Service User
-              </label>
-            </div>
-            <br />
-            <div id="time-call">
-              Total time spent
-              <br />
-            </div>
-            <div id="time-call">
-              <label>
-                <input name="time-call" value="15 min" type="radio" />
-                15 min
-              </label>
-              <br />
-              <label>
-                <input name="time-call" value="30 min" type="radio" />
-                30 min
-              </label>
-              <br />
-              <label>
-                <input name="time-call" value="45 min" type="radio" />
-                45 min
-              </label>
-              <br />
-              <label id="services-link">
-                <input name="time-call" value="60 min" type="radio" />
-                60 min
-              </label>
-              <br />
-              {this.displayOtherTimeSpent()}
-            </div>
-            <hr id="services-provided" />
-            <h3>Services Provided</h3>
-            <label htmlFor="advocacy">Advocacy</label>
-            <div id="advocacy">
-              <input type="checkbox" name="advocacy" value="Economic" />
-              Economic
-              <br />
-              <input type="checkbox" name="advocacy" value="Financial" />
-              Financial
-              <br />
-              <input type="checkbox" name="advocacy" value="Housing" />
-              Housing
-              <br />
-              <input type="checkbox" name="advocacy" value="Education" />
-              Education
-              <br />
-              <input type="checkbox" name="advocacy" value="Employment" />
-              Employment
-              <br />
-              <input type="checkbox" name="advocacy" value="Immigration" />
-              Immigrantion
-              <br />
-              <input type="checkbox" name="advocacy" value="Healthcare" />
-              Healthcare
-              <br />
-              {this.displayOtherAdvocacyButton()}
-              <br />
-            </div>
-            <label htmlFor="support">Support</label>
-            <div id="support">
-              <input type="checkbox" name="support" value="Emotional" />
-              Emotional
-              <br />
-              <input type="checkbox" name="support" value="Crisis" />
-              Crisis
-              <br />
-              <input type="checkbox" name="support" value="Criminal Legal" />
-              Criminal Legal
-              <br />
-              {this.displayOtherSupportButton()}
-              <br />
-            </div>
-            <div>
-              <label htmlFor="Medical">Medical</label>
-              <div id="medical" />
-              <input
-                type="checkbox"
-                name="medical"
-                value="SANE Exam Accompaniment"
-              />
-              SANE Exam Accompaniment
-              <br />
-              <br />
-            </div>
-            <label htmlFor="assistance-services">Assistance/Services</label>
-            <div id="assistance-services">
-              {this.displayVictimsClaim()}
-              <input
-                type="checkbox"
-                name="assistance-services"
-                value="Language"
-              />
-              Language
-              <br />
-              <input
-                type="checkbox"
-                name="assistance-services"
-                value="Transporation"
-              />
-              Transporation
-              <br />
-              {this.displayMaterialAssistance()}
-              <br />
-            </div>
-            <label htmlFor="information-referral">Information and Referral</label>
-            <div id="information-referral">
-              <input
-                type="checkbox"
-                name="information-referral"
-                value="Information"
-              />
-              Information
-              <br />
-              {this.displayReferralBox()}
-              <br />
-              <br />
-            </div>
-            <label htmlFor="safe-home">Safe Home</label>
-            <div id="safe-home">
-              Date Entered
-              <br />
-              <input id="safe-home-entered" type="date" name="safe-home" className="input" />
-              <br />
-              Date Exited
-              <br />
-              <input id="safe-home-exited" type="date" name="safe-home" className="input" />
-
-              <br />
-              Extention Date
-              <br />
-              <input id="safe-home-extension" type="date" name="safe-home" className="input" />
-              <br />
-              <br />
-            </div>
-            <label htmlFor="groups">Groups</label>
-            <div id="groups-div">
-              Groups:
-              <input id="groups" type="text" name="groups" className="inline-input" />
-              <br />
-              <br />
-            </div>
-            <hr id="referrals-hr" />
-            {this.displayReferrals()}
-            <h3>Outcome Measures</h3>
-            <div id="measures">
-              <label htmlFor="plan-for-safety">
-                Service User knows more ways to plan for their safety
-              </label>
-              <div id="plan-for-safety">
-                <label>
-                  <input name="plan-for-safety" value="Yes" type="radio" />
-                  Yes
-                </label>
-                <br />
-                <label>
-                  <input name="plan-for-safety" value="No" type="radio" />
-                  No
-                </label>
-                <br />
-                <label>
-                  <input name="plan-for-safety" value="N/A" type="radio" />
-                  N/A
-                </label>
-              </div>
-              <br />
-              <label htmlFor="community-resources">
-                Service User knows more about community resources
-              </label>
-              <div id="community-resources">
-                <label>
-                  <input name="community-resources" value="Yes" type="radio" />
-                  Yes
-                </label>
-                <br />
-                <label>
-                  <input name="community-resources" value="No" type="radio" />
-                  No
-                </label>
-                <br />
-                <label>
-                  <input name="community-resources" value="N/A" type="radio" />
-                  N/A
-                </label>
-              </div>
-              <br />
-              <label htmlFor="rights-options">
-                Service User knows more about their rights and options
-              </label>
-              <div id="rights-options">
-                <label>
-                  <input name="rights-options" value="Yes" type="radio" />
-                  Yes
-                </label>
-                <br />
-                <label>
-                  <input name="rights-options" value="No" type="radio" />
-                  No
-                </label>
-                <br />
-                <label>
-                  <input name="rights-options" value="N/A" type="radio" />
-                  N/A
-                </label>
-              </div>
-              <hr />
-            </div>
-          </div>
-          <h4>{this.state.errorMessage}</h4>
-          <button onClick={this.handleSubmit}>submit</button>
-        </form>
-      </div>
-    );
+        );
+    }
   }
 }
 
@@ -1601,7 +1629,7 @@ function referralValues(name) {
   return finalValues;
 }
 
-function getIncidents(num) {
+function getIncidents (num) {
   let theIncidents = [];
   let i = 1;
   let incidentObject = {};
@@ -1617,7 +1645,7 @@ function getIncidents(num) {
   return theIncidents;
 }
 
-function getOrders(num) {
+function getOrders (num) {
   let theOrders = [];
   let i = 1;
   let orderObject = {};
@@ -1633,4 +1661,4 @@ function getOrders(num) {
   return theOrders;
 }
 
-export default Form;
+export default Edit;

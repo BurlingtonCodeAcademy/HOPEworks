@@ -7,13 +7,21 @@ import Login from "./login"
 import Form from "./form"
 import Forms from "./forms"
 import Data from "./data"
+import Edit from "./edit"
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            property: true
+            editingForm: null
         }
+        this.setForm = this.setForm.bind(this);
+
+    }
+
+
+    setForm(form) {
+      this.setState( {editingForm: form} )
     }
 
     render() {
@@ -22,8 +30,9 @@ class App extends React.Component {
           <Route path="/" exact component={Login} />
           <Route path="/home" component={Home} />
           <Route path="/form" component={Form} />
-          <Route path="/forms" component={Forms}/>
+          <Route path="/forms" render={()=><Forms setForm={this.setForm}/>}/>
           <Route path="/data" component={Data}/>
+          <Route path="/edit" render={()=><Edit editingForm={this.state.editingForm}/>}/>
         </div>
       )
     }        

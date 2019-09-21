@@ -1,5 +1,6 @@
 import React from 'react';
 import Hw from './images/hw.png';
+import { Link } from 'react-router-dom'
 
 class Forms extends React.Component {
     constructor() {
@@ -49,12 +50,17 @@ class Forms extends React.Component {
         this.nameDroppedChange = this.nameDroppedChange.bind(this);
         this.nameSearchChange = this.nameSearchChange.bind(this);
         this.deselectAll = this.deselectAll.bind(this);
+        this.setTheForm = this.setTheForm.bind(this);
     }
 
     async componentDidMount() {
         const response = await fetch("/forms");
         const formsObj = await response.json();
         this.setState({allForms: formsObj, selectedForms: formsObj})
+    }
+
+    setTheForm() {
+        this.props.setForm(this.state.allForms[this.state.currentForm])
     }
 
     showFormCount(forms) {
@@ -934,6 +940,9 @@ class Forms extends React.Component {
                     <div style={{height: "1px"}}></div>
                     <h1 id="survivor-info-text">Survivor Information</h1>
                     <button onClick={this.viewList}>back to form list</button>
+                    <Link to={{pathname: "/edit"}}>
+                        <button onClick={this.setTheForm}>edit this form</button>
+                    </Link>
                     {this.displayForm(this.state.currentForm)}
                     <button onClick={this.viewList}>back to form list</button>
                 </div>
